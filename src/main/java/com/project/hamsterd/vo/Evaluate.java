@@ -29,7 +29,6 @@ public class Evaluate {
     @Column(name = "PENALTY")
     private int penalty;
 
-
     @ManyToOne
     @JoinColumn(name = "GROUP_NO")
     private int groupNo;
