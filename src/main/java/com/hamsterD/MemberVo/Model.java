@@ -19,24 +19,24 @@ public class Model {
     @Column(name = "MEMBER_NO")
     @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "memberSQ")
     @SequenceGenerator(name="memberSQ",sequenceName = "SEQ_MEMBER_NO",allocationSize = 1)
-    private int member_no;
+    private int memberNo;
 
     @ManyToOne
     @JoinColumn(name="GROUP_NO")
     @Column(name = "GROUP_NO") // Join필요
-    private int group_no;
+    private int groupNo;
     @Column(name = " ID ")
-    private String member_id;
+    private String memberId;
     @Column(name = "NAME")
-    private String member_name;
+    private String memberName;
     @Column(name = "AGE")
-    private int member_age;
+    private int memberAge;
     @Column(name = "ACADEMY_NAME")
-    private String academy_name;
+    private String academyName;
     @Column(name = "WEIGHT" )
-    private int member_weight;
+    private int memberWeight;
     @Column(name = "STUDENT_NO")
-    private int student_no;
+    private int studentNo;
 
 
 
