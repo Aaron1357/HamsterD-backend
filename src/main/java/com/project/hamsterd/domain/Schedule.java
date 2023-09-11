@@ -35,9 +35,9 @@ public class Schedule {
     private Date scheduleDate;
 
     // 스터디그룹
-    //@ManyToOne
-    //JoinColumn(name="groupNo")
-    // private StudyGroup studyGroup;
+//    @ManyToOne
+//    JoinColumn(name="groupNo")
+//    private StudyGroup studyGroup;
 
     // 멤버
     //@ManyToOne
