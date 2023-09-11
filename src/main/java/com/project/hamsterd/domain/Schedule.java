@@ -1,6 +1,8 @@
 package com.project.hamsterd.domain;
 
 
+import com.hamsterD.MemberVo.Member;
+import com.hamsterD.StudyGroupVO.StudyGroup;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,13 +37,13 @@ public class Schedule {
     private Date scheduleDate;
 
     // 스터디그룹
-//    @ManyToOne
-//    JoinColumn(name="groupNo")
-//    private StudyGroup studyGroup;
+    @ManyToOne
+    @JoinColumn(name="group_no")
+    private StudyGroup studyGroup;
 
     // 멤버
-    //@ManyToOne
-    //JoinColumn(name="memberNo")
-    // private Member member;
+   @ManyToOne
+   @JoinColumn(name="member_no")
+   private Member member;
 
 }
