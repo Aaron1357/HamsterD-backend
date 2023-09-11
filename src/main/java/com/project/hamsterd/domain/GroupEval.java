@@ -1,4 +1,4 @@
-package com.project.hamsterd.vo;
+package com.project.hamsterd.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Evaluate {
+public class GroupEval {
 
     @Id
     @Column(name = "GROUP_REV_NO")
@@ -35,6 +35,6 @@ public class Evaluate {
 
     @ManyToOne
     @JoinColumn(name = "MEMEBER_NO")
-    private int memberNo;
+    private Member member;
 
 }
