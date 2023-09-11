@@ -27,7 +27,7 @@ public class StudyGroupService {
 
     public StudyGroup update(StudyGroup studyGroup){
 
-        StudyGroup target = dao.findById(studyGroup.getGroup_no()).orElse(null);
+        StudyGroup target = dao.findById(studyGroup.getGroupNo()).orElse(null);
 
         if(target!=null) return dao.save(studyGroup);
 
