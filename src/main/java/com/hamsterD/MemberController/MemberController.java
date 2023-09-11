@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/member/*")
+@RequestMapping("/hamsterd/*")
 
 public class MemberController {
 
     @Autowired
     private MemberService service;
 
-    @GetMapping("/allmember")
+    @GetMapping("/member")
     public ResponseEntity<List<Member>> showAll() {
         return ResponseEntity.status(HttpStatus.OK).body(service.showAll());
     }
@@ -28,17 +28,17 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(service.show(id));
     }
 
-    @PostMapping("/createmember")
+    @PostMapping("/member")
     public ResponseEntity<Member> create(@RequestBody Member member) {
         return ResponseEntity.status(HttpStatus.OK).body(service.create(member));
     }
 
-    @PutMapping("/updatemember")
+    @PutMapping("/member")
     public ResponseEntity<Member> update(@RequestBody Member member) {
         return ResponseEntity.status(HttpStatus.OK).body(service.update(member));
     }
 
-    @DeleteMapping("/deletemembewr/{id}")
+    @DeleteMapping("/member/{id}")
     public ResponseEntity<Member> delete(@PathVariable int id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.delete(id));
     }
