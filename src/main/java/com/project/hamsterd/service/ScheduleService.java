@@ -24,7 +24,7 @@ public class ScheduleService {
         return scheduleDAO.findAll();
     }
 
-    // R : 일정 1개 보기(변수 및 타입 수정 필요함)
+    // R : 일정 1개 상세 보기(변수 및 타입 수정 필요함)
 //    public Schedule show(int id){
 //        Schedule schedule = scheduleDAO.findById(id).orElse(null);
 //        StudyGroup studyGroup = studyGroupDAO.findById(schedule.getStudyGroup().getGroupNo()).orElse(null);
@@ -32,7 +32,11 @@ public class ScheduleService {
 //        return schedule;
 //    }
     
-    // R: 특정 스터디그룹의 모든 일정 목록 보기
+    // R : 특정 스터디그룹의 일정 목록 보기
+
+    // R : 개인 일정 전체 보기
+    
+    // R : 개인 일정 1개 상세 보기
 
     // U : 일정 수정
     public Schedule update(Schedule schedule){
