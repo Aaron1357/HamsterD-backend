@@ -14,30 +14,47 @@ import java.util.List;
 public class GroupEvalController {
 
     @Autowired
-    private GroupEvalService service;
+    private GroupEvalService groupEvalService;
 
-    @GetMapping("/review")
+
+    //    http://localhost:8080/hamsterd/groupeval
+    @GetMapping("/groupeval")
     public ResponseEntity<List<GroupEval>> showAll(){
-        return ResponseEntity.status(HttpStatus.OK).body(service.showAll());
+        return ResponseEntity.status(HttpStatus.OK).body(groupEvalService.showAll());
     }
 
-    @GetMapping("/review/{id}")
+
+    //    http://localhost:8080/hamsterd/groupeval/1
+    @GetMapping("/groupeval/{id}")
     public ResponseEntity<GroupEval> show(@PathVariable int id){
-        return ResponseEntity.status(HttpStatus.OK).body(service.show(id));
+        return ResponseEntity.status(HttpStatus.OK).body(groupEvalService.show(id));
     }
 
-    @PostMapping("/review")
+
+    //    http://localhost:8080/hamsterd/groupeval
+    @PostMapping("/groupeval")
     public ResponseEntity<GroupEval> create(@RequestBody GroupEval groupEval){
-        return ResponseEntity.status(HttpStatus.OK).body(service.create(groupEval));
+        return ResponseEntity.status(HttpStatus.OK).body(groupEvalService.create(groupEval));
     }
 
-    @PutMapping("/review")
+    //    http://localhost:8080/hamsterd/groupeval
+    @PutMapping("/groupeval")
     public ResponseEntity<GroupEval> update(@RequestBody GroupEval groupEval){
-        return ResponseEntity.status(HttpStatus.OK).body(service.update(groupEval));
+        return ResponseEntity.status(HttpStatus.OK).body(groupEvalService.update(groupEval));
     }
 
-    @DeleteMapping("/review/{id}")
+
+    //    http://localhost:8080/hamsterd/groupeval/1
+    @DeleteMapping("/groupeval/{id}")
     public ResponseEntity<GroupEval> delete(@PathVariable int id){
-        return ResponseEntity.status(HttpStatus.OK).body(service.delete(id));
+        return ResponseEntity.status(HttpStatus.OK).body(groupEvalService.delete(id));
     }
+
+    //    http://localhost:8080/hamsterd/groupeval/eval?mno=1&gno=1
+
+    @GetMapping("/groupeval/eval")
+    public ResponseEntity<List<GroupEval>> showMemberAndGroup(@RequestParam int mno, @RequestParam int gno){
+        return ResponseEntity.status(HttpStatus.OK).body(groupEvalService.showMemberAndGroup(mno, gno));
+    }
+
 }

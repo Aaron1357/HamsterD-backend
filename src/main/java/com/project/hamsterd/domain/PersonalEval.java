@@ -1,6 +1,7 @@
 package com.project.hamsterd.domain;
 
 
+import com.hamsterD.MemberVo.Model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,5 +28,5 @@ public class PersonalEval {
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_NO")
-    private int member;
+    private Model member;
 }
