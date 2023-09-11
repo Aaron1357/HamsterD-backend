@@ -17,14 +17,14 @@ public class StudyGroup {
     @Column(name = "GROUP_NO")
     @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "groupSQ")
     @SequenceGenerator(name="groupSQ",sequenceName = "SEQ_GROUP_NO",allocationSize = 1)
-    private int group_no;
+    private int groupNo;
 
     @Column
     private String academy;
 
     @Column
-    private String groupname;
+    private String groupName;
 
     @Column
-    private int membercount;
+    private int memberCount;
 }
