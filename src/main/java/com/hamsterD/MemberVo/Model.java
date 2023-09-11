@@ -1,37 +1,41 @@
 package com.hamsterD.MemberVo;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 
-@Entity
+
 public class Model {
 
 
     @Id
+    @Column(name = "MEMBER_NO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "memberSQ")
+    @SequenceGenerator(name="memberSQ",sequenceName = "SEQ_MEMBER_NO",allocationSize = 1)
     private int member_no;
-    @Column
+
+    @ManyToOne
+    @JoinColumn(name="GROUP_NO")
+    @Column(name = "GROUP_NO") // Join필요
     private int group_no;
-    @Column
+    @Column(name = " ID ")
     private String member_id;
-    @Column
+    @Column(name = "NAME")
     private String member_name;
-    @Column
+    @Column(name = "AGE")
     private int member_age;
-    @Column
+    @Column(name = "ACADEMY_NAME")
     private String academy_name;
-    @Column
+    @Column(name = "WEIGHT" )
     private int member_weight;
-    @Column
+    @Column(name = "STUDENT_NO")
     private int student_no;
 
 
