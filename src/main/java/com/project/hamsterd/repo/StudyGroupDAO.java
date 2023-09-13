@@ -1,6 +1,6 @@
-package com.hamsterD.StudyGroupDAO;
+package com.project.hamsterd.repo;
 
-import com.hamsterD.StudyGroupVO.StudyGroup;
+import com.project.hamsterd.domain.StudyGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

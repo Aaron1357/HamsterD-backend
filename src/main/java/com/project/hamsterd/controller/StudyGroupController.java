@@ -1,7 +1,7 @@
-package com.hamsterD.StudyGroupController;
+package com.project.hamsterd.controller;
 
-import com.hamsterD.StudyGroupService.StudyGroupService;
-import com.hamsterD.StudyGroupVO.StudyGroup;
+import com.project.hamsterd.service.StudyGroupService;
+import com.project.hamsterd.domain.StudyGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

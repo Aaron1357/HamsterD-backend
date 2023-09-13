@@ -1,4 +1,4 @@
-package com.hamsterD.MemberVo;
+package com.project.hamsterd.domain;
 
 
 import jakarta.persistence.*;

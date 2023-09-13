@@ -1,9 +1,8 @@
 package com.project.hamsterd.service;
 
-import com.hamsterD.MemberDAO.MemberDAO;
-import com.hamsterD.MemberVo.Member;
-import com.hamsterD.StudyGroupDAO.StudyGroupDAO;
-import com.hamsterD.StudyGroupVO.StudyGroup;
+import com.project.hamsterd.repo.MemberDAO;
+import com.project.hamsterd.repo.StudyGroupDAO;
+import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.domain.Schedule;
 import com.project.hamsterd.repo.ScheduleDAO;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -26,7 +26,7 @@ public class CommentLike {
     @JoinColumn(name = "COMMENT_NO")
     private PostComment comment;
 
-//    @ManyToOne
-//    @JoinColumn(name = "MEMBER_NO")
-//    private  Member member;
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_NO")
+    private  Member member;
 }

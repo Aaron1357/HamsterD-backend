@@ -1,7 +1,5 @@
 package com.project.hamsterd.domain;
 
-import com.hamsterD.MemberVo.Model;
-import com.hamsterD.StudyGroupVO.StudyGroup;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,6 +35,6 @@ public class GroupEval {
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_NO")
-    private Model model;
+    private Member member;
 
 }

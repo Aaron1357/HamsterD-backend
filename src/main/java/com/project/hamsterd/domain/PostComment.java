@@ -44,8 +44,8 @@ public class PostComment {
     @JoinColumn(name = "POST_NO")
     private Post post;
 
-//    @ManyToOne
-//    @JoinColumn(name = "MEMBER_NO")
-//    private Member member;
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_NO")
+    private Member member;
 
 }

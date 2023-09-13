@@ -1,7 +1,7 @@
 package com.project.hamsterd.service;
 
 
-import com.hamsterD.MemberDAO.MemberDAO;
+import com.project.hamsterd.repo.MemberDAO;
 import com.hamsterD.MemberVo.Model;
 import com.project.hamsterd.domain.PersonalEval;
 import com.project.hamsterd.repo.PersonalEvalDAO;

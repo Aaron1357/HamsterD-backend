@@ -1,4 +1,4 @@
-package com.hamsterD.StudyGroupVO;
+package com.project.hamsterd.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

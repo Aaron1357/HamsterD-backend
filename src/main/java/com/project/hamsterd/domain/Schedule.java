@@ -1,8 +1,6 @@
 package com.project.hamsterd.domain;
 
 
-import com.hamsterD.MemberVo.Member;
-import com.hamsterD.StudyGroupVO.StudyGroup;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
