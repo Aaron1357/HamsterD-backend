@@ -16,16 +16,16 @@ public class PersonalEval {
     @Column(name = "REV_NO")
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "revNoSequence")
     @SequenceGenerator(name = "revNoSequence", sequenceName = "SEQ_PER_REV_NO", allocationSize = 1)
-    private int revNo;
+    private int revNo;  // 리뷰번호
 
     @Column(name = "PENALTY")
-    private int penalty;
+    private int penalty;    // 패널티
 
     @Column(name = "FOOT_PRINT")
-    private int footPrint;
+    private int footPrint;  // 리뷰점수
 
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_NO")
-    private Member member;
+    private Member member;  // 멤버 테이블 조인
 }

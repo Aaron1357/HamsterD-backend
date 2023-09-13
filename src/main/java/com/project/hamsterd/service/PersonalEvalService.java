@@ -1,8 +1,8 @@
 package com.project.hamsterd.service;
 
 
+import com.project.hamsterd.domain.Member;
 import com.project.hamsterd.repo.MemberDAO;
-import com.hamsterD.MemberVo.Model;
 import com.project.hamsterd.domain.PersonalEval;
 import com.project.hamsterd.repo.PersonalEvalDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class PersonalEvalService {
 
     public PersonalEval show(int memberNo){
         PersonalEval perEval = personalEvalDAO.findById(memberNo).orElse(null);
-        Model member = memberDAO.findById(perEval.getMember().getMemberNo()).orElse(null);
+        Member member = memberDAO.findById(perEval.getMember().getMemberNo()).orElse(null);
         perEval.setMember(member);
         return perEval;
 
@@ -59,6 +59,10 @@ public class PersonalEvalService {
         }
 
         return null;
+    }
+
+    public List<PersonalEval> findBymemberNo(int memberNo){
+        return personalEvalDAO.findByMemberId(memberNo);
     }
 
 
