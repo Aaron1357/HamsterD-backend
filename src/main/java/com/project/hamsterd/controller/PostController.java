@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequestMapping("/hamsterd/*")
 public class PostController {
     @Autowired
     private PostService service;
@@ -42,10 +43,11 @@ public class PostController {
 
     //R :
     // 특정 멤버의 모든 게시판 조회 memberNo 받아와서 작성하기
-    //메서드명 임의로 지정 member한테 받아오기
-//    public ResponseEntity <List<Post>> showMember(@RequestParam int memberNo) {
-//        return ResponseEntity.status(HttpStatus.OK).body(service.showMember());
-//    }
+
+    @GetMapping("/post/{id}")
+    public ResponseEntity <List<Post>> postList(@PathVariable String id) {
+       return ResponseEntity.status(HttpStatus.OK).body(service.findByMemberId(id));
+  }
 
     //U : 내 게시판 수정하기
 
@@ -55,10 +57,10 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(service.update(post));
     }
 
-    //D : 내 게시판 삭제하기
+    //D : 특정 내 게시판 삭제하기
     /*내 게시판만 지울수있음 memberNo에 postNo으로 해야해*/
     @DeleteMapping("/post/{postNo}")
-    public ResponseEntity <Post> delete(@PathVariable int postNo) {
+    public ResponseEntity <Post> postUserDelete(@PathVariable int postNo) {
         return ResponseEntity.status(HttpStatus.OK).body(service.delete(postNo));
     }
 

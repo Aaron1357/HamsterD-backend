@@ -1,5 +1,6 @@
 package com.project.hamsterd.domain;
 
+import com.hamsterD.MemberVo.Member;
 import jakarta.persistence.*;
 import jdk.jfr.DataAmount;
 import lombok.AllArgsConstructor;
@@ -32,7 +33,9 @@ public class Post {
     @Column
     private String nickname;
 
-    /* 멤버 클래스의 멤버 넘버 외래키 받아와야함
-     private Member member;*/
+    @ManyToOne
+    @JoinColumn(name="member_no")
+     /*멤버 클래스의 멤버 넘버 외래키 */
+     private Member member;
 }
 
