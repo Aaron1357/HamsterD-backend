@@ -2,7 +2,7 @@ package com.hamsterD.MemberController;
 
 
 import com.hamsterD.MemberService.MemberService;
-import com.hamsterD.MemberVo.Model;
+import com.hamsterD.MemberVo.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,27 +19,27 @@ public class MemberController {
     private MemberService service;
 
     @GetMapping("/allmember")
-    public ResponseEntity<List<Model>> showAll() {
+    public ResponseEntity<List<Member>> showAll() {
         return ResponseEntity.status(HttpStatus.OK).body(service.showAll());
     }
 
     @GetMapping("/member/{id}")
-    public ResponseEntity<Model> show(@PathVariable int id) {
+    public ResponseEntity<Member> show(@PathVariable int id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.show(id));
     }
 
     @PostMapping("/createmember")
-    public ResponseEntity<Model> create(@RequestBody Model model) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.create(model));
+    public ResponseEntity<Member> create(@RequestBody Member member) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.create(member));
     }
 
     @PutMapping("/updatemember")
-    public ResponseEntity<Model> update(@RequestBody Model model) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.update(model));
+    public ResponseEntity<Member> update(@RequestBody Member member) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.update(member));
     }
 
     @DeleteMapping("/deletemembewr/{id}")
-    public ResponseEntity<Model> delete(@PathVariable int id) {
+    public ResponseEntity<Member> delete(@PathVariable int id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.delete(id));
     }
 

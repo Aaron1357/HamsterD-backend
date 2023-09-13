@@ -1,7 +1,7 @@
 package com.hamsterD.MemberService;
 
 import com.hamsterD.MemberDAO.MemberDAO;
-import com.hamsterD.MemberVo.Model;
+import com.hamsterD.MemberVo.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,27 +14,27 @@ public class MemberService {
     @Autowired
     private MemberDAO dao;
 
-    public List<Model> showAll() {
+    public List<Member> showAll() {
      return dao.findAll();
     }
 
-    public Model show(int id){
+    public Member show(int id){
         return dao.findById(id).orElse(null);
 
     }
-    public Model create(Model model) {
-        return dao.save(model);
+    public Member create(Member member) {
+        return dao.save(member);
     }
 
-    public Model update(Model model) {
-        Model target = dao.findById(model.getMember_no()).orElse(null);
+    public Member update(Member member) {
+        Member target = dao.findById(member.getMemberNo()).orElse(null);
 
-        if (target != null) return dao.save(model);
+        if (target != null) return dao.save(member);
        return null;
     }
 
-   public Model delete(int id) {
-        Model target = dao.findById(id).orElse(null);
+   public Member delete(int id) {
+        Member target = dao.findById(id).orElse(null);
         dao.delete(target);
         return target;
    }
