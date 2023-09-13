@@ -34,5 +34,8 @@ public class PostService {
         return data;
     }
 
+    public List<Post> findByMemberId(String id) {
+        return dao.findByMemberId(id);
+    }
 
 }
