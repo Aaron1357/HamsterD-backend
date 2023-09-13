@@ -31,6 +31,9 @@ public class Post {
     @Column
     private String nickname;
 
+    /*공지글 여부 할지말지 고민중*/
+    /*private Boolean noticeYn;*/
+
     @ManyToOne
     @JoinColumn(name="member_no")
      /*멤버 클래스의 멤버 넘버 외래키 */
