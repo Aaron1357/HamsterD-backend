@@ -42,25 +42,16 @@ public class ScheduleService {
         return schedule;
     }
     
-    // R : 특정 스터디그룹의 일정 목록 보기
+    // R : 특정 스터디그룹의 일정 목록 보기(groupNo로 조회)
     public List<Schedule> showAllGroupSchedule(int id){
         return scheduleDAO.findByGroupId(id); // scheduleDAO에서 관련 쿼리문 생성함
     }
 
-    // R : 개인 일정 전체 보기(memberNo로 조회)
-    public List<Schedule> showAllMemberSchedule(int id){
+    // R : 개인 일정 목록(memberNo로 조회)
+    public List<Schedule> findByMemberId(int id){
         return scheduleDAO.findByMemberId(id); // scheduleDAO에서 관련 쿼리문 생성함
     }
-
     
-    // R : 개인 일정 1개 상세 보기
-    public Schedule showMemberSchedule(int id){
-        Schedule schedule = scheduleDAO.findById(id).orElse(null);
-        Member member = memberDAO.findById(schedule.getMember().getMemberNo()).orElse(null);
-        schedule.setMember(member);
-        return schedule;
-    }
-
     // U : 일정 수정
     public Schedule update(Schedule schedule){
         Schedule target = scheduleDAO.findById(schedule.getScheduleNo()).orElse(null);

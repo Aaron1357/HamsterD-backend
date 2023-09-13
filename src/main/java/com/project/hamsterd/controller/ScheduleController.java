@@ -41,13 +41,11 @@ public class ScheduleController {
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.showAllGroupSchedule(groupNo));
     }
 
-    // R : 개인 일정 전체 보기(memberNo로 조회)
+    // R : 개인 일정 목록(memberNo로 조회)
     @GetMapping("schedule/{memberNo}")
-    public ResponseEntity<List<Schedule>> showAllMemberSchedule(@PathVariable int memberNo){
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.showAllMemberSchedule(memberNo));
+    public ResponseEntity<List<Schedule>> findByMemberId(@PathVariable int memberNo){
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByMemberId(memberNo));
     }
-
-    // R : 개인 일정 1개 상세 보기 (memberNo 외에 매개변수 받아올 것 정해서 다시 짜기)
 
 
     // U : 일정 수정
@@ -57,8 +55,8 @@ public class ScheduleController {
     }
 
     // D : 일정 삭제
-    @DeleteMapping("/schedule")
-    public ResponseEntity<Schedule> delete(@RequestBody int id){
+    @DeleteMapping("/schedule/{id}")
+    public ResponseEntity<Schedule> delete(@PathVariable int id){
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.delete(id));
     }
 }

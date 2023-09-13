@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ScheduleDAO extends JpaRepository<Schedule, Integer> {
+
     // 특정 스터디의 모든 스케줄 조회
     @Query(value="SELECT * FROM TB_SCHEDULE WHERE group_no = :groupNo", nativeQuery = true)
     List<Schedule> findByGroupId(int id);
