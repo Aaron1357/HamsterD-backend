@@ -15,6 +15,8 @@ import java.util.List;
 @RequestMapping("/hamsterd/*")
 public class CommentLikeController {
 
+
+
     @Autowired
     private CommentLikeService cLikeService;
 

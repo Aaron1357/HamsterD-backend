@@ -1,6 +1,8 @@
 package com.project.hamsterd.controller;
 
 import com.project.hamsterd.domain.Post;
+import com.project.hamsterd.domain.PostComment;
+import com.project.hamsterd.service.PostCommentService;
 import com.project.hamsterd.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,11 @@ import java.util.List;
 public class PostController {
     @Autowired
     private PostService service;
+
+
+
+    @Autowired
+    private PostCommentService pCommentService;
 
 
     //C : 게시판 작성하기
@@ -64,5 +71,12 @@ public class PostController {
     public ResponseEntity <Post> postUserDelete(@PathVariable int postNo) {
         return ResponseEntity.status(HttpStatus.OK).body(service.delete(postNo));
     }
+
+    @GetMapping("/post/pcomment")
+    public ResponseEntity<List<PostComment>> postComment(@RequestParam int postNo){
+        return ResponseEntity.status(HttpStatus.OK).body(pCommentService.findByPostNo(postNo));
+    }
+
+
 
 }

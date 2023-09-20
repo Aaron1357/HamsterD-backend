@@ -1,7 +1,7 @@
 package com.project.hamsterd.service;
 
+import com.project.hamsterd.domain.Member;
 import com.project.hamsterd.repo.MemberDAO;
-import com.hamsterD.MemberVo.Model;
 import com.project.hamsterd.repo.StudyGroupDAO;
 import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.repo.GroupEvalDAO;
@@ -33,10 +33,10 @@ public class GroupEvalService {
 
     public GroupEval show(int id){
         GroupEval groupEval = groupEvalDAO.findById(id).orElse(null);
-        Model member = memberDAO.findById(groupEval.getModel().getMemberNo()).orElse(null);
+        Member member = memberDAO.findById(groupEval.getMember().getMemberNo()).orElse(null);
         StudyGroup group = studyGroupDAO.findById(groupEval.getStudyGroup().getGroupNo()).orElse(null);
 
-        groupEval.setModel(member);
+        groupEval.setMember(member);
         groupEval.setStudyGroup(group);
 
         return groupEval;
@@ -59,6 +59,10 @@ public class GroupEvalService {
         GroupEval target = groupEvalDAO.findById(id).orElse(null);
         groupEvalDAO.delete(target);
         return target;
+    }
+
+    public List<GroupEval> findByMemberNoAndGroupNo(int mNo, int gNo){
+        return groupEvalDAO.findByMemberNoAndGroupNo(mNo, gNo);
     }
 
 

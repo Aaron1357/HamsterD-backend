@@ -41,7 +41,7 @@ public class PostCommentService {
         return target;
     }
 
-    public List<PostComment> findByCommentNo(int commentNo){
-        return dao.findByCommentNo(commentNo);
+    public List<PostComment> findByPostNo(int postNo){
+        return dao.findByPostNo(postNo);
     }
 }
