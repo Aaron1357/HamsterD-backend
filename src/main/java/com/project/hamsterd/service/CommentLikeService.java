@@ -28,7 +28,7 @@ public class CommentLikeService {
 
     public CommentLike update(CommentLike vo){
 
-        CommentLike target = dao.findById(vo.getLikeNo()).orElse(null);
+        CommentLike target = dao.findById(vo.getCLikeNo()).orElse(null);
 
         if(target != null) return dao.save(vo);
 
