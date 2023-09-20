@@ -16,6 +16,7 @@ public class PostController {
     @Autowired
     private PostService service;
 
+
     //C : 게시판 작성하기
     @PostMapping("/post")
     public ResponseEntity <Post> create(@RequestBody Post post) {
