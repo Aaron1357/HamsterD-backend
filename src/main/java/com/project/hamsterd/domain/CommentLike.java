@@ -14,10 +14,10 @@ import org.hibernate.annotations.DynamicInsert;
 public class CommentLike {
 
     @Id
-    @Column(name = "LIKE_NO")
+    @Column(name = "CLIKE_NO")
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "likeSequence")
     @SequenceGenerator(name = "likeSequence", sequenceName = "SEQ_COMMENT_LIKE_NO", allocationSize = 1)
-    private int likeNo;
+    private int cLikeNo;
 
     @Column(name = "LI_CO_CREATEDATE")
     private String createDate;
