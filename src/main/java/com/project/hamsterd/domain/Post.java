@@ -17,7 +17,7 @@ public class Post {
     @Id
     @Column(name="post_no")
     @GeneratedValue(strategy= GenerationType.IDENTITY, generator="postSequence" )
-    @SequenceGenerator(name="postSequence", sequenceName="SEQ_POST", allocationSize=1)
+    @SequenceGenerator(name="postSequence", sequenceName="SEQ_POST_NO", allocationSize=1)
     private int postNo;
 
     @Column(name="post_title")
