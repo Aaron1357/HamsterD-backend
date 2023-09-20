@@ -14,7 +14,7 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
     //SELECT * FROM post WHERE memberNo=?
 
      @Query(value="SELECT * FROM post WHERE member_No : memberNo", nativeQuery=true)
-     List<Post> findByMemberId(String id);
+     List<Post> findByMemberId(String memberNo);
 
 
 
