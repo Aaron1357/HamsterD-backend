@@ -1,7 +1,7 @@
 package com.hamsterD.MemberService;
 
 import com.hamsterD.MemberDAO.MemberDAO;
-import com.hamsterD.MemberVo.Member;
+import com.project.hamsterd.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

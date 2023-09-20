@@ -1,32 +1,18 @@
-<<<<<<< Updated upstream:src/main/java/com/project/hamsterd/domain/Member.java
-package com.project.hamsterd.domain;
-=======
-package com.hamsterD.MemberVo;
->>>>>>> Stashed changes:src/main/java/com/hamsterD/MemberVo/Member.java
 
+package com.project.hamsterd.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-<<<<<<< Updated upstream:src/main/java/com/project/hamsterd/domain/Member.java
 
 
-//나 금미리 범인이죠
-=======
->>>>>>> Stashed changes:src/main/java/com/hamsterD/MemberVo/Member.java
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-<<<<<<< Updated upstream:src/main/java/com/project/hamsterd/domain/Member.java
-=======
-
-
->>>>>>> Stashed changes:src/main/java/com/hamsterD/MemberVo/Member.java
 public class Member {
-
 
     @Id
     @Column(name = "MEMBER_NO")
@@ -37,7 +23,7 @@ public class Member {
     @ManyToOne
     @JoinColumn(name="GROUP_NO")
     @Column(name = "GROUP_NO") // Join필요
-    private int groupNo;
+    private StudyGroup studyGroup;
     @Column(name = " ID ")
     private String memberId;
     @Column(name = "NAME")

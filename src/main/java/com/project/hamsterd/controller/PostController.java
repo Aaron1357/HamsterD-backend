@@ -72,10 +72,23 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(service.delete(postNo));
     }
 
+//
+//    @PostMapping("/post/pcomment")
+//    public ResponseEntity<List<PostComment>> create(@RequestBody PostComment postComment){
+//        return ResponseEntity.status(HttpStatus.OK).body(pCommentService.findByPostNo(postComment));
+//    }
     @GetMapping("/post/pcomment")
     public ResponseEntity<List<PostComment>> postComment(@RequestParam int postNo){
         return ResponseEntity.status(HttpStatus.OK).body(pCommentService.findByPostNo(postNo));
     }
+
+    //대댓글 추가하기
+//    @PostMapping("/post/pcomment")
+//    public ResponseEntity<PostComment> create(@RequestBody PostComment commentNo){
+//        return ResponseEntity.status(HttpStatus.OK).body(pCommentService.create(commentNo));
+//    }
+
+
 
 
 
