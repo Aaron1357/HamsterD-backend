@@ -11,6 +11,7 @@ import org.hibernate.annotations.DynamicInsert;
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicInsert
+@Table(name="TB_STUDYGROUP")
 public class StudyGroup {
 
     @Id
@@ -18,9 +19,6 @@ public class StudyGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "groupSQ")
     @SequenceGenerator(name="groupSQ",sequenceName = "SEQ_GROUP_NO",allocationSize = 1)
     private int groupNo;
-
-    @Column
-    private String academy;
 
     @Column
     private String groupName;

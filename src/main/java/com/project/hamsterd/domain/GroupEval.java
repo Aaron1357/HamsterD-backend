@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name="TB_GROUP_REV")
 public class GroupEval {
 
     @Id
@@ -18,16 +19,10 @@ public class GroupEval {
     private int groupRevNo;
 
     @Column(name = "GROUP_SCORE")
-    private int groupScore;
+    private int groupScore; // 그룹 평가 점수( 나중에 평균내서 점수 출력시키기)
 
     @Column
-    private String review;
-
-    @Column(name = "FOOT_PRINT")
-    private String footPrint;
-
-    @Column
-    private int penalty;
+    private String review;  // 그룹 평가내용
 
     @ManyToOne
     @JoinColumn(name = "GROUP_NO")

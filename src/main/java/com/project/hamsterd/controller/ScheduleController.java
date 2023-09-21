@@ -1,6 +1,8 @@
 package com.project.hamsterd.controller;
 
+import com.project.hamsterd.domain.Member;
 import com.project.hamsterd.domain.Schedule;
+import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,12 @@ public class ScheduleController {
     // C : 일정 추가
     @PostMapping("/schedule")
     public ResponseEntity<Schedule> create(@RequestBody Schedule schedule){
+
+        Member member = new Member();
+        member.setMemberNo(1);
+
+        schedule.setMember(member);
+
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.create(schedule));
     }
     

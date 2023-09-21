@@ -13,6 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @DynamicInsert
+@Table(name="TB_POST_LIKE")
 public class PostLike {
 
     @Id

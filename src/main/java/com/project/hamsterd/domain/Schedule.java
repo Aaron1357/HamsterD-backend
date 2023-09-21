@@ -13,11 +13,12 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @DynamicInsert
+@Table(name="TB_SCHEDULE")
 public class Schedule {
 
     @Id
     @Column(name="schedule_no")
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator="")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator="scheduleSequence")
     @SequenceGenerator(name="scheduleSequence", sequenceName="SEQ_SCHEDULE_NO", allocationSize = 1)
     // 스케줄 넘버
     private int scheduleNo;

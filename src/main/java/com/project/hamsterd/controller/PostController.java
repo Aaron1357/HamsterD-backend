@@ -1,7 +1,9 @@
 package com.project.hamsterd.controller;
 
+import com.project.hamsterd.domain.Member;
 import com.project.hamsterd.domain.Post;
 import com.project.hamsterd.domain.PostComment;
+import com.project.hamsterd.service.InCommentService;
 import com.project.hamsterd.service.PostCommentService;
 import com.project.hamsterd.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ public class PostController {
     @Autowired
     private PostService service;
 
+    @Autowired
+    private InCommentService iCommentService;
 
 
     @Autowired
@@ -72,14 +76,46 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(service.delete(postNo));
     }
 
-//
-//    @PostMapping("/post/pcomment")
-//    public ResponseEntity<List<PostComment>> create(@RequestBody PostComment postComment){
-//        return ResponseEntity.status(HttpStatus.OK).body(pCommentService.findByPostNo(postComment));
-//    }
+
+    // 댓글 추가
+    @PostMapping("/post/pcomment")
+    public ResponseEntity<PostComment> create(@RequestBody PostComment postComment){
+
+        Post post = new Post();
+        post.setPostNo(1);
+        postComment.setPost(post);
+
+
+        Member member = new Member();
+        member.setMemberNo(1);
+        postComment.setMember(member);
+
+       return ResponseEntity.status(HttpStatus.OK).body(pCommentService.create(postComment));
+    }
+
+    //U : 내 댓글 수정하기
+    @PutMapping("/post/pcomment")
+    public ResponseEntity <PostComment> update(@RequestBody PostComment postComment) {
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(pCommentService.update(postComment));
+    }
+
+
+
+    // 댓글 전체 보기
     @GetMapping("/post/pcomment")
     public ResponseEntity<List<PostComment>> postComment(@RequestParam int postNo){
+
         return ResponseEntity.status(HttpStatus.OK).body(pCommentService.findByPostNo(postNo));
+
+
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("/post/pcomment/{id}")
+    public ResponseEntity<PostComment> deletePDelete(@PathVariable int id){
+        return ResponseEntity.status(HttpStatus.OK).body(pCommentService.delete(id));
     }
 
     //대댓글 추가하기

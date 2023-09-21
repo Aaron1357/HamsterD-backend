@@ -11,6 +11,7 @@ import org.hibernate.annotations.DynamicInsert;
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicInsert
+@Table(name="TB_COMMENT_LIKE")
 public class CommentLike {
 
     @Id

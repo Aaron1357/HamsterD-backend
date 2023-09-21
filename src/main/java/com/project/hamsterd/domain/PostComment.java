@@ -7,11 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.util.Date;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicInsert
+@Table(name="TB_COMMENT")
 public class PostComment {
 
 
@@ -22,20 +25,20 @@ public class PostComment {
     private int commentNo;
 
 
-    @Column(name = "IN_COMMENT_NO")
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "inCommentSequence")
-    @SequenceGenerator(name = "inCommentSequence", sequenceName = "SEQ_IN_COMMENT_NO", allocationSize = 1)
-    private int inCoNo;
+//    @Column(name = "IN_COMMENT_NO")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "inCommentSequence")
+//    @SequenceGenerator(name = "inCommentSequence", sequenceName = "SEQ_IN_COMMENT_NO", allocationSize = 1)
+//    private int inCoNo;
 
 
     @Column(name = "COMMENT_CONTENT")
     private String commentContent;
 
     @Column(name = "CO_CREATEDATE")
-    private String createDate;
+    private Date createDate;
 
     @Column(name = "CO_UPDATEDATE")
-    private String updateDate;
+    private Date updateDate;
 
     @Column(name = "CO_NICKNAME")
     private String nickName;

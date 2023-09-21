@@ -1,7 +1,9 @@
 package com.project.hamsterd.controller;
 
+import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.service.MemberService;
 import com.project.hamsterd.domain.Member;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/hamsterd/*")
-
+@Log4j2
+@CrossOrigin(origins = {"*"}, maxAge = 6000)
 public class MemberController {
 
     @Autowired
@@ -30,6 +33,18 @@ public class MemberController {
 
     @PostMapping("/member")
     public ResponseEntity<Member> create(@RequestBody Member member) {
+        log.info(member);
+//        StudyGroup group  = new StudyGroup();
+//        group.setGroupNo(0);
+//        member.setStudyGroup(group);
+//        Member mem = new Member();
+//        mem.setMemberId("user1");
+//        mem.setMemberAge(24);
+//        mem.setMemberName("윤종빈");
+//        mem.setAcademyName("kh");
+//        mem.setStudentNo(1);
+
+
         return ResponseEntity.status(HttpStatus.OK).body(service.create(member));
     }
 

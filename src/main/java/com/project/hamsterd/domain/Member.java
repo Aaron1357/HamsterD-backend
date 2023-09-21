@@ -5,13 +5,15 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import org.hibernate.annotations.DynamicInsert;
 
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
+@Table(name="TB_MEMBER")
 public class Member {
 
     @Id
@@ -22,9 +24,8 @@ public class Member {
 
     @ManyToOne
     @JoinColumn(name="GROUP_NO")
-    @Column(name = "GROUP_NO") // Join필요
     private StudyGroup studyGroup;
-    @Column(name = " ID ")
+    @Column(name = "ID")
     private String memberId;
     @Column(name = "NAME")
     private String memberName;

@@ -5,11 +5,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
+@Table(name="TB_PER_REV")
 public class PersonalEval {
 
     @Id
