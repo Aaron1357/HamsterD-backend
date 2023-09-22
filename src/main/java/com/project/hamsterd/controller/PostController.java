@@ -1,5 +1,6 @@
 package com.project.hamsterd.controller;
 
+import com.project.hamsterd.domain.InComment;
 import com.project.hamsterd.domain.Member;
 import com.project.hamsterd.domain.Post;
 import com.project.hamsterd.domain.PostComment;
@@ -23,7 +24,6 @@ public class PostController {
     @Autowired
     private InCommentService iCommentService;
 
-
     @Autowired
     private PostCommentService pCommentService;
 
@@ -36,10 +36,7 @@ public class PostController {
 
     //C : 관리자 공지 글 작성하기 -- 관리자만 작성할수있음 관리자만 삭제가능
 
-
     //C : 게시판 임시 글 작성하기
-
-
 
     //R : 전체 게시판 보기
     @GetMapping("/post")
@@ -76,15 +73,14 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(service.delete(postNo));
     }
 
-
-    // 댓글 추가
+    //=====================================댓글==========================================
+    // C :댓글 추가
     @PostMapping("/post/pcomment")
     public ResponseEntity<PostComment> create(@RequestBody PostComment postComment){
 
         Post post = new Post();
         post.setPostNo(1);
         postComment.setPost(post);
-
 
         Member member = new Member();
         member.setMemberNo(1);
@@ -93,39 +89,59 @@ public class PostController {
        return ResponseEntity.status(HttpStatus.OK).body(pCommentService.create(postComment));
     }
 
+    // 댓글 전체 보기
+    @GetMapping("/post/{postNo}/pcomment")
+    public ResponseEntity<List<PostComment>> postComment(@PathVariable int postNo){
+
+        return ResponseEntity.status(HttpStatus.OK).body(pCommentService.findByPostNo(postNo));
+
+    }
     //U : 내 댓글 수정하기
     @PutMapping("/post/pcomment")
     public ResponseEntity <PostComment> update(@RequestBody PostComment postComment) {
-
-
         return ResponseEntity.status(HttpStatus.OK).body(pCommentService.update(postComment));
     }
 
 
-
-    // 댓글 전체 보기
-    @GetMapping("/post/pcomment")
-    public ResponseEntity<List<PostComment>> postComment(@RequestParam int postNo){
-
-        return ResponseEntity.status(HttpStatus.OK).body(pCommentService.findByPostNo(postNo));
-
-
-    }
-
-    // 댓글 삭제
+    // D : 댓글 삭제
     @DeleteMapping("/post/pcomment/{id}")
     public ResponseEntity<PostComment> deletePDelete(@PathVariable int id){
         return ResponseEntity.status(HttpStatus.OK).body(pCommentService.delete(id));
     }
 
-    //대댓글 추가하기
-//    @PostMapping("/post/pcomment")
-//    public ResponseEntity<PostComment> create(@RequestBody PostComment commentNo){
-//        return ResponseEntity.status(HttpStatus.OK).body(pCommentService.create(commentNo));
-//    }
+    //================================대댓글==========================================
 
+    //C : 대댓글 추가
+    @PostMapping("/post/pcomment/incomment")
+    public ResponseEntity <InComment> create(@RequestBody InComment incomment) {
+        Member member = new Member();
+        Post post = new Post();
+        PostComment pcomment = new PostComment();
+        member.setMemberNo(1);
+        post.setPostNo(1);
+        pcomment.setCommentNo(3);
+        incomment.setMember(member);
+        incomment.setPost(post);
+        incomment.setPostComment(pcomment);
+        return ResponseEntity.status(HttpStatus.OK).body(iCommentService.create(incomment));
+    }
 
+    //R : 대댓글 전체 보기
+    @GetMapping("/post/{postNo}/pcomment/{commentNo}/incomment")
+    public ResponseEntity<List<InComment>> showAll(@PathVariable int postNo, @PathVariable int commentNo) {
+        return ResponseEntity.status(HttpStatus.OK).body(iCommentService.showAll( postNo, commentNo));
+    }
 
+    //U : 대댓글 수정하기
+    @PutMapping("/post/pcomment/incomment")
+    public ResponseEntity <InComment> update(@RequestBody InComment incomment) {
+        return ResponseEntity.status(HttpStatus.OK).body(iCommentService.update(incomment));
+    }
 
+    //D : 대댓글 삭제하기
+    @DeleteMapping("/post/pcomment/incomment/{incono}")
+    public ResponseEntity <InComment> inCommentDelete(@PathVariable int incono) {
+        return ResponseEntity.status(HttpStatus.OK).body(iCommentService.delete(incono));
+    }
 
 }

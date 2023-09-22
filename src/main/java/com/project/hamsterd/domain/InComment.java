@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.util.Date;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -27,11 +29,11 @@ public class InComment {
 
     //대댓글 작성시간
     @Column(name = "IN_CO_CREATEDATE")
-    private String createDate;
+    private Date createDate;
 
     //대댓글 수정시간
     @Column(name = "IN_CO_UPDATEDATE")
-    private String updateDate;
+    private Date updateDate;
 
     //대댓글 익명 닉네임
     @Column(name = "IN_CO_NICKNAME")
