@@ -1,5 +1,5 @@
-
 package com.project.hamsterd.domain;
+
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,6 +15,7 @@ import org.hibernate.annotations.DynamicInsert;
 @DynamicInsert
 @Table(name="TB_MEMBER")
 public class Member {
+
 
     @Id
     @Column(name = "MEMBER_NO")
