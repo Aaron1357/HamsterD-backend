@@ -18,6 +18,8 @@ import java.util.List;
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 public class MemberController {
 
+
+    int nextVal = 0;
     @Autowired
     private MemberService service;
 
@@ -32,8 +34,9 @@ public class MemberController {
     }
 
     @PostMapping("/member")
-    public ResponseEntity<Member> create(@RequestBody Member member) {
+    public ResponseEntity<Member> create(@ModelAttribute Member member) {
         log.info(member);
+
 //        StudyGroup group  = new StudyGroup();
 //        group.setGroupNo(0);
 //        member.setStudyGroup(group);
@@ -44,6 +47,11 @@ public class MemberController {
 //        mem.setAcademyName("kh");
 //        mem.setStudentNo(1);
 
+
+
+        member.setStudentNo(++nextVal);
+
+        log.info(member.getStudentNo());
 
         return ResponseEntity.status(HttpStatus.OK).body(service.create(member));
     }

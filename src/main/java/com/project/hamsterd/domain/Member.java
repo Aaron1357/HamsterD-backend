@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.util.Date;
+
 
 @Entity
 @Data
@@ -19,26 +21,36 @@ public class Member {
 
     @Id
     @Column(name = "MEMBER_NO")
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "memberSQ")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "memberSQ")
     @SequenceGenerator(name="memberSQ",sequenceName = "SEQ_MEMBER_NO",allocationSize = 1)
     private int memberNo;
+
+
+    @Column(name = "ID")
+    private String id;
+    @Column(name = "PASSWORD")
+    private String password;
+    @Column(name = "NAME")
+    private String name;
+    @Column(name = "BIRTH")
+    private Date birth;
+    @Column(name = "GENDER")
+    private String gender;
+    @Column(name = "PHONE")
+    private String phone;
+    @Column(name = "ADDR")
+    private String address;
+    @Column(name = "ACADEMY_NAME")
+    private String academyName;
+    @Column(name = "WEIGHT" )
+    private int weight;
+    @Column(name = "STUDENT_NO")
+    private int studentNo;
+    @Column(name = "AUTHORITY")
+    private String authority;
 
     @ManyToOne
     @JoinColumn(name="GROUP_NO")
     private StudyGroup studyGroup;
-    @Column(name = "ID")
-    private String memberId;
-    @Column(name = "NAME")
-    private String memberName;
-    @Column(name = "AGE")
-    private int memberAge;
-    @Column(name = "ACADEMY_NAME")
-    private String academyName;
-    @Column(name = "WEIGHT" )
-    private int memberWeight;
-    @Column(name = "STUDENT_NO")
-    private int studentNo;
-
-
 
 }
