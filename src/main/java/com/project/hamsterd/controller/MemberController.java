@@ -18,8 +18,8 @@ import java.util.List;
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 public class MemberController {
 
+    private int nextVal = 0;
 
-    int nextVal = 0;
     @Autowired
     private MemberService service;
 
@@ -48,10 +48,7 @@ public class MemberController {
 //        mem.setStudentNo(1);
 
 
-
-        member.setStudentNo(++nextVal);
-
-        log.info(member.getStudentNo());
+          member.setStudentNo(++nextVal);
 
         return ResponseEntity.status(HttpStatus.OK).body(service.create(member));
     }
