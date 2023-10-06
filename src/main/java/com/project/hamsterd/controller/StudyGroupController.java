@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -73,9 +76,9 @@ public class StudyGroupController {
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.showAll());
     }
     // R : 일정 1개 상세 보기(scheduleNo로 조회)
-    @GetMapping("/schedule/{id}")
-    public ResponseEntity<Schedule> showSchdule(@PathVariable int id){
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.show(id));
+    @GetMapping("/study/{groupNo}/schedule/{scheduleNo}")
+    public ResponseEntity<Schedule> showSchdule(@PathVariable int groupNo, @PathVariable int scheduleNo){
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.show(groupNo, scheduleNo));
     }
 
     // R : 특정 스터디그룹의 일정 목록 보기
@@ -85,9 +88,23 @@ public class StudyGroupController {
     }
 
     // R : 개인 일정 목록(memberNo로 조회)
-    @GetMapping("schedule/member/{memberNo}")
+    @GetMapping("/schedule/member/{memberNo}")
     public ResponseEntity<List<Schedule>> findByMemberId(@PathVariable int memberNo){
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByMemberId(memberNo));
+    }
+
+    // R: 일정 날짜별 조회(scheduleDate로 조회)
+//    @GetMapping("/study/{groupNo}/{scheduleDate}")
+//    public ResponseEntity<List<Schedule>> findByDate(@PathVariable int groupNo, @PathVariable String scheduleDate){
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByDate(groupNo, scheduleDate));
+//
+//    }
+
+    // R: 일정 날짜별 조회(scheduleDate로 조회)
+    @GetMapping("/study/{scheduleDate}")
+    public ResponseEntity<List<Schedule>> findByDate(@PathVariable String scheduleDate){
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByDate(scheduleDate));
     }
 
 
