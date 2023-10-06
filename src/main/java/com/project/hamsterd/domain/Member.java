@@ -48,6 +48,8 @@ public class Member {
     private int studentNo;
     @Column(name = "AUTHORITY")
     private String authority;
+    @Column(name ="NICNAME")
+    private String nickname;
 
     @ManyToOne
     @JoinColumn(name="GROUP_NO")

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -31,12 +32,14 @@ public class Post {
     private Date createTime;
     @Column(name="update_time")
     private Date updateTime;
-    @Column
-    private String nickname;
+    @Column(name="post_file")
+    private String postFile;
+
 
     /*공지글 여부 할지말지 고민중*/
     /*private Boolean noticeYn;*/
-
+    
+    //멤버에서 닉네임 받아와야함
     @ManyToOne
     @JoinColumn(name="member_no")
      /*멤버 클래스의 멤버 넘버 외래키 */
