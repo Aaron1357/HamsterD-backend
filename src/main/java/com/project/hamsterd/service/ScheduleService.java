@@ -56,17 +56,11 @@ public class ScheduleService {
     }
 
     // R: 날짜별 일정 목록(scheduleDate로 조회)
-//    public List<Schedule> findByDate(int groupNo, String scheduleDate){
-//        System.out.println("Service date : " + scheduleDate);
-//
-//        return scheduleDAO.findByDate(groupNo, scheduleDate);
-//    }
-
-    // R: 날짜별 일정 목록(scheduleDate로 조회)
-    public List<Schedule> findByDate(String scheduleDate){
-        System.out.println("Service date : " + scheduleDate);
-        return scheduleDAO.findByDate(scheduleDate);
+    public List<Schedule> findByDate(int groupNo, String scheduleDate){
+        return scheduleDAO.findByDate(groupNo, scheduleDate);
     }
+
+
     
     // U : 일정 수정
     public Schedule update(Schedule schedule){
