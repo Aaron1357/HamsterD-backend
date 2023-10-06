@@ -5,12 +5,16 @@ import com.project.hamsterd.repo.StudyGroupDAO;
 import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.domain.Schedule;
 import com.project.hamsterd.repo.ScheduleDAO;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
+@Log4j2
 public class ScheduleService {
 
     @Autowired
@@ -34,22 +38,29 @@ public class ScheduleService {
     }
 
     // R : 일정 1개 상세 보기(scheduleNo로 조회)
-    public Schedule show(int id){
-        Schedule schedule = scheduleDAO.findById(id).orElse(null);
+    public Schedule show(int groupNo, int scheduleNo){
+        Schedule schedule = scheduleDAO.findByGnSn(groupNo, scheduleNo);
         StudyGroup studyGroup = studyGroupDAO.findById(schedule.getStudyGroup().getGroupNo()).orElse(null);
         schedule.setStudyGroup(studyGroup);
         return schedule;
     }
     
     // R : 특정 스터디그룹의 일정 목록 보기(groupNo로 조회)
-    public List<Schedule> showAllGroupSchedule(int id){
-        return scheduleDAO.findByGroupId(id); // scheduleDAO에서 관련 쿼리문 생성함
+    public List<Schedule> showAllGroupSchedule(int groupNo){
+        return scheduleDAO.findByGroupId(groupNo); // scheduleDAO에서 관련 쿼리문 생성함
     }
 
     // R : 개인 일정 목록(memberNo로 조회)
     public List<Schedule> findByMemberId(int id){
         return scheduleDAO.findByMemberId(id); // scheduleDAO에서 관련 쿼리문 생성함
     }
+
+    // R: 날짜별 일정 목록(scheduleDate로 조회)
+    public List<Schedule> findByDate(int groupNo, String scheduleDate){
+        return scheduleDAO.findByDate(groupNo, scheduleDate);
+    }
+
+
     
     // U : 일정 수정
     public Schedule update(Schedule schedule){
@@ -67,4 +78,5 @@ public class ScheduleService {
         scheduleDAO.delete(target);
         return target;
     }
+
 }
