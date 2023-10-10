@@ -57,6 +57,8 @@ public class Member {
 
     @Column(name = "AUTHORITY")
     private String authority;
+    @Column(name ="NICNAME")
+    private String nickname;
 
     @Column(name = "NICKNAME")
     private String nickname;
