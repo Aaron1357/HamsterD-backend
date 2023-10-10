@@ -25,11 +25,6 @@ public class Member {
     @SequenceGenerator(name="memberSEQ",sequenceName = "SEQ_MEMBER_NO", allocationSize = 1)
     private int memberNo;
 
-    @Column(name = "STUDENT_NO")
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "studentSEQ")
-    @SequenceGenerator(name="studentSEQ",sequenceName = "SEQ_STUDENT_NO", allocationSize = 1)
-    private int studentNo;
-
     @Column(name = "ID")
     private String id;
 
@@ -57,14 +52,10 @@ public class Member {
     @Column(name = "WEIGHT" )
     private int weight;
 
-
-
     @Column(name = "AUTHORITY")
     private String authority;
-    @Column(name ="NICNAME")
-    private String nickname;
 
-    @Column(name = "NICKNAME")
+    @Column(name ="NICNAME")
     private String nickname;
 
     @ManyToOne

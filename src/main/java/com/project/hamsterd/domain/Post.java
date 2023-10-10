@@ -34,7 +34,8 @@ public class Post {
     private Date updateTime;
     @Column(name="post_file")
     private String postFile;
-
+    @Column(name="board_view")
+    private Integer boardView;
 
     /*공지글 여부 할지말지 고민중*/
     /*private Boolean noticeYn;*/
