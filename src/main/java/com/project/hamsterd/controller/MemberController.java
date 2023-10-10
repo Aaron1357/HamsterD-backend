@@ -36,7 +36,6 @@ public class MemberController {
     @PostMapping("/member")
     public ResponseEntity<Member> create(@ModelAttribute Member member) {
         log.info(member);
-
 //        StudyGroup group  = new StudyGroup();
 //        group.setGroupNo(0);
 //        member.setStudyGroup(group);
