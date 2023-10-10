@@ -25,6 +25,11 @@ public class Member {
     @SequenceGenerator(name="memberSEQ",sequenceName = "SEQ_MEMBER_NO", allocationSize = 1)
     private int memberNo;
 
+    @Column(name = "STUDENT_NO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "studentSEQ")
+    @SequenceGenerator(name="studentSEQ",sequenceName = "SEQ_STUDENT_NO", allocationSize = 1)
+    private int studentNo;
+
     @Column(name = "ID")
     private String id;
 

@@ -48,7 +48,7 @@ public class MemberController {
 //        mem.setStudentNo(1);
 
 
-          member.setStudentNo(++nextVal);
+//          member.setStudentNo(++nextVal);
 
         return ResponseEntity.status(HttpStatus.OK).body(service.create(member));
     }
