@@ -3,6 +3,7 @@ package com.project.hamsterd.controller;
 import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.service.MemberService;
 import com.project.hamsterd.domain.Member;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ import java.util.List;
 public class MemberController {
 
     @Autowired
+    private HttpSession session;
+
+    @Autowired
     private MemberService service;
 
     @GetMapping("/member")
@@ -46,6 +50,10 @@ public class MemberController {
 //            if(member.getId().equals(list.get(i).getId()) && member.getPassword().equals(list.get(i).getPassword())){
 //                member = list.get(i);
 //            }
+//        }
+
+//        if(service.show(id, password) != null){
+//            session.setAttribute();
 //        }
 
         return ResponseEntity.status(HttpStatus.OK).body(service.show(id, password));
