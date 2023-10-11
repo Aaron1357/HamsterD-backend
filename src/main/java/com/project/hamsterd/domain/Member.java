@@ -53,8 +53,6 @@ public class Member {
     @Column(name = "WEIGHT" )
     private int weight;
 
-
-
     @Column(name = "AUTHORITY")
     private String authority;
 
