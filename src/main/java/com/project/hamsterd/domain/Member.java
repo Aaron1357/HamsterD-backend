@@ -42,7 +42,7 @@ public class Member {
     private String gender;
 
     @Column
-    private String phone;
+    private int phone;
 
     @Column(name = "ADDR")
     private String address;
