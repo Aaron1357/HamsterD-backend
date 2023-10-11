@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Array;
@@ -52,15 +52,18 @@ public class MemberController {
 //            }
 //        }
 
-//        if(service.show(id, password) != null){
-//            session.setAttribute();
+        Member member = service.show(id, password);
+
+//        if(member != null){
+//            session.setAttribute("member", member);
+////            return ResponseEntity.status(HttpStatus.OK).body();
 //        }
 
-        return ResponseEntity.status(HttpStatus.OK).body(service.show(id, password));
+        return ResponseEntity.status(HttpStatus.OK).body(member);
     }
 
     @PostMapping("/member")
-    public ResponseEntity<Member> create(@ModelAttribute Member member) {
+    public ResponseEntity<Member> create(@RequestBody Member member) {
         log.info(member);
 
 //        StudyGroup group  = new StudyGroup();

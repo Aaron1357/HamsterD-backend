@@ -1,6 +1,7 @@
 package com.project.hamsterd.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -46,7 +47,7 @@ public class Member {
     private String address;
 
     @Column(name = "ACADEMY_NAME")
-    private String academyName;
+    private String academy;
 
     @Column
     private int weight;
