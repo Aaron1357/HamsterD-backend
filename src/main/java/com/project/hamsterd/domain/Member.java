@@ -18,30 +18,28 @@ import java.util.Date;
 @Table(name="TB_MEMBER")
 public class Member {
 
-
     @Id
     @Column(name = "MEMBER_NO")
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "memberSEQ")
     @SequenceGenerator(name="memberSEQ",sequenceName = "SEQ_MEMBER_NO", allocationSize = 1)
     private int memberNo;
 
-
-    @Column(name = "ID")
+    @Column
     private String id;
 
-    @Column(name = "PASSWORD")
+    @Column
     private String password;
 
-    @Column(name = "NAME")
+    @Column
     private String name;
 
-    @Column(name = "BIRTH")
+    @Column
     private Date birth;
 
-    @Column(name = "GENDER")
+    @Column
     private String gender;
 
-    @Column(name = "PHONE")
+    @Column
     private String phone;
 
     @Column(name = "ADDR")
@@ -50,17 +48,23 @@ public class Member {
     @Column(name = "ACADEMY_NAME")
     private String academyName;
 
-    @Column(name = "WEIGHT" )
+    @Column
     private int weight;
 
-    @Column(name = "AUTHORITY")
+
+    @Column
     private String authority;
 
-    @Column(name ="NICKNAME")
+    @Column
     private String nickname;
+
+    @Column
+    private String profile;
+
 
     @ManyToOne
     @JoinColumn(name="GROUP_NO")
     private StudyGroup studyGroup;
+
 
 }
