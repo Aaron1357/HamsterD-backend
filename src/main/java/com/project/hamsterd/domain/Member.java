@@ -26,22 +26,22 @@ public class Member {
     private int memberNo;
 
 
-    @Column(name = "ID")
+    @Column
     private String id;
 
-    @Column(name = "PASSWORD")
+    @Column
     private String password;
 
-    @Column(name = "NAME")
+    @Column
     private String name;
 
-    @Column(name = "BIRTH")
+    @Column
     private Date birth;
 
-    @Column(name = "GENDER")
+    @Column
     private String gender;
 
-    @Column(name = "PHONE")
+    @Column
     private String phone;
 
     @Column(name = "ADDR")
@@ -50,19 +50,23 @@ public class Member {
     @Column(name = "ACADEMY_NAME")
     private String academyName;
 
-    @Column(name = "WEIGHT" )
+    @Column
     private int weight;
 
 
-
-    @Column(name = "AUTHORITY")
+    @Column
     private String authority;
 
-    @Column(name ="NICKNAME")
+    @Column
     private String nickname;
+
+    @Column
+    private String profile;
+
 
     @ManyToOne
     @JoinColumn(name="GROUP_NO")
     private StudyGroup studyGroup;
+
 
 }
