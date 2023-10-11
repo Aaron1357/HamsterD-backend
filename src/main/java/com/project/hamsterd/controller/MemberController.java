@@ -3,12 +3,20 @@ package com.project.hamsterd.controller;
 import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.service.MemberService;
 import com.project.hamsterd.domain.Member;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 
@@ -18,19 +26,29 @@ import java.util.List;
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 public class MemberController {
 
-    private int nextVal = 0;
-
     @Autowired
     private MemberService service;
 
     @GetMapping("/member")
     public ResponseEntity<List<Member>> showAll() {
+        log.info("전체조회!!");
         return ResponseEntity.status(HttpStatus.OK).body(service.showAll());
     }
 
-    @GetMapping("/member/{id}")
-    public ResponseEntity<Member> show(@PathVariable int id) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.show(id));
+    @GetMapping("/member/{id}/{password}")
+    public ResponseEntity<Member> show(@PathVariable String id, @PathVariable String password) {
+        System.out.println("멤버 개별 조회 들어옴?");
+        System.out.println("id : " + id);
+        System.out.println("pw : " + password);
+
+//        List<Member> list =  service.showAll();
+//        for(int i = 0; i<list.size(); i++){
+//            if(member.getId().equals(list.get(i).getId()) && member.getPassword().equals(list.get(i).getPassword())){
+//                member = list.get(i);
+//            }
+//        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(service.show(id, password));
     }
 
     @PostMapping("/member")

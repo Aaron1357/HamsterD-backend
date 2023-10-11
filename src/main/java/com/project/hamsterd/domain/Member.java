@@ -60,7 +60,8 @@ public class Member {
     @Column(name = "AUTHORITY")
     private String authority;
 
-    @Column(name ="NICNAME")
+
+    @Column(name ="NICKNAME")
     private String nickname;
 
     @ManyToOne
