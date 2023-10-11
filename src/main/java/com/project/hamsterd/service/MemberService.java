@@ -1,6 +1,6 @@
 package com.project.hamsterd.service;
 
-import com.project.hamsterd.SecurityConfig;
+//import com.project.hamsterd.SecurityConfig;
 import com.project.hamsterd.repo.MemberDAO;
 import com.project.hamsterd.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ public class MemberService {
     @Autowired
     private MemberDAO dao;
 
-    private SecurityConfig security;
+//    private SecurityConfig security;
 
 
     public List<Member> showAll() {
@@ -35,10 +35,10 @@ public class MemberService {
     public Member create(Member member) {
 
 
-        String encodedPw = security.passwordEncoder().encode(member.getPassword());
+//        String encodedPw = security.passwordEncoder().encode(member.getPassword());
 
-        System.out.println("암호화 된 비번 : " + encodedPw);
-        member.setPassword(encodedPw);
+//        System.out.println("암호화 된 비번 : " + encodedPw);
+//        member.setPassword(encodedPw);
 
         return dao.save(member);
     }
