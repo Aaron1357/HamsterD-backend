@@ -1,5 +1,6 @@
 package com.project.hamsterd.controller;
 
+import com.project.hamsterd.domain.MemberDTO;
 import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.service.MemberService;
 import com.project.hamsterd.domain.Member;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 //import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Array;
@@ -28,10 +31,9 @@ import java.util.List;
 public class MemberController {
 
     @Autowired
-    private HttpSession session;
-
-    @Autowired
     private MemberService service;
+
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @GetMapping("/member")
     public ResponseEntity<List<Member>> showAll() {
@@ -63,8 +65,8 @@ public class MemberController {
     }
 
     @PostMapping("/member")
-    public ResponseEntity<Member> create(@RequestBody Member member) {
-        log.info(member);
+    public ResponseEntity<MemberDTO> create(@RequestBody MemberDTO dto) {
+//        log.info(member);
 
 //        StudyGroup group  = new StudyGroup();
 //        group.setGroupNo(0);
@@ -78,8 +80,38 @@ public class MemberController {
 
 
 //          member.setStudentNo(++nextVal);
+    
+        log.info("회원가입들어옴");
+        Member member = Member.builder()
+                                .id(dto.getId())
+                                .password(passwordEncoder.encode(dto.getPassword()))
+                                .name(dto.getName())
+                                .birth(dto.getBirth())
+                                .gender(dto.getGender())
+                                .phone(dto.getPhone())
+                                .academy(dto.getAcademy())
+                                .address(dto.getAddress())
+                                .nickname(dto.getNickname())
+                                .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(service.create(member));
+        Member registerMember = service.create(member);
+
+        MemberDTO responseDTO = MemberDTO.builder()
+                .id(registerMember.getId())
+//                .password(registerMember.getPassword())
+                .name(registerMember.getName())
+                .birth(registerMember.getBirth())
+                .gender(registerMember.getGender())
+                .phone(registerMember.getPhone())
+                .academy(registerMember.getAcademy())
+                .address(registerMember.getAddress())
+                .nickname(registerMember.getNickname())
+                .build();
+
+//        log.info(registerMember.toString());
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     @PutMapping("/member")
