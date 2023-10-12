@@ -3,22 +3,26 @@ package com.project.hamsterd.controller;
 import com.project.hamsterd.domain.GroupEval;
 import com.project.hamsterd.domain.Member;
 import com.project.hamsterd.domain.Schedule;
-import com.project.hamsterd.service.GroupEvalService;
 import com.project.hamsterd.service.ScheduleService;
 import com.project.hamsterd.service.StudyGroupService;
 import com.project.hamsterd.domain.StudyGroup;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+@CrossOrigin(origins={"*"}, maxAge = 6000)
 @RestController
 @RequestMapping("/hamsterd/*")
+@Log4j2
 public class StudyGroupController {
 
     @Autowired
@@ -59,15 +63,31 @@ public class StudyGroupController {
 
     // C : 일정 추가
     @PostMapping("/schedule")
-    public ResponseEntity<Schedule> create(@RequestBody Schedule schedule){
+    public ResponseEntity<Schedule> create(
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("date") String dateString) {
 
-        Member member = new Member();
-        member.setMemberNo(1);
+        Schedule vo = new Schedule();
+        vo.setScheduleTitle(title);
+        vo.setScheduleContent(content);
 
-        schedule.setMember(member);
+        // 문자열로 받은 날짜를 Date 객체로 변환
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = dateFormat.parse(dateString);
+            vo.setScheduleDate(date);
+        } catch (ParseException e) {
+            // 날짜 파싱 오류 처리
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
 
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.create(schedule));
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.create(vo));
     }
+
+
+
+
 
     // R : 일정 조회
     // R : 일정 목록 전체 보기
