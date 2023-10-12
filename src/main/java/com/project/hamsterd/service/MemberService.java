@@ -4,6 +4,7 @@ package com.project.hamsterd.service;
 import com.project.hamsterd.repo.MemberDAO;
 import com.project.hamsterd.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,6 +55,16 @@ public class MemberService {
         Member target = dao.findById(id).orElse(null);
         dao.delete(target);
         return target;
+    }
+
+    public Member getByCredentials(String id, String password, PasswordEncoder encoder){
+        Member member = dao.findByMemberId(id);
+
+        if(member != null && encoder.matches(password, member.getPassword())){
+            return member;
+        }
+
+        return null;
     }
 
 }

@@ -2,6 +2,7 @@ package com.project.hamsterd.controller;
 
 import com.project.hamsterd.domain.MemberDTO;
 import com.project.hamsterd.domain.StudyGroup;
+import com.project.hamsterd.security.TokenProvider;
 import com.project.hamsterd.service.MemberService;
 import com.project.hamsterd.domain.Member;
 import jakarta.servlet.http.HttpSession;
@@ -29,6 +30,10 @@ import java.util.List;
 @Log4j2
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 public class MemberController {
+
+
+    @Autowired
+    private TokenProvider tokenProvider;
 
     @Autowired
     private MemberService service;
@@ -122,6 +127,22 @@ public class MemberController {
     @DeleteMapping("/member/{id}")
     public ResponseEntity<Member> delete(@PathVariable int id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.delete(id));
+    }
+
+    @PostMapping("/member/signup")
+    public ResponseEntity authenticate(@RequestBody MemberDTO dto){
+        Member member = service.getByCredentials(dto.getId(), dto.getPassword(), passwordEncoder);
+        if(member!=null){ // -> 토큰 생성
+            String token = tokenProvider.create(member);
+            MemberDTO responseDTO = MemberDTO.builder()
+                    .id(member.getId())
+                    .name(member.getName())
+                    .token(token)
+                    .build();
+            return ResponseEntity.ok().body(responseDTO);
+        }else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }
