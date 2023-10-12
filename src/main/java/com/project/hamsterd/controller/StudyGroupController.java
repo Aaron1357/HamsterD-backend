@@ -37,6 +37,8 @@ public class StudyGroupController {
         return ResponseEntity.status(HttpStatus.OK).body(service.showAll());
     }
 
+
+
     // 스터디그룹 개별 조회
     @GetMapping("/studygroup/{id}")
     public ResponseEntity<StudyGroup> show(@PathVariable int id){
@@ -48,12 +50,15 @@ public class StudyGroupController {
     public ResponseEntity<StudyGroup> create(
             @RequestParam("grouptitle") String grouptitle,
             @RequestParam("groupcontent") String groupcontent,
-            @RequestParam("groupacademy") String groupacademy) {
+            @RequestParam("groupacademy") String groupacademy,
+            @RequestParam("groupimage") String groupimage) {
 
             StudyGroup vo = new StudyGroup();
             vo.setGroupName(grouptitle);
             vo.setGroupContent(groupcontent);
             vo.setGroupAcademy(groupacademy);
+            vo.setGroupImage(groupimage);
+
         return ResponseEntity.status(HttpStatus.OK).body(service.create(vo));
     }
 

@@ -28,4 +28,8 @@ public class StudyGroup {
 
     @Column
     private String groupAcademy;
+
+    @Column
+    private String groupImage;
+
    }
