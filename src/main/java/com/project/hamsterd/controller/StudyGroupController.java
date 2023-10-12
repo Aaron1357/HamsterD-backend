@@ -72,6 +72,15 @@ public class StudyGroupController {
         vo.setScheduleTitle(title);
         vo.setScheduleContent(content);
 
+        StudyGroup sg = new StudyGroup();
+        sg.setGroupNo(1);
+
+        Member m = new Member();
+        m.setMemberNo(1);
+
+        vo.setStudyGroup(sg);
+        vo.setMember(m);
+
         // 문자열로 받은 날짜를 Date 객체로 변환
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
