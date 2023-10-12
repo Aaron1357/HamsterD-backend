@@ -45,8 +45,16 @@ public class StudyGroupController {
 
     // 스터디 그룹 생성
     @PostMapping("/studygroup")
-    public ResponseEntity<StudyGroup> create(@RequestBody StudyGroup studyGroup){
-        return ResponseEntity.status(HttpStatus.OK).body(service.create(studyGroup));
+    public ResponseEntity<StudyGroup> create(
+            @RequestParam("grouptitle") String grouptitle,
+            @RequestParam("groupcontent") String groupcontent,
+            @RequestParam("groupacademy") String groupacademy) {
+
+            StudyGroup vo = new StudyGroup();
+            vo.setGroupName(grouptitle);
+            vo.setGroupContent(groupcontent);
+            vo.setGroupAcademy(groupacademy);
+        return ResponseEntity.status(HttpStatus.OK).body(service.create(vo));
     }
 
     // 스터디그룹 수정
