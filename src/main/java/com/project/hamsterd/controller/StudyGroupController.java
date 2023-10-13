@@ -8,22 +8,32 @@ import com.project.hamsterd.service.StudyGroupService;
 import com.project.hamsterd.domain.StudyGroup;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins={"*"}, maxAge = 6000)
 @RestController
 @RequestMapping("/hamsterd/*")
 @Log4j2
 public class StudyGroupController {
+
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadPath;
 
     @Autowired
     private StudyGroupService service;
@@ -51,13 +61,33 @@ public class StudyGroupController {
             @RequestParam("grouptitle") String grouptitle,
             @RequestParam("groupcontent") String groupcontent,
             @RequestParam("groupacademy") String groupacademy,
-            @RequestParam("groupimage") String groupimage) {
+            @RequestParam("groupimage") MultipartFile groupimage) {
+
+//        이미지 실제 파일 이름
+             String originalImage = groupimage.getOriginalFilename();
+             String realImage = originalImage.substring(originalImage.lastIndexOf("\\") + 1);
+             log.info("oriImg : " + originalImage);
+
+//        UUID
+        String uuid = UUID.randomUUID().toString();
+
+//        실제로 저장할 파일 명 (위치포함)
+
+        String saveImage = uploadPath + File.separator + uuid + "_" + realImage;
+
+        Path pathImage = Paths.get(saveImage);
+
+        try {
+            groupimage.transferTo(pathImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
             StudyGroup vo = new StudyGroup();
             vo.setGroupName(grouptitle);
             vo.setGroupContent(groupcontent);
             vo.setGroupAcademy(groupacademy);
-            vo.setGroupImage(groupimage);
+            vo.setGroupImage(saveImage);
 
         return ResponseEntity.status(HttpStatus.OK).body(service.create(vo));
     }
