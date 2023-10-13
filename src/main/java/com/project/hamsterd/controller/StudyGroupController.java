@@ -123,9 +123,8 @@ public class StudyGroupController {
     }
 
     // R: 일정 날짜별 조회(scheduleDate로 조회)
-    @GetMapping("/study/{groupNo}/{scheduleDate}")
+    @GetMapping("/schedule/study/{groupNo}/{scheduleDate}")
     public ResponseEntity<List<Schedule>> findByDate(@PathVariable int groupNo, @PathVariable String scheduleDate){
-
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByDate(groupNo, scheduleDate));
 
     }
