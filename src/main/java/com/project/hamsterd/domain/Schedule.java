@@ -35,7 +35,7 @@ public class Schedule {
 
     // 스케줄 날짜
     @Column(name="schedule_date")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone="GMT+9")
     private Date scheduleDate;
 
     // 스터디그룹
