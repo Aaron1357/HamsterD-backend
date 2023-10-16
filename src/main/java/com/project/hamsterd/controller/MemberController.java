@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Array;
 import java.util.List;
@@ -120,7 +121,13 @@ public class MemberController {
     }
 
     @PutMapping("/member")
-    public ResponseEntity<Member> update(@RequestBody Member member) {
+    public ResponseEntity<Member> update(MultipartFile profile, @RequestParam(name = "id") String id, @RequestParam(name = "password") String password, @RequestParam(name = "nickname") String nickname) {
+        Member member = Member.builder()
+                .id(id)
+                .password(passwordEncoder.encode(password))
+                .nickname(nickname)
+                .build();
+
         return ResponseEntity.status(HttpStatus.OK).body(service.update(member));
     }
 
@@ -135,8 +142,8 @@ public class MemberController {
         if(member!=null){ // -> 토큰 생성
             String token = tokenProvider.create(member);
             MemberDTO responseDTO = MemberDTO.builder()
-                    .memberNo(member.getMemberNo())
-//                    .id(member.getId())
+//                    .memberNo(member.getMemberNo())
+                    .id(member.getId())
                     .name(member.getName())
                     .nickname(member.getNickname())
                     .token(token)

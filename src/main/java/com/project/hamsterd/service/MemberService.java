@@ -45,9 +45,17 @@ public class MemberService {
     }
 
     public Member update(Member member) {
-        Member target = dao.findById(member.getMemberNo()).orElse(null);
+        Member target = dao.findByMemberId(member.getId());
+//        System.out.println("인코딩 된 패스워드(수정) : " + member.getPassword());
+//        System.out.println("닉네임 (수정) : " + member.getNickname());
+//        System.out.println("멤버 식별용 아이디 : " + member.getId());
 
-        if (target != null) return dao.save(member);
+
+        if (target != null) {
+            target.setPassword(member.getPassword());
+            target.setNickname(member.getNickname());
+            return dao.save(target);
+        }
         return null;
     }
 
