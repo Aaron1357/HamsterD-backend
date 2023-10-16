@@ -44,9 +44,15 @@ public class MemberService {
     }
 
     public Member update(Member member) {
-        Member target = dao.findById(member.getMemberNo()).orElse(null);
+        Member target = dao.findByMemberId(member.getId()); // 기존 DB에 있는 데이터를 member의 아이디로 검색
 
-        if (target != null) return dao.save(member);
+        if (target != null) {
+            target.setPassword(member.getPassword());
+            target.setNickname(member.getNickname());
+            target.setProfile(member.getProfile());
+
+            return dao.save(target);
+        }
         return null;
     }
 
