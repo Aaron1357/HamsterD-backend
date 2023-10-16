@@ -41,7 +41,7 @@ public class TokenProvider {
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)  // header에 들어갈 내용
                 .setSubject(member.getId())                      // 여기부터 payload에 들어갈 내용
                 .setIssuer("hamsterd")                        // 프로젝트 이름
-                .setClaims(claims)                              // claims 담긴 claims 추가
+                .setClaims(claims)                              // claims 담긴 claims 추가npm
                 .setIssuedAt(new Date())                         // 현재 날짜
                 .setExpiration(expireDate)                       // 언제까지
                 .compact();

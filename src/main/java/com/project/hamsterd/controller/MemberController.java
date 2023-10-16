@@ -129,14 +129,16 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(service.delete(id));
     }
 
-    @PostMapping("/member/signup")
+    @PostMapping("/member/signin")
     public ResponseEntity authenticate(@RequestBody MemberDTO dto){
         Member member = service.getByCredentials(dto.getId(), dto.getPassword(), passwordEncoder);
         if(member!=null){ // -> 토큰 생성
             String token = tokenProvider.create(member);
             MemberDTO responseDTO = MemberDTO.builder()
-                    .id(member.getId())
+                    .memberNo(member.getMemberNo())
+//                    .id(member.getId())
                     .name(member.getName())
+                    .nickname(member.getNickname())
                     .token(token)
                     .build();
             return ResponseEntity.ok().body(responseDTO);
