@@ -1,9 +1,6 @@
 package com.project.hamsterd.controller;
 
-import com.project.hamsterd.domain.InComment;
-import com.project.hamsterd.domain.Member;
-import com.project.hamsterd.domain.Post;
-import com.project.hamsterd.domain.PostComment;
+import com.project.hamsterd.domain.*;
 import com.project.hamsterd.service.InCommentService;
 import com.project.hamsterd.service.PostCommentService;
 import com.project.hamsterd.service.PostService;
@@ -20,13 +17,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Controller
 @Log4j2
 @RequestMapping("/hamsterd/*")
-//postman과 연동시켜주기 위한 애노테이션 테스트위한거임
+//CORS 요청을 허용할 원본(도메인)을 지정합니다. {"*"}은 모든 원본을 허용
 @CrossOrigin(origins={"*"}, maxAge = 6000)
 public class PostController {
     @Autowired
@@ -38,45 +36,56 @@ public class PostController {
     @Autowired
     private PostCommentService pCommentService;
 
-    @Value("${spring.servlet.multipart.location}")
+    @Value("${file.upload.path}")
     private String uploadPath;
+
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadPathImage;
 
 
     //C : 게시판 작성하기
     @PostMapping("/post")
-    public ResponseEntity <Post> create(@RequestParam("title") String title, @RequestParam("desc") String desc,  @RequestParam("file") MultipartFile file) {
-
-
-        //1.업로드된 채널 이미지 파일의 원본 파일 이름
-        String originalPhoto = file.getOriginalFilename();
-
-        //2.마지막 인덱스 값에서 +1 해주면 실제 이름부터 값이 시작됨
-        String realPhoto = originalPhoto.substring(originalPhoto.lastIndexOf("\\")+1);
-
-        //3.UUID 무작위로 이름 지정해줌, 파일명 중복 방지위해 사용됨
-        String uuid = UUID.randomUUID().toString();
-
-        //4.저장할 채널 이미지파일 경로 구성
-        String savePhoto = uploadPath + File.separator + uuid + "_" + realPhoto;
+    public ResponseEntity <Post> create(@RequestParam("title") String title, @RequestParam("desc") String desc) {
+//    public ResponseEntity<String> imgUrl(@RequestBody PostDTO postDTO) {  @RequestParam("img") MultipartFile img
+        //, @RequestParam(value="file", required = false) MultipartFile[] files
 
         Post vo = new Post();
-        vo.setPostTitle(title);
-        vo.setPostContent(desc);
-//        vo.getMember().setNickname(nickname);
-        vo.setPostFile(savePhoto);
-
-
-        Path pathPhoto = Paths.get(savePhoto);
-        try {
-            file.transferTo(pathPhoto);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+//        if (files != null) {
+//            for (MultipartFile file : files) {
+//
+//                if (file != null && !file.isEmpty()) {
+//                    //1.업로드된 채널 이미지 파일의 원본 파일 이름
+//                    String originalPhoto = file.getOriginalFilename();
+//
+//                    //2.마지막 인덱스 값에서 +1 해주면 실제 이름부터 값이 시작됨
+//                    String realPhoto = originalPhoto.substring(originalPhoto.lastIndexOf("\\") + 1);
+//
+//                    //3.UUID 무작위로 이름 지정해줌, 파일명 중복 방지위해 사용됨
+//                    String uuid = UUID.randomUUID().toString();
+//
+//                    //4.저장할 채널 이미지파일 경로 구성
+//                    String savePhoto = uploadPathImage + File.separator + uuid + "_" + realPhoto;
+//
+//
+//                    Path path = Paths.get(savePhoto);
+//                    try {
+//                        file.transferTo(path);
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                    vo.setPostFile(savePhoto);
+//                    log.info(savePhoto);
+//
+//                    //  postman 테스트해보기 위한 코드 db에 값 안넘어감
+//                    // return ResponseEntity.status(HttpStatus.OK).build();
+//                }
+//            }
+//            }
+            vo.setPostTitle(title);
+            vo.setPostContent(desc);
+            return ResponseEntity.status(HttpStatus.OK).body(service.create(vo));
         }
 
-        //  postman 테스트해보기 위한 코드
-        // return ResponseEntity.status(HttpStatus.OK).build();
-        return ResponseEntity.status(HttpStatus.OK).body(service.create(vo));
-    }
 
     //C : 관리자 공지 글 작성하기 -- 관리자만 작성할수있음 관리자만 삭제가능
 

@@ -25,7 +25,6 @@ public class Member {
     @SequenceGenerator(name="memberSEQ",sequenceName = "SEQ_MEMBER_NO", allocationSize = 1)
     private int memberNo;
 
-
     @Column
     private String id;
 

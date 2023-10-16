@@ -10,6 +10,7 @@ import com.project.hamsterd.domain.StudyGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -17,8 +18,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/hamsterd/*")
+@CrossOrigin(origins={"*"}, maxAge = 6000)
 public class StudyGroupController {
 
     @Autowired
@@ -58,15 +60,35 @@ public class StudyGroupController {
     }
 
     // C : 일정 추가
+
+    // C : 일정 추가
     @PostMapping("/schedule")
-    public ResponseEntity<Schedule> create(@RequestBody Schedule schedule){
+    public ResponseEntity<Schedule> create(
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("date") String dateString) {
 
-        Member member = new Member();
-        member.setMemberNo(1);
+        Schedule vo = new Schedule();
+        vo.setScheduleTitle(title);
+        vo.setScheduleContent(content);
 
-        schedule.setMember(member);
+        StudyGroup sg = new StudyGroup();
+        sg.setGroupNo(1);
 
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.create(schedule));
+        Member m = new Member();
+        m.setMemberNo(1);
+
+        // 문자열로 받은 날짜를 Date 객체로 변환
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = dateFormat.parse(dateString);
+            vo.setScheduleDate(date);
+        } catch (ParseException e) {
+            // 날짜 파싱 오류 처리
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.create(vo));
     }
 
     // R : 일정 조회
