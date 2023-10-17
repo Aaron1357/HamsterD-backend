@@ -22,7 +22,11 @@ public class PostService {
     }
 
     public Post show(int postNo) {
-        return dao.findById(postNo).orElse(null);
+        log.info(postNo);
+        Post post = dao.findById(postNo).orElse(null);
+        log.info(post);
+
+        return post;
     }
 
     public Post create(Post post) {
@@ -67,7 +71,7 @@ public class PostService {
         return data;
     }
 
-    public List<Post> findByMemberId(String id) {
+    public List<Post> findByMemberId(int id) {
         return dao.findByMemberId(id);
     }
 

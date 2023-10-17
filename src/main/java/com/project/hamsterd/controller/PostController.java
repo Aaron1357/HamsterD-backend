@@ -98,8 +98,9 @@ public class PostController {
     }
 
     //R : 특정 게시판 보기
-    @GetMapping("/post/{postNo}")
+    @GetMapping("/post/detail/{postNo}")
     public ResponseEntity <Post> show(@PathVariable int postNo) {
+        log.info("상세페이지 들어옴");
         return ResponseEntity.status(HttpStatus.OK).body(service.show(postNo));
     }
 
@@ -107,7 +108,7 @@ public class PostController {
     // 특정 멤버의 모든 게시판 조회 memberNo 받아와서 작성하기
 
     @GetMapping("/post/{id}")
-    public ResponseEntity <List<Post>> postList(@PathVariable String id) {
+    public ResponseEntity <List<Post>> postList(@PathVariable int id) {
        return ResponseEntity.status(HttpStatus.OK).body(service.findByMemberId(id));
   }
 

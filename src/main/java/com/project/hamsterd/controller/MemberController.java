@@ -86,7 +86,7 @@ public class MemberController {
 
 //          member.setStudentNo(++nextVal);
     
-        log.info("회원가입들어옴");
+        log.info(dto.getAcademy());
         Member member = Member.builder()
                                 .id(dto.getId())
                                 .password(passwordEncoder.encode(dto.getPassword()))
@@ -100,7 +100,7 @@ public class MemberController {
                                 .build();
 
         Member registerMember = service.create(member);
-
+        log.info("회원가입들어옴");
         MemberDTO responseDTO = MemberDTO.builder()
                 .id(registerMember.getId())
 //                .password(registerMember.getPassword())
