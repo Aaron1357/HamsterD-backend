@@ -127,6 +127,7 @@ public class MemberController {
                 .password(passwordEncoder.encode(password))
                 .nickname(nickname)
                 .build();
+        log.info(service.update(member));
 
         return ResponseEntity.status(HttpStatus.OK).body(service.update(member));
     }
@@ -142,7 +143,7 @@ public class MemberController {
         if(member!=null){ // -> 토큰 생성
             String token = tokenProvider.create(member);
             MemberDTO responseDTO = MemberDTO.builder()
-//                    .memberNo(member.getMemberNo())
+                    .memberNo(member.getMemberNo())
                     .id(member.getId())
                     .name(member.getName())
                     .nickname(member.getNickname())
