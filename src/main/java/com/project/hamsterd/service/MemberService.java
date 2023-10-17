@@ -1,6 +1,7 @@
 package com.project.hamsterd.service;
 
 //import com.project.hamsterd.SecurityConfig;
+import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.repo.MemberDAO;
 import com.project.hamsterd.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,13 @@ public class MemberService {
 
     public List<Member> showAll() {
         return dao.findAll();
+    }
+
+    public Member show(String id){
+        Member mem = dao.findByMemberId(id);
+
+        return mem;
+
     }
 
     public Member show(String id, String password){
@@ -59,6 +67,20 @@ public class MemberService {
     public Member delete(int id) {
         Member target = dao.findById(id).orElse(null);
         dao.delete(target);
+        return target;
+    }
+
+    public List<Member> inGroup(int groupNo){
+
+        List<Member> target = dao.findByGroupNo(groupNo);
+
+        return target;
+    }
+
+    public Member findManager(int groupNo){
+
+        Member target = dao.findManager(groupNo);
+
         return target;
     }
 

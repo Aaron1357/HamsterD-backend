@@ -3,6 +3,7 @@ package com.project.hamsterd.controller;
 import com.project.hamsterd.domain.GroupEval;
 import com.project.hamsterd.domain.Member;
 import com.project.hamsterd.domain.Schedule;
+import com.project.hamsterd.service.MemberService;
 import com.project.hamsterd.service.ScheduleService;
 import com.project.hamsterd.service.StudyGroupService;
 import com.project.hamsterd.domain.StudyGroup;
@@ -41,6 +42,11 @@ public class StudyGroupController {
     @Autowired
     private ScheduleService scheduleService;
 
+    @Autowired
+    private MemberService memberService;
+
+
+
     // 스터디 그룹 전체보기
     @GetMapping("/studygroup")
     public ResponseEntity<List<StudyGroup>> showAll(){
@@ -50,10 +56,25 @@ public class StudyGroupController {
 
 
     // 스터디그룹 개별 조회
-    @GetMapping("/studygroup/{id}")
-    public ResponseEntity<StudyGroup> show(@PathVariable int id){
-        return ResponseEntity.status(HttpStatus.OK).body(service.show(id));
+    @GetMapping("/studygroup/{groupNo}")
+    public ResponseEntity<StudyGroup> show(@PathVariable int groupNo){
+        return ResponseEntity.status(HttpStatus.OK).body(service.show(groupNo));
     }
+
+
+    // 그룹넘버를 기본키로 가지는 스터디 그룹에 속한 멤버들 조회
+    @GetMapping("/studygroup/{groupNo}/member")
+    public ResponseEntity<List<Member>> showGroupMember(@PathVariable int groupNo){
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.inGroup(groupNo));
+    }
+
+    // 그룹넘버를 기본키로 가지는 스터디 그룹의 조장 조회
+    @GetMapping("/studygroup/{groupNo}/manager")
+    public ResponseEntity<Member> findManager(@PathVariable int groupNo){
+
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.findManager(groupNo));
+    }
+
 
     // 스터디 그룹 생성
     @PostMapping("/studygroup")
@@ -61,7 +82,9 @@ public class StudyGroupController {
             @RequestParam("grouptitle") String grouptitle,
             @RequestParam("groupcontent") String groupcontent,
             @RequestParam("groupacademy") String groupacademy,
-            @RequestParam("groupimage") MultipartFile groupimage) {
+            @RequestParam("groupimage") MultipartFile groupimage,
+            @RequestParam("id") String id)
+            {
 
 //        이미지 실제 파일 이름
              String originalImage = groupimage.getOriginalFilename();
@@ -89,7 +112,14 @@ public class StudyGroupController {
             vo.setGroupAcademy(groupacademy);
             vo.setGroupImage(saveImage);
 
-        return ResponseEntity.status(HttpStatus.OK).body(service.create(vo));
+            StudyGroup studyGroup = service.create(vo);
+
+            Member member = memberService.show(id);
+            member.setStudyGroup(studyGroup);
+            member.setAuthority("GROUP_MANAGER");
+            log.info("controller : " +memberService.update(member).getAuthority());
+
+        return ResponseEntity.status(HttpStatus.OK).body(studyGroup);
     }
 
     // 스터디그룹 수정
