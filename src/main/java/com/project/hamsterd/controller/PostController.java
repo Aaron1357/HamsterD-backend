@@ -115,15 +115,23 @@ public class PostController {
     //U : 내 게시판 수정하기
 
     /*내 게시판만 수정할수있음 memberNo에 postNo으로 해야해*/
-    @PutMapping("/post")
-    public ResponseEntity <Post> update(@RequestBody Post post) {
+    @PutMapping("/updatePost")
+    public ResponseEntity <Post> update(@RequestParam("postNo") int postNo, @RequestParam("title") String title, @RequestParam("desc") String desc) {
+
+        Post post = new Post();
+        post.setPostNo(postNo);
+        post.setPostTitle(title);
+        log.info(title);
+        post.setPostContent(desc);
+        log.info(desc);
         return ResponseEntity.status(HttpStatus.OK).body(service.update(post));
     }
 
     //D : 특정 내 게시판 삭제하기
     /*내 게시판만 지울수있음 memberNo에 postNo으로 해야해*/
-    @DeleteMapping("/post/{postNo}")
-    public ResponseEntity <Post> postUserDelete(@PathVariable int postNo) {
+    @DeleteMapping("/deletePost/{postNo}")
+    public ResponseEntity <Post> delete(@PathVariable int postNo) {
+        log.info("포스트삭제 넘버 :" + postNo);
         return ResponseEntity.status(HttpStatus.OK).body(service.delete(postNo));
     }
 
