@@ -80,6 +80,7 @@ public class MemberService {
     public Member findManager(int groupNo){
 
         Member target = dao.findManager(groupNo);
+        System.out.println(target);
 
         return target;
     }
