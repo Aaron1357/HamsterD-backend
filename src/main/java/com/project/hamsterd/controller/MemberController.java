@@ -127,6 +127,7 @@ public class MemberController {
                 .nickname(nickname)
                 .build();
         log.info(service.update(member));
+        System.out.println("회원정보수정");
 
         return ResponseEntity.status(HttpStatus.OK).body(service.update(member));
     }
@@ -146,6 +147,7 @@ public class MemberController {
                     .id(member.getId())
                     .name(member.getName())
                     .nickname(member.getNickname())
+                    .authority(member.getAuthority())
                     .token(token)
                     .build();
             return ResponseEntity.ok().body(responseDTO);
