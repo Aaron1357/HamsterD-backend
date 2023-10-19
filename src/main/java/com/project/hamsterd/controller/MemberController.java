@@ -148,6 +148,7 @@ public class MemberController {
                     .id(member.getId())
                     .name(member.getName())
                     .nickname(member.getNickname())
+                    .authority(member.getAuthority())
                     .token(token)
                     .build();
             return ResponseEntity.ok().body(responseDTO);
