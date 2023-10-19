@@ -79,7 +79,7 @@ public class StudyGroupController {
         sg.setGroupNo(1);
 
         Member m = new Member();
-        m.setMemberNo(1);
+        m.setMemberNo(2);
 
         vo.setStudyGroup(sg);
         vo.setMember(m);

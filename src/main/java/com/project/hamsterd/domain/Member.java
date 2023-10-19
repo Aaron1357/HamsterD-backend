@@ -43,7 +43,7 @@ public class Member {
     private String gender;
 
     @Column
-    private int phone;
+    private String phone;
 
     @Column(name = "ADDR")
     private String address;
