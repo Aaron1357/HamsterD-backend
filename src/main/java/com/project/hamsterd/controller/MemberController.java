@@ -75,16 +75,10 @@ public class MemberController {
     public ResponseEntity<Member> create(@RequestBody Member member) {
         log.info(member);
 
-//        StudyGroup group  = new StudyGroup();
-//        group.setGroupNo(0);
-//        member.setStudyGroup(group);
-//        Member mem = new Member();
-//        mem.setMemberId("user1");
-//        mem.setMemberAge(24);
-//        mem.setMemberName("윤종빈");
-//        mem.setAcademyName("kh");
-//        mem.setStudentNo(1);
-
+          if(member.getProfile() == null)
+          {
+              member.setProfile("D:\\Aaron1357\\HamsterD-Front-WorkSpace\\hamsterd-front-workspace\\public\\upload\\man.png");
+          };
 
 //          member.setStudentNo(++nextVal);
 
@@ -113,6 +107,10 @@ public class MemberController {
 
         //4.저장할 채널 이미지파일 경로 구성
         String saveProfile = uploadPath + File.separator + uuid + "_" + realPhoto;
+
+        log.info("photo 주소 : " +saveProfile);
+
+
 
         Member vo = new Member();
         vo.setId(id);
