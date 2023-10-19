@@ -1,8 +1,10 @@
 package com.project.hamsterd.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -16,15 +18,14 @@ import java.util.Date;
 @AllArgsConstructor
 @DynamicInsert
 @Table(name="TB_MEMBER")
+@Builder
 public class Member {
-
 
     @Id
     @Column(name = "MEMBER_NO")
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "memberSEQ")
     @SequenceGenerator(name="memberSEQ",sequenceName = "SEQ_MEMBER_NO", allocationSize = 1)
     private int memberNo;
-
 
     @Column
     private String id;
@@ -48,7 +49,7 @@ public class Member {
     private String address;
 
     @Column(name = "ACADEMY_NAME")
-    private String academyName;
+    private String academy;
 
     @Column
     private int weight;
