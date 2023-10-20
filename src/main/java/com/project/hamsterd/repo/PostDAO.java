@@ -13,8 +13,12 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
     //특정 멤버의 모든 게시판 조회
     //SELECT * FROM post WHERE memberNo=?
 
-     @Query(value="SELECT * FROM post WHERE member_No = :memberNo", nativeQuery=true)
+     @Query(value="SELECT * FROM tb_post WHERE member_No = :memberNo", nativeQuery=true)
      List<Post> findByMemberId(int memberNo);
+
+     @Query(value="UPDATE tb_post SET board_view = board_view + 1 WHERE post_no =:postNo", nativeQuery=true)
+     Post updateBoardView(int postNo);
+
 
 
 

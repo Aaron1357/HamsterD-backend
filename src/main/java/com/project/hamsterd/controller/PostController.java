@@ -45,7 +45,8 @@ public class PostController {
 
     //C : 게시판 작성하기
     @PostMapping("/post")
-    public ResponseEntity <Post> create(@RequestParam("title") String title, @RequestParam("desc") String desc) {
+    public ResponseEntity<Post> create(@RequestParam("title") String title, @RequestParam("desc") String desc, @RequestParam("securityCheck") char securityCheck) {
+
 //    public ResponseEntity<String> imgUrl(@RequestBody PostDTO postDTO) {  @RequestParam("img") MultipartFile img
         //, @RequestParam(value="file", required = false) MultipartFile[] files
 
@@ -81,11 +82,22 @@ public class PostController {
 //                }
 //            }
 //            }
-            vo.setPostTitle(title);
-            vo.setPostContent(desc);
-            return ResponseEntity.status(HttpStatus.OK).body(service.create(vo));
-        }
+        vo.setPostTitle(title);
+        vo.setPostContent(desc);
+        vo.setSecurityCheck(securityCheck);
+        return ResponseEntity.status(HttpStatus.OK).body(service.create(vo));
+    }
 
+
+
+    //게시판 조회수 updateBoardView
+    @PutMapping("/post/boardView/{postNo}")
+    public ResponseEntity<Post> update(@PathVariable int postNo) {
+        Post post =new Post();
+        post.setPostNo(1);
+        log.info("게시판 조회수 들어움");
+        return ResponseEntity.status(HttpStatus.OK).body(service.updateBoardView(postNo));
+    }
 
     //C : 관리자 공지 글 작성하기 -- 관리자만 작성할수있음 관리자만 삭제가능
 

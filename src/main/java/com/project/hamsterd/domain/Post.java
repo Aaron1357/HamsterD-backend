@@ -35,13 +35,13 @@ public class Post {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name="update_time")
     private Date updateTime;
-    @Column(name="post_file")
-    private String postFile;
     @Column(name="board_view")
-    private Integer boardView;
+    private int boardView;
+    @Column
+    private char securityCheck;
+    //y랑 n으로 하고 n을 default로 db 추가하기
 
-    /*공지글 여부 할지말지 고민중*/
-    /*private Boolean noticeYn;*/
+
     
     //멤버에서 닉네임 받아와야함
     @ManyToOne
