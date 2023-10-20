@@ -4,6 +4,8 @@ import com.project.hamsterd.domain.Post;
 import com.project.hamsterd.repo.PostDAO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -17,8 +19,8 @@ public class PostService {
     @Autowired
     private PostDAO dao;
 
-    public List<Post> showAll() {
-        return dao.findAll();
+    public Page<Post> showAll(Pageable pageable) {
+        return dao.findAll(pageable);
     }
 
     public Post show(int postNo) {

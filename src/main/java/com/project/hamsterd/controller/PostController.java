@@ -6,10 +6,15 @@ import com.project.hamsterd.service.InCommentService;
 import com.project.hamsterd.service.MemberService;
 import com.project.hamsterd.service.PostCommentService;
 import com.project.hamsterd.service.PostService;
+import com.querydsl.core.BooleanBuilder;
 import lombok.extern.log4j.Log4j2;
 import org.apache.el.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -45,11 +50,11 @@ public class PostController {
     @Autowired
     private MemberService memberService;
 
-    @Value("${file.upload.path}")
-    private String uploadPath;
-
-    @Value("${spring.servlet.multipart.location}")
-    private String uploadPathImage;
+//    @Value("${file.upload.path}")
+//    private String uploadPath;
+//
+//    @Value("${spring.servlet.multipart.location}")
+//    private String uploadPathImage;
 
 
     //C : 게시판 작성하기
@@ -91,10 +96,16 @@ public class PostController {
 
     //C : 게시판 임시 글 작성하기
 
-    //R : 전체 게시판 보기
-    @GetMapping("/post")
-    public ResponseEntity<List<Post>> showAll() {
-        return ResponseEntity.status(HttpStatus.OK).body(service.showAll());
+    //R : 게시판 전체 조회
+    @GetMapping("/posts")
+    public ResponseEntity<List<Post>> showAll(@RequestParam(name="page", defaultValue = "1") int page) {
+
+        Sort sort = Sort.by("postNo").descending();
+        Pageable pageable = PageRequest.of(page-1, 5, sort);
+
+
+        Page<Post> result =  service.showAll(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(result.getContent());
     }
 
     //R : 특정 게시판 보기
