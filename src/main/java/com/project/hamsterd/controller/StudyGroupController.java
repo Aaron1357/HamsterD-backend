@@ -93,7 +93,7 @@ public class StudyGroupController {
             @RequestParam("groupimage") MultipartFile groupimage,
             @RequestParam("id") String id)
             {
-
+            log.info(grouptitle);
 //        이미지 실제 파일 이름
              String originalImage = groupimage.getOriginalFilename();
              String realImage = originalImage.substring(originalImage.lastIndexOf("\\") + 1);

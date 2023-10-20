@@ -22,7 +22,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public static final QMember member = new QMember("member1");
 
-    public final StringPath academy = createString("academy");
+    public final StringPath academyName = createString("academyName");
 
     public final StringPath address = createString("address");
 

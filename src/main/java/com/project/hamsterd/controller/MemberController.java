@@ -1,6 +1,5 @@
 package com.project.hamsterd.controller;
 
-import com.project.hamsterd.domain.Post;
 import com.project.hamsterd.domain.MemberDTO;
 import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.security.TokenProvider;
@@ -37,7 +36,6 @@ import java.util.UUID;
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 public class MemberController {
 
-
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath;
 
@@ -54,12 +52,6 @@ public class MemberController {
         log.info("전체조회!!");
         return ResponseEntity.status(HttpStatus.OK).body(service.showAll());
     }
-
-
-    @GetMapping("/member/{memberNo}")
-    public ResponseEntity<Member> showMember(@PathVariable int memberNo) {
-        log.info("전체조회!!");
-        return ResponseEntity.status(HttpStatus.OK).body(service.show(memberNo));
 
     @GetMapping("/member/manager")
     public ResponseEntity<List<Member>> getManagerList() {
@@ -95,6 +87,8 @@ public class MemberController {
 //        log.info(member);
 
 
+//        StudyGroup group  = new StudyGroup();
+//        group.setGroupNo(0);
 //        member.setStudyGroup(group);
 //        Member mem = new Member();
 //        mem.setMemberId("user1");
@@ -105,19 +99,19 @@ public class MemberController {
 
 
 //          member.setStudentNo(++nextVal);
-    
+
         log.info(dto.getAcademy());
         Member member = Member.builder()
-                                .id(dto.getId())
-                                .password(passwordEncoder.encode(dto.getPassword()))
-                                .name(dto.getName())
-                                .birth(dto.getBirth())
-                                .gender(dto.getGender())
-                                .phone(dto.getPhone())
-                                .academyName(dto.getAcademy())
-                                .address(dto.getAddress())
-                                .nickname(dto.getNickname())
-                                .build();
+                .id(dto.getId())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .name(dto.getName())
+                .birth(dto.getBirth())
+                .gender(dto.getGender())
+                .phone(dto.getPhone())
+                .academyName(dto.getAcademy())
+                .address(dto.getAddress())
+                .nickname(dto.getNickname())
+                .build();
 
         Member registerMember = service.create(member);
         log.info("회원가입들어옴");
@@ -193,11 +187,10 @@ public class MemberController {
     }
 
     @PostMapping("/member/signin")
+
     public ResponseEntity<MemberDTO> authenticate(@RequestBody MemberDTO dto){
 
         Member member = service.getByCredentials(dto.getId(), dto.getPassword(), passwordEncoder);
-
-
         if(member!=null){ // -> 토큰 생성
             String token = tokenProvider.create(member);
             MemberDTO responseDTO = MemberDTO.builder()

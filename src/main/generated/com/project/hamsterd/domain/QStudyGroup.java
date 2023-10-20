@@ -19,11 +19,15 @@ public class QStudyGroup extends EntityPathBase<StudyGroup> {
 
     public static final QStudyGroup studyGroup = new QStudyGroup("studyGroup");
 
+    public final StringPath groupAcademy = createString("groupAcademy");
+
+    public final StringPath groupContent = createString("groupContent");
+
+    public final StringPath groupImage = createString("groupImage");
+
     public final StringPath groupName = createString("groupName");
 
     public final NumberPath<Integer> groupNo = createNumber("groupNo", Integer.class);
-
-    public final NumberPath<Integer> memberCount = createNumber("memberCount", Integer.class);
 
     public QStudyGroup(String variable) {
         super(StudyGroup.class, forVariable(variable));
