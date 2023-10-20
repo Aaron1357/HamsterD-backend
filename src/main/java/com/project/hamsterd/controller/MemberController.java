@@ -45,6 +45,12 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(service.showAll());
     }
 
+    @GetMapping("/member/{memberNo}")
+    public ResponseEntity<Member> showMember(@PathVariable int memberNo) {
+        log.info("전체조회!!");
+        return ResponseEntity.status(HttpStatus.OK).body(service.show(memberNo));
+    }
+
     @GetMapping("/member/{id}/{password}")
     public ResponseEntity<Member> show(@PathVariable String id, @PathVariable String password) {
         System.out.println("멤버 개별 조회 들어옴?");
@@ -73,8 +79,6 @@ public class MemberController {
 //        log.info(member);
 
 
-//        StudyGroup group  = new StudyGroup();
-//        group.setGroupNo(0);
 //        member.setStudyGroup(group);
 //        Member mem = new Member();
 //        mem.setMemberId("user1");
@@ -138,10 +142,11 @@ public class MemberController {
     }
 
     @PostMapping("/member/signin")
-
     public ResponseEntity<MemberDTO> authenticate(@RequestBody MemberDTO dto){
 
         Member member = service.getByCredentials(dto.getId(), dto.getPassword(), passwordEncoder);
+
+
         if(member!=null){ // -> 토큰 생성
             String token = tokenProvider.create(member);
             MemberDTO responseDTO = MemberDTO.builder()

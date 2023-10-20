@@ -32,6 +32,15 @@ public class MemberService {
 
         return null;
 
+    }public Member show(int memberNo){
+        Member mem = dao.findById(memberNo).orElse(null);
+
+//        if(mem.getId().equals(id) && mem.getPassword().equals(password)){
+//            return mem;
+//        }
+
+        return mem;
+
     }
     public Member create(Member member) {
 
