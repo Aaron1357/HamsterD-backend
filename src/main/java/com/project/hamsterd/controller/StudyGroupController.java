@@ -4,12 +4,18 @@ import com.project.hamsterd.domain.GroupEval;
 import com.project.hamsterd.domain.Member;
 import com.project.hamsterd.domain.Schedule;
 import com.project.hamsterd.service.MemberService;
+import com.project.hamsterd.domain.*;
 import com.project.hamsterd.service.ScheduleService;
 import com.project.hamsterd.service.StudyGroupService;
-import com.project.hamsterd.domain.StudyGroup;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -137,6 +143,8 @@ public class StudyGroupController {
     }
 
     // C : 일정 추가
+
+    // C : 일정 추가
     @PostMapping("/schedule")
     public ResponseEntity<Schedule> create(
             @RequestParam("title") String title,
@@ -146,6 +154,14 @@ public class StudyGroupController {
         Schedule vo = new Schedule();
         vo.setScheduleTitle(title);
         vo.setScheduleContent(content);
+
+        StudyGroup sg = new StudyGroup();
+        sg.setGroupNo(1);
+
+        Member m = new Member();
+
+        m.setMemberNo(1);
+
 
         // 문자열로 받은 날짜를 Date 객체로 변환
         try {
@@ -178,8 +194,24 @@ public class StudyGroupController {
 
     // R : 특정 스터디그룹의 일정 목록 보기
     @GetMapping("/schedule/study/{groupNo}")
-    public ResponseEntity<List<Schedule>> showAllGroupSchedule(@PathVariable int groupNo){
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.showAllGroupSchedule(groupNo));
+    public ResponseEntity<List<Schedule>> showAllGroupSchedule(@RequestParam(name="page", defaultValue = "1") int page, @PathVariable int groupNo){
+        Sort sort = Sort.by("scheduleNo").descending();
+        Pageable pageable = PageRequest.of(page-1, 20, sort); // 시작페이지(0부터 시작), 몇개씩 보여줄지
+
+        QSchedule qSchedule = QSchedule.schedule;
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if(groupNo!=0) {
+            BooleanExpression expression = qSchedule.studyGroup.groupNo.eq(groupNo);
+            builder.and(expression);
+        }
+
+        Page<Schedule> result = scheduleService.showAllGroupSchedule(pageable, builder);
+
+//        Page<Schedule> result = scheduleService.showAllGroupSchedule(pageable, groupNo);
+        return ResponseEntity.status(HttpStatus.OK).body(result.getContent());
+//        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     // R : 개인 일정 목록(memberNo로 조회)
@@ -189,9 +221,8 @@ public class StudyGroupController {
     }
 
     // R: 일정 날짜별 조회(scheduleDate로 조회)
-    @GetMapping("/study/{groupNo}/{scheduleDate}")
+    @GetMapping("/schedule/study/{groupNo}/{scheduleDate}")
     public ResponseEntity<List<Schedule>> findByDate(@PathVariable int groupNo, @PathVariable String scheduleDate){
-
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByDate(groupNo, scheduleDate));
 
     }
@@ -201,8 +232,44 @@ public class StudyGroupController {
 
     // U : 일정 수정
     @PutMapping("/schedule")
-    public ResponseEntity<Schedule> updateSchedule(@RequestBody Schedule schedule){
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.update(schedule));
+    public ResponseEntity<Schedule> updateSchedule(@RequestParam("title") String title, @RequestParam("content") String content, @RequestParam("date") String dateString, @RequestParam("scheduleNo") int scheduleNo){
+        // ResponseEntity<Schedule> schedule = showSchdule(1, 1);
+
+        // 수정한 값으로 잘 들어옴
+        log.info("title : " + title);
+        log.info("date : " + dateString);
+        log.info("content : " + content);
+        log.info("scheduleNo : " + scheduleNo);
+
+
+
+        Schedule vo = new Schedule();
+
+        StudyGroup sg = new StudyGroup();
+        sg.setGroupNo(1);
+
+        Member m = new Member();
+        m.setMemberNo(1);
+
+
+        vo.setScheduleTitle(title);
+        vo.setScheduleContent(content);
+        vo.setScheduleNo(scheduleNo);
+        vo.setStudyGroup(sg);
+        vo.setMember(m);
+
+        // 문자열로 받은 날짜를 Date 객체로 변환
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = dateFormat.parse(dateString);
+            vo.setScheduleDate(date);
+        } catch (ParseException e) {
+            // 날짜 파싱 오류 처리
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.update(vo));
     }
 
     // D : 일정 삭제

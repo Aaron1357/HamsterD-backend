@@ -25,6 +25,10 @@ public class Schedule {
     // 스케줄 넘버
     private int scheduleNo;
 
+//    @Column(name="num")
+//    // 목록 정렬을 위한 넘버
+//    private int num;
+
     // 스케줄 제목
     @Column(name="schedule_title")
     private String scheduleTitle;
@@ -35,6 +39,7 @@ public class Schedule {
 
     // 스케줄 날짜
     @Column(name="schedule_date")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone="GMT+9")
     private Date scheduleDate;
 
     // 스터디그룹

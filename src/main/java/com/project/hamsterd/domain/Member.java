@@ -4,6 +4,7 @@ package com.project.hamsterd.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -17,6 +18,7 @@ import java.util.Date;
 @AllArgsConstructor
 @DynamicInsert
 @Table(name="TB_MEMBER")
+@Builder
 public class Member {
 
     @Id
@@ -59,6 +61,7 @@ public class Member {
 
     @Column
     private String authority;
+
 
     @Column
     private String nickname;

@@ -5,6 +5,7 @@ import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.repo.MemberDAO;
 import com.project.hamsterd.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -83,6 +84,15 @@ public class MemberService {
         System.out.println(target);
 
         return target;
+    }
+    public Member getByCredentials(String id, String password, PasswordEncoder encoder){
+        Member member = dao.findByMemberId(id);
+
+        if(member != null && encoder.matches(password, member.getPassword())){
+            return member;
+        }
+
+        return null;
     }
 
 }
