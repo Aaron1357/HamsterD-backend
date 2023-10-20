@@ -16,6 +16,9 @@ public interface MemberDAO extends JpaRepository<Member, Integer > {
     @Query(value="SELECT * FROM TB_MEMBER WHERE ID = :id", nativeQuery=true)
     Member findByMemberId(@Param("id") String id);
 
+    @Query(value="SELECT * FROM TB_MEMBER WHERE AUTHORITY = 'GROUP_MANAGER'", nativeQuery=true)
+    List<Member> getManagerList();
+
     @Query(value="SELECT * FROM TB_MEMBER WHERE GROUP_NO = :groupNo", nativeQuery=true)
     List<Member> findByGroupNo(@Param("groupNo") int groupNo);
 

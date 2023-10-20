@@ -55,6 +55,12 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(service.showAll());
     }
 
+    @GetMapping("/member/manager")
+    public ResponseEntity<List<Member>> getManagerList() {
+        log.info("매니저 조회!!");
+        return ResponseEntity.status(HttpStatus.OK).body(service.getManagerList());
+    }
+
     @GetMapping("/member/{id}/{password}")
     public ResponseEntity<Member> show(@PathVariable String id, @PathVariable String password) {
         System.out.println("멤버 개별 조회 들어옴?");
@@ -104,7 +110,7 @@ public class MemberController {
                                 .birth(dto.getBirth())
                                 .gender(dto.getGender())
                                 .phone(dto.getPhone())
-                                .academy(dto.getAcademy())
+                                .academyName(dto.getAcademy())
                                 .address(dto.getAddress())
                                 .nickname(dto.getNickname())
                                 .build();
@@ -118,7 +124,7 @@ public class MemberController {
                 .birth(registerMember.getBirth())
                 .gender(registerMember.getGender())
                 .phone(registerMember.getPhone())
-                .academy(registerMember.getAcademy())
+                .academy(registerMember.getAcademyName())
                 .address(registerMember.getAddress())
                 .nickname(registerMember.getNickname())
                 .build();

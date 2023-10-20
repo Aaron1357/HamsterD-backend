@@ -75,12 +75,12 @@ public class StudyGroupController {
     }
 
     // 그룹넘버를 기본키로 가지는 스터디 그룹의 조장 조회
-    @GetMapping("/studygroup/{groupNo}/manager")
+    @GetMapping("/studygroup/manager/{groupNo}")
     public ResponseEntity<Member> findManager(@PathVariable int groupNo){
-        Member mem = memberService.findManager(groupNo);
-//        log.info(mem);
+//        Member mem = memberService.findManager(groupNo);
+//        log.info(groupNo);
 
-        return ResponseEntity.status(HttpStatus.OK).body(mem);
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.findManager(groupNo));
     }
 
 

@@ -30,6 +30,9 @@ public class MemberService {
         return mem;
 
     }
+    public List<Member> getManagerList(){
+        return dao.getManagerList();
+    }
 
     public Member show(String id, String password){
         Member mem = dao.findByMemberId(id);
@@ -81,7 +84,7 @@ public class MemberService {
     public Member findManager(int groupNo){
 
         Member target = dao.findManager(groupNo);
-        System.out.println(target);
+//        System.out.println(target);
 
         return target;
     }

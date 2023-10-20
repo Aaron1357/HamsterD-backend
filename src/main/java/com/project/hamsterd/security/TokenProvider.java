@@ -29,7 +29,7 @@ public class TokenProvider {
         claims.put("birth", member.getBirth());
         claims.put("address", member.getAddress());
         claims.put("gender", member.getGender());
-        claims.put("academy", member.getAcademy());
+        claims.put("academy", member.getAcademyName());
         claims.put("phone", member.getPhone());
         claims.put("profile", member.getProfile());
         claims.put("weight", member.getWeight());
