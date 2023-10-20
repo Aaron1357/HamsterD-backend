@@ -1,5 +1,9 @@
 package com.project.hamsterd.controller;
 
+import com.project.hamsterd.domain.GroupEval;
+import com.project.hamsterd.domain.Member;
+import com.project.hamsterd.domain.Schedule;
+import com.project.hamsterd.service.MemberService;
 import com.project.hamsterd.domain.*;
 import com.project.hamsterd.service.ScheduleService;
 import com.project.hamsterd.service.StudyGroupService;
@@ -7,6 +11,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,12 +20,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins={"*"}, maxAge = 6000)
 @RestController
@@ -28,11 +39,19 @@ import java.util.List;
 @Log4j2
 public class StudyGroupController {
 
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadPath;
+
     @Autowired
     private StudyGroupService service;
 
     @Autowired
     private ScheduleService scheduleService;
+
+    @Autowired
+    private MemberService memberService;
+
+
 
     // 스터디 그룹 전체보기
     @GetMapping("/studygroup")
@@ -40,16 +59,75 @@ public class StudyGroupController {
         return ResponseEntity.status(HttpStatus.OK).body(service.showAll());
     }
 
+
+
     // 스터디그룹 개별 조회
-    @GetMapping("/studygroup/{id}")
-    public ResponseEntity<StudyGroup> show(@PathVariable int id){
-        return ResponseEntity.status(HttpStatus.OK).body(service.show(id));
+    @GetMapping("/studygroup/{groupNo}")
+    public ResponseEntity<StudyGroup> show(@PathVariable int groupNo){
+        return ResponseEntity.status(HttpStatus.OK).body(service.show(groupNo));
     }
+
+
+    // 그룹넘버를 기본키로 가지는 스터디 그룹에 속한 멤버들 조회
+    @GetMapping("/studygroup/{groupNo}/member")
+    public ResponseEntity<List<Member>> showGroupMember(@PathVariable int groupNo){
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.inGroup(groupNo));
+    }
+
+    // 그룹넘버를 기본키로 가지는 스터디 그룹의 조장 조회
+    @GetMapping("/studygroup/manager/{groupNo}")
+    public ResponseEntity<Member> findManager(@PathVariable int groupNo){
+//        Member mem = memberService.findManager(groupNo);
+//        log.info(groupNo);
+
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.findManager(groupNo));
+    }
+
 
     // 스터디 그룹 생성
     @PostMapping("/studygroup")
-    public ResponseEntity<StudyGroup> create(@RequestBody StudyGroup studyGroup){
-        return ResponseEntity.status(HttpStatus.OK).body(service.create(studyGroup));
+    public ResponseEntity<StudyGroup> create(
+            @RequestParam("grouptitle") String grouptitle,
+            @RequestParam("groupcontent") String groupcontent,
+            @RequestParam("groupacademy") String groupacademy,
+            @RequestParam("groupimage") MultipartFile groupimage,
+            @RequestParam("id") String id)
+            {
+
+//        이미지 실제 파일 이름
+             String originalImage = groupimage.getOriginalFilename();
+             String realImage = originalImage.substring(originalImage.lastIndexOf("\\") + 1);
+             log.info("oriImg : " + originalImage);
+
+//        UUID
+        String uuid = UUID.randomUUID().toString();
+
+//        실제로 저장할 파일 명 (위치포함)
+
+        String saveImage = uploadPath + File.separator + uuid + "_" + realImage;
+
+        Path pathImage = Paths.get(saveImage);
+
+        try {
+            groupimage.transferTo(pathImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+            StudyGroup vo = new StudyGroup();
+            vo.setGroupName(grouptitle);
+            vo.setGroupContent(groupcontent);
+            vo.setGroupAcademy(groupacademy);
+            vo.setGroupImage(saveImage);
+
+            StudyGroup studyGroup = service.create(vo);
+
+            Member member = memberService.show(id);
+            member.setStudyGroup(studyGroup);
+            member.setAuthority("GROUP_MANAGER");
+            log.info("controller : " +memberService.update(member).getAuthority());
+
+        return ResponseEntity.status(HttpStatus.OK).body(studyGroup);
     }
 
     // 스터디그룹 수정

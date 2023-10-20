@@ -24,5 +24,12 @@ public class StudyGroup {
     private String groupName;
 
     @Column
-    private int memberCount;
-}
+    private String groupContent;
+
+    @Column
+    private String groupAcademy;
+
+    @Column
+    private String groupImage;
+
+   }

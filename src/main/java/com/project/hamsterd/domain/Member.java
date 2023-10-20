@@ -27,6 +27,10 @@ public class Member {
     @SequenceGenerator(name="memberSEQ",sequenceName = "SEQ_MEMBER_NO", allocationSize = 1)
     private int memberNo;
 
+    @ManyToOne
+    @JoinColumn(name="GROUP_NO")
+    private StudyGroup studyGroup;
+
     @Column
     private String id;
 
@@ -49,7 +53,7 @@ public class Member {
     private String address;
 
     @Column(name = "ACADEMY_NAME")
-    private String academy;
+    private String academyName;
 
     @Column
     private int weight;
@@ -64,11 +68,6 @@ public class Member {
 
     @Column
     private String profile;
-
-
-    @ManyToOne
-    @JoinColumn(name="GROUP_NO")
-    private StudyGroup studyGroup;
 
 
 }

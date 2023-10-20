@@ -1,6 +1,7 @@
 package com.project.hamsterd.service;
 
 //import com.project.hamsterd.SecurityConfig;
+import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.repo.MemberDAO;
 import com.project.hamsterd.domain.Member;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,16 @@ public class MemberService {
 
     public List<Member> showAll() {
         return dao.findAll();
+    }
+
+    public Member show(String id){
+        Member mem = dao.findByMemberId(id);
+
+        return mem;
+
+    }
+    public List<Member> getManagerList(){
+        return dao.getManagerList();
     }
 
     public Member show(String id, String password){
@@ -63,15 +74,13 @@ public class MemberService {
     }
 
     public Member update(Member member) {
-        Member target = dao.findByMemberId(member.getId());
-//        System.out.println("인코딩 된 패스워드(수정) : " + member.getPassword());
-//        System.out.println("닉네임 (수정) : " + member.getNickname());
-//        System.out.println("멤버 식별용 아이디 : " + member.getId());
-
+        Member target = dao.findByMemberId(member.getId()); // 기존 DB에 있는 데이터를 member의 아이디로 검색
 
         if (target != null) {
             target.setPassword(member.getPassword());
             target.setNickname(member.getNickname());
+            target.setProfile(member.getProfile());
+
             return dao.save(target);
         }
         return null;
@@ -83,6 +92,20 @@ public class MemberService {
         return target;
     }
 
+    public List<Member> inGroup(int groupNo){
+
+        List<Member> target = dao.findByGroupNo(groupNo);
+
+        return target;
+    }
+
+    public Member findManager(int groupNo){
+
+        Member target = dao.findManager(groupNo);
+//        System.out.println(target);
+
+        return target;
+    }
     public Member getByCredentials(String id, String password, PasswordEncoder encoder){
         Member member = dao.findByMemberId(id);
 
