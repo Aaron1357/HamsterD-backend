@@ -13,12 +13,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -74,6 +72,7 @@ public class MemberController {
     public ResponseEntity<MemberDTO> create(@RequestBody MemberDTO dto) {
 //        log.info(member);
 
+
 //        StudyGroup group  = new StudyGroup();
 //        group.setGroupNo(0);
 //        member.setStudyGroup(group);
@@ -87,7 +86,7 @@ public class MemberController {
 
 //          member.setStudentNo(++nextVal);
     
-        log.info("회원가입들어옴");
+        log.info(dto.getAcademy());
         Member member = Member.builder()
                                 .id(dto.getId())
                                 .password(passwordEncoder.encode(dto.getPassword()))
@@ -101,7 +100,7 @@ public class MemberController {
                                 .build();
 
         Member registerMember = service.create(member);
-
+        log.info("회원가입들어옴");
         MemberDTO responseDTO = MemberDTO.builder()
                 .id(registerMember.getId())
 //                .password(registerMember.getPassword())
@@ -139,8 +138,9 @@ public class MemberController {
     }
 
     @PostMapping("/member/signin")
-    public ResponseEntity authenticate(@RequestBody MemberDTO dto){
-        log.info(dto);
+
+    public ResponseEntity<MemberDTO> authenticate(@RequestBody MemberDTO dto){
+
         Member member = service.getByCredentials(dto.getId(), dto.getPassword(), passwordEncoder);
         if(member!=null){ // -> 토큰 생성
             String token = tokenProvider.create(member);
@@ -149,6 +149,7 @@ public class MemberController {
                     .id(member.getId())
                     .name(member.getName())
                     .nickname(member.getNickname())
+                    .authority(member.getAuthority())
                     .token(token)
                     .build();
             return ResponseEntity.ok().body(responseDTO);

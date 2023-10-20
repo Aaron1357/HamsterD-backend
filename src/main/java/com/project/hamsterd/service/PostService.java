@@ -22,7 +22,11 @@ public class PostService {
     }
 
     public Post show(int postNo) {
-        return dao.findById(postNo).orElse(null);
+        log.info("show postNo " + postNo);
+        Post post = dao.findById(postNo).orElse(null);
+        log.info(post);
+
+        return post;
     }
 
     public Post create(Post post) {
@@ -52,22 +56,26 @@ public class PostService {
 
 
         Post create = dao.findById(post.getPostNo()).orElse(null);
-        post.setCreateTime( create.getCreateTime());
+        post.setCreateTime(create.getCreateTime());
 
         post.setUpdateTime(formattedDate);
-
-
-
-        return dao.save(post);
+        log.info("create: " + create);
+        if(create!=null){
+            return dao.save(post);
+        }
+        return null;
     }
 
     public Post delete(int postNo){
         Post data = dao.findById(postNo).orElse(null);
-        dao.delete(data);
-        return data;
+
+        if(data !=null) {
+            dao.delete(data);
+        }
+        return null;
     }
 
-    public List<Post> findByMemberId(String id) {
+    public List<Post> findByMemberId(int id) {
         return dao.findByMemberId(id);
     }
 

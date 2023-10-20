@@ -65,6 +65,8 @@ public class StudyGroupController {
     }
 
     // C : 일정 추가
+
+    // C : 일정 추가
     @PostMapping("/schedule")
     public ResponseEntity<Schedule> create(
             @RequestParam("title") String title,
@@ -79,10 +81,9 @@ public class StudyGroupController {
         sg.setGroupNo(1);
 
         Member m = new Member();
-        m.setMemberNo(2);
 
-        vo.setStudyGroup(sg);
-        vo.setMember(m);
+        m.setMemberNo(1);
+
 
         // 문자열로 받은 날짜를 Date 객체로 변환
         try {
