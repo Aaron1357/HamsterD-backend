@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface StudyGroupDAO extends JpaRepository<StudyGroup, Integer> {
 
-//    @Query(value="SELECT * FROM TB_MEMBER WHERE ID = :id", nativeQuery=true)
-//    Member findByMemberId(@Param("id") String id);
 }
