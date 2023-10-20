@@ -1,10 +1,13 @@
 package com.project.hamsterd.controller;
 
 import com.project.hamsterd.domain.*;
+import com.project.hamsterd.security.TokenProvider;
 import com.project.hamsterd.service.InCommentService;
+import com.project.hamsterd.service.MemberService;
 import com.project.hamsterd.service.PostCommentService;
 import com.project.hamsterd.service.PostService;
 import lombok.extern.log4j.Log4j2;
+import org.apache.el.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -36,6 +39,12 @@ public class PostController {
     @Autowired
     private PostCommentService pCommentService;
 
+    @Autowired
+    private TokenProvider tokenProvider;
+
+    @Autowired
+    private MemberService memberService;
+
     @Value("${file.upload.path}")
     private String uploadPath;
 
@@ -45,46 +54,25 @@ public class PostController {
 
     //C : 게시판 작성하기
     @PostMapping("/post")
-    public ResponseEntity<Post> create(@RequestParam("title") String title, @RequestParam("desc") String desc, @RequestParam("securityCheck") char securityCheck) {
+    public ResponseEntity<Post> create(@RequestParam("title") String title,
+                                       @RequestParam("desc") String desc,
+                                       @RequestParam("securityCheck") char securityCheck,
+                                       @RequestParam("token") String token ) {
 
-//    public ResponseEntity<String> imgUrl(@RequestBody PostDTO postDTO) {  @RequestParam("img") MultipartFile img
-        //, @RequestParam(value="file", required = false) MultipartFile[] files
+        log.info(token);
 
-        Post vo = new Post();
-//        if (files != null) {
-//            for (MultipartFile file : files) {
-//
-//                if (file != null && !file.isEmpty()) {
-//                    //1.업로드된 채널 이미지 파일의 원본 파일 이름
-//                    String originalPhoto = file.getOriginalFilename();
-//
-//                    //2.마지막 인덱스 값에서 +1 해주면 실제 이름부터 값이 시작됨
-//                    String realPhoto = originalPhoto.substring(originalPhoto.lastIndexOf("\\") + 1);
-//
-//                    //3.UUID 무작위로 이름 지정해줌, 파일명 중복 방지위해 사용됨
-//                    String uuid = UUID.randomUUID().toString();
-//
-//                    //4.저장할 채널 이미지파일 경로 구성
-//                    String savePhoto = uploadPathImage + File.separator + uuid + "_" + realPhoto;
-//
-//
-//                    Path path = Paths.get(savePhoto);
-//                    try {
-//                        file.transferTo(path);
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                    vo.setPostFile(savePhoto);
-//                    log.info(savePhoto);
-//
-//                    //  postman 테스트해보기 위한 코드 db에 값 안넘어감
-//                    // return ResponseEntity.status(HttpStatus.OK).build();
-//                }
-//            }
-//            }
-        vo.setPostTitle(title);
-        vo.setPostContent(desc);
-        vo.setSecurityCheck(securityCheck);
+        String id = tokenProvider.validateAndGetUserId(token);
+        log.info("id", id);
+        Member member =  memberService.showById(id);
+        log.info(member.toString());
+        Post vo = Post.builder()
+                .postTitle(title)
+                .postContent(desc)
+                .securityCheck(securityCheck)
+                .member(member)
+                .build();
+
+
         return ResponseEntity.status(HttpStatus.OK).body(service.create(vo));
     }
 

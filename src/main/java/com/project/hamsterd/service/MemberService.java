@@ -3,6 +3,7 @@ package com.project.hamsterd.service;
 //import com.project.hamsterd.SecurityConfig;
 import com.project.hamsterd.repo.MemberDAO;
 import com.project.hamsterd.domain.Member;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-
+@Slf4j
 public class MemberService {
 
     @Autowired
@@ -33,6 +34,14 @@ public class MemberService {
         return null;
 
     }
+
+    public Member showById(String id)
+    {
+        log.info("@@@@@@@@@@@@@@ID : "  + id);
+        return dao.findByMemberId(id);
+
+    }
+
     public Member create(Member member) {
 
 

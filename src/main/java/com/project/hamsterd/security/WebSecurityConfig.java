@@ -31,6 +31,7 @@ public class WebSecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
+                .requestMatchers("/hamsterd/**").permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/hamsterd/**")).permitAll()
                 .anyRequest().authenticated();  // 인증 되었을때만
 
