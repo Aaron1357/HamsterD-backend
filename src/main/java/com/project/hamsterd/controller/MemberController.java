@@ -138,7 +138,9 @@ public class MemberController {
     }
 
     @PostMapping("/member/signin")
+
     public ResponseEntity<MemberDTO> authenticate(@RequestBody MemberDTO dto){
+
         Member member = service.getByCredentials(dto.getId(), dto.getPassword(), passwordEncoder);
         if(member!=null){ // -> 토큰 생성
             String token = tokenProvider.create(member);
