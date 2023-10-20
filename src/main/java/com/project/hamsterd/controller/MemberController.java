@@ -120,16 +120,30 @@ public class MemberController {
     }
 
     @PutMapping("/member")
-    public ResponseEntity<Member> update(MultipartFile profile, @RequestParam(name = "id") String id, @RequestParam(name = "password") String password, @RequestParam(name = "nickname") String nickname) {
+    public ResponseEntity<MemberDTO> update(MultipartFile profile, @RequestParam(name = "id") String id, @RequestParam(name = "password") String password, @RequestParam(name = "nickname") String nickname) {
         Member member = Member.builder()
                 .id(id)
                 .password(passwordEncoder.encode(password))
                 .nickname(nickname)
                 .build();
         log.info(service.update(member));
+
+        Member mem = service.update(member);
+
+        String token = tokenProvider.create(mem);
+
+        log.info(mem.getNickname());
+
+        MemberDTO responseDTO = MemberDTO.builder()
+                .id(mem.getId())
+                .name(mem.getName())
+                .nickname(mem.getNickname())
+                .authority(mem.getAuthority())
+                .token(token)
+                .build();
         System.out.println("회원정보수정");
 
-        return ResponseEntity.status(HttpStatus.OK).body(service.update(member));
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     @DeleteMapping("/member/{id}")
@@ -143,7 +157,6 @@ public class MemberController {
         if(member!=null){ // -> 토큰 생성
             String token = tokenProvider.create(member);
             MemberDTO responseDTO = MemberDTO.builder()
-                    .memberNo(member.getMemberNo())
                     .id(member.getId())
                     .name(member.getName())
                     .nickname(member.getNickname())
