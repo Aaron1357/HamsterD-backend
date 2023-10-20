@@ -152,12 +152,19 @@ public class MemberController {
         //4.저장할 채널 이미지파일 경로 구성
         String saveProfile = uploadPath + File.separator + uuid + "_" + realPhoto;
 
-        Member vo = new Member();
-        vo.setId(id);
-        vo.setPassword(password);
-//        vo.getMember().setNickname(nickname);
-        vo.setNickname(nickname);
-        vo.setProfile(saveProfile);
+        Member member = Member.builder()
+                .id(id)
+                .password(passwordEncoder.encode(password))
+                .nickname(nickname)
+                .profile(saveProfile)
+                .build();
+
+//        Member vo = new Member();
+//        vo.setId(id);
+//        vo.setPassword(password);
+////        vo.getMember().setNickname(nickname);
+//        vo.setNickname(nickname);
+//        vo.setProfile(saveProfile);
 
 
         Path pathPhoto = Paths.get(saveProfile);
@@ -167,16 +174,7 @@ public class MemberController {
             throw new RuntimeException(e);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(service.update(vo));
-        // Member member = Member.builder()
-        //         .id(id)
-        //         .password(passwordEncoder.encode(password))
-        //         .nickname(nickname)
-        //         .build();
-        // log.info(service.update(member));
-        // System.out.println("회원정보수정");
-
-        // return ResponseEntity.status(HttpStatus.OK).body(service.update(member));
+        return ResponseEntity.status(HttpStatus.OK).body(service.update(member));
     }
 
     @DeleteMapping("/member/{id}")

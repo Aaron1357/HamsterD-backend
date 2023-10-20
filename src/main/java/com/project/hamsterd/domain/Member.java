@@ -53,7 +53,7 @@ public class Member {
     private String address;
 
     @Column(name = "ACADEMY_NAME")
-    private String academyName;
+    private String academy;
 
     @Column
     private int weight;
