@@ -19,10 +19,10 @@ public class PostService {
     @Autowired
     private PostDAO dao;
 
-    public Page<Post> showAll(Pageable pageable) {
-        return dao.findAll(pageable);
+    public List<Post> showAll() {
+        return dao.findAll();
     }
-
+    //Pageable pageable
     public Post show(int postNo) {
         log.info("show postNo " + postNo);
         Post post = dao.findById(postNo).orElse(null);

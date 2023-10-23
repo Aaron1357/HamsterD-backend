@@ -138,6 +138,7 @@ public class MemberController {
                 .id(mem.getId())
                 .name(mem.getName())
                 .nickname(mem.getNickname())
+
                 .authority(mem.getAuthority())
                 .token(token)
                 .build();
