@@ -3,6 +3,8 @@ package com.project.hamsterd.controller;
 import com.project.hamsterd.domain.GroupEval;
 import com.project.hamsterd.domain.Member;
 import com.project.hamsterd.domain.Schedule;
+import com.project.hamsterd.security.TokenProvider;
+import com.project.hamsterd.service.GroupCommentService;
 import com.project.hamsterd.service.MemberService;
 import com.project.hamsterd.domain.*;
 import com.project.hamsterd.service.ScheduleService;
@@ -50,6 +52,12 @@ public class StudyGroupController {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private GroupCommentService gCommentService;
+
+    @Autowired
+    private TokenProvider tokenProvider;
 
 
 
@@ -142,38 +150,84 @@ public class StudyGroupController {
         return ResponseEntity.status(HttpStatus.OK).body(service.delete(id));
     }
 
-    // C : 일정 추가
+// ============================================================================
+
+    // C :댓글 추가
+    @PostMapping("/studyGroup/gcomment")
+    public ResponseEntity<GroupComment> create(@RequestBody String newComment){
+        log.info(newComment);
+        GroupComment gc = new GroupComment();
+        gc.setCommentContent(newComment);
+
+        Member m = new Member();
+        m.setMemberNo(1);
+
+        StudyGroup sg = new StudyGroup();
+        sg.setGroupNo(2);
+
+        gc.setMember(m);
+        gc.setStudyGroup(sg);
+        return ResponseEntity.status(HttpStatus.OK).body(gCommentService.create(gc));
+    }
+
+
+    // 특정 스터디그룹의 댓글 목록 보기
+    @GetMapping("/studyGroup/{groupNo}/gcomment")
+    public ResponseEntity<List<GroupComment>> postComment(@PathVariable int groupNo){
+
+        return ResponseEntity.status(HttpStatus.OK).body(gCommentService.findByPostNo(groupNo));
+    }
+
+
+
+
+    //U : 내 댓글 수정하기
+    @PutMapping("/studyGroup/gcomment")
+    public ResponseEntity <GroupComment> update(@RequestBody GroupComment groupComment) {
+        return ResponseEntity.status(HttpStatus.OK).body(gCommentService.update(groupComment));
+    }
+
+
+    // D : 댓글 삭제
+    @DeleteMapping("/studyGroup/gcomment/{gCommentNo}")
+    public ResponseEntity<GroupComment> deletePDelete(@PathVariable int gCommentNo){
+        return ResponseEntity.status(HttpStatus.OK).body(gCommentService.delete(gCommentNo));
+    }
+
+
+// ============================================================================
 
     // C : 일정 추가
     @PostMapping("/schedule")
     public ResponseEntity<Schedule> create(
             @RequestParam("title") String title,
             @RequestParam("content") String content,
-            @RequestParam("date") String dateString) {
+            @RequestParam("date") String dateString,
+            @RequestParam("token") String token) {
 
-        Schedule vo = new Schedule();
-        vo.setScheduleTitle(title);
-        vo.setScheduleContent(content);
+        log.info("token : " + token);
 
-        StudyGroup sg = new StudyGroup();
-        sg.setGroupNo(1);
-
-        Member m = new Member();
-
-        m.setMemberNo(1);
-
+        String id = tokenProvider.validateAndGetUserId(token);
+        Member member = memberService.showById(id);
+        log.info(member.toString());
 
         // 문자열로 받은 날짜를 Date 객체로 변환
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = dateFormat.parse(dateString);
-            vo.setScheduleDate(date);
+            Schedule vo = Schedule.builder()
+                    .scheduleTitle(title)
+                    .scheduleContent(content)
+                    .scheduleDate(date)
+                    .studyGroup(member.getStudyGroup())
+                    .member(member)
+                    .build();
+            log.info(vo.toString());
+            return ResponseEntity.status(HttpStatus.OK).body(scheduleService.create(vo));
         } catch (ParseException e) {
             // 날짜 파싱 오류 처리
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.create(vo));
     }
 
 
@@ -196,7 +250,7 @@ public class StudyGroupController {
     @GetMapping("/schedule/study/{groupNo}")
     public ResponseEntity<List<Schedule>> showAllGroupSchedule(@RequestParam(name="page", defaultValue = "1") int page, @PathVariable int groupNo){
         Sort sort = Sort.by("scheduleNo").descending();
-        Pageable pageable = PageRequest.of(page-1, 20, sort); // 시작페이지(0부터 시작), 몇개씩 보여줄지
+        Pageable pageable = PageRequest.of(page-1, 10, sort); // 시작페이지(0부터 시작), 몇개씩 보여줄지
 
         QSchedule qSchedule = QSchedule.schedule;
 
@@ -232,31 +286,26 @@ public class StudyGroupController {
 
     // U : 일정 수정
     @PutMapping("/schedule")
-    public ResponseEntity<Schedule> updateSchedule(@RequestParam("title") String title, @RequestParam("content") String content, @RequestParam("date") String dateString, @RequestParam("scheduleNo") int scheduleNo){
-        // ResponseEntity<Schedule> schedule = showSchdule(1, 1);
-
-        // 수정한 값으로 잘 들어옴
-        log.info("title : " + title);
-        log.info("date : " + dateString);
-        log.info("content : " + content);
-        log.info("scheduleNo : " + scheduleNo);
+    public ResponseEntity<Schedule> updateSchedule(@RequestParam("title") String title,
+                                                   @RequestParam("content") String content,
+                                                   @RequestParam("date") String dateString,
+                                                   @RequestParam("scheduleNo") int scheduleNo,
+                                                   @RequestParam("token") String token){
 
 
+        String id = tokenProvider.validateAndGetUserId(token);
+        Member member = memberService.showById(id);
 
         Schedule vo = new Schedule();
 
         StudyGroup sg = new StudyGroup();
-        sg.setGroupNo(1);
-
-        Member m = new Member();
-        m.setMemberNo(1);
-
+        sg.setGroupNo(scheduleNo);
 
         vo.setScheduleTitle(title);
         vo.setScheduleContent(content);
         vo.setScheduleNo(scheduleNo);
         vo.setStudyGroup(sg);
-        vo.setMember(m);
+        vo.setMember(member);
 
         // 문자열로 받은 날짜를 Date 객체로 변환
         try {

@@ -82,6 +82,12 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(member);
     }
 
+    @GetMapping("/member/{id}")
+    public ResponseEntity<Member> showMember(@PathVariable String id) {
+        Member member = service.showById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(member);
+    }
+
     @PostMapping("/member")
     public ResponseEntity<MemberDTO> create(@RequestBody MemberDTO dto) {
 //        log.info(member);
