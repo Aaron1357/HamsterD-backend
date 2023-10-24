@@ -1,7 +1,8 @@
 package com.project.hamsterd.controller;
 
-import com.project.hamsterd.domain.Post;
+import com.project.hamsterd.domain.MemberDTO;
 import com.project.hamsterd.domain.StudyGroup;
+import com.project.hamsterd.security.TokenProvider;
 import com.project.hamsterd.service.MemberService;
 import com.project.hamsterd.domain.Member;
 import jakarta.servlet.http.HttpSession;
@@ -13,10 +14,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,14 +37,13 @@ import java.util.UUID;
 public class MemberController {
 
 
-    @Value("${spring.servlet.multipart.location}")
-    private String uploadPath;
-
     @Autowired
-    private HttpSession session;
+    private TokenProvider tokenProvider;
 
     @Autowired
     private MemberService service;
+
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @GetMapping("/member")
     public ResponseEntity<List<Member>> showAll() {
@@ -64,16 +64,20 @@ public class MemberController {
 //            }
 //        }
 
-//        if(service.show(id, password) != null){
-//            session.setAttribute();
+        Member member = service.show(id, password);
+
+//        if(member != null){
+//            session.setAttribute("member", member);
+////            return ResponseEntity.status(HttpStatus.OK).body();
 //        }
 
-        return ResponseEntity.status(HttpStatus.OK).body(service.show(id, password));
+        return ResponseEntity.status(HttpStatus.OK).body(member);
     }
 
     @PostMapping("/member")
-    public ResponseEntity<Member> create(@RequestBody Member member) {
-        log.info(member);
+    public ResponseEntity<MemberDTO> create(@RequestBody MemberDTO dto) {
+//        log.info(member);
+
 
           if(member.getProfile() == null)
           {
@@ -81,58 +85,93 @@ public class MemberController {
           };
 
 //          member.setStudentNo(++nextVal);
+    
+        log.info(dto.getAcademy());
+        Member member = Member.builder()
+                                .id(dto.getId())
+                                .password(passwordEncoder.encode(dto.getPassword()))
+                                .name(dto.getName())
+                                .birth(dto.getBirth())
+                                .gender(dto.getGender())
+                                .phone(dto.getPhone())
+                                .academy(dto.getAcademy())
+                                .address(dto.getAddress())
+                                .nickname(dto.getNickname())
+                                .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(service.create(member));
+        Member registerMember = service.create(member);
+        log.info("회원가입들어옴");
+        MemberDTO responseDTO = MemberDTO.builder()
+                .id(registerMember.getId())
+//                .password(registerMember.getPassword())
+                .name(registerMember.getName())
+                .birth(registerMember.getBirth())
+                .gender(registerMember.getGender())
+                .phone(registerMember.getPhone())
+                .academy(registerMember.getAcademy())
+                .address(registerMember.getAddress())
+                .nickname(registerMember.getNickname())
+                .build();
+
+//        log.info(registerMember.toString());
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     @PutMapping("/member")
-    public ResponseEntity<Member> update(MultipartFile profile, @RequestParam(name = "id") String id, @RequestParam(name = "password") String password, @RequestParam(name = "nickname") String nickname) {
+    public ResponseEntity<MemberDTO> update(MultipartFile profile, @RequestParam(name = "id") String id, @RequestParam(name = "password") String password, @RequestParam(name = "nickname") String nickname) {
+        Member member = Member.builder()
+                .id(id)
+                .password(passwordEncoder.encode(password))
+                .nickname(nickname)
+                .build();
+        log.info(service.update(member));
 
-        log.info("멤버 id : " + id);
-        log.info("멤버 password : " + password);
-        log.info("멤버 nickname : " + nickname);
+        Member mem = service.update(member);
 
+        String token = tokenProvider.create(mem);
 
-        //1.업로드된 채널 이미지 파일의 원본 파일 이름
-        String originalPhoto = profile.getOriginalFilename();
+        log.info(mem.getNickname());
 
-        log.info(originalPhoto);
+        MemberDTO responseDTO = MemberDTO.builder()
+                .id(mem.getId())
+                .name(mem.getName())
+                .nickname(mem.getNickname())
 
-        //2.마지막 인덱스 값에서 +1 해주면 실제 이름부터 값이 시작됨
-        String realPhoto = originalPhoto.substring(originalPhoto.lastIndexOf("\\")+1);
-        log.info(realPhoto);
+                .authority(mem.getAuthority())
+                .token(token)
+                .build();
+        System.out.println("회원정보수정");
 
-        //3.UUID 무작위로 이름 지정해줌, 파일명 중복 방지위해 사용됨
-        String uuid = UUID.randomUUID().toString();
-
-        //4.저장할 채널 이미지파일 경로 구성
-        String saveProfile = uploadPath + File.separator + uuid + "_" + realPhoto;
-
-        log.info("photo 주소 : " +saveProfile);
-
-
-
-        Member vo = new Member();
-        vo.setId(id);
-        vo.setPassword(password);
-//        vo.getMember().setNickname(nickname);
-        vo.setNickname(nickname);
-        vo.setProfile(saveProfile);
-
-
-        Path pathPhoto = Paths.get(saveProfile);
-        try {
-            profile.transferTo(pathPhoto);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(service.update(vo));
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     @DeleteMapping("/member/{id}")
     public ResponseEntity<Member> delete(@PathVariable int id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.delete(id));
+    }
+
+    @PostMapping("/member/signin")
+
+    public ResponseEntity<MemberDTO> authenticate(@RequestBody MemberDTO dto){
+
+        Member member = service.getByCredentials(dto.getId(), dto.getPassword(), passwordEncoder);
+        if(member!=null){ // -> 토큰 생성
+            String token = tokenProvider.create(member);
+            MemberDTO responseDTO = MemberDTO.builder()
+                    .memberNo(member.getMemberNo())
+                    .id(member.getId())
+                    .name(member.getName())
+                    .nickname(member.getNickname())
+                    .authority(member.getAuthority())
+                    .token(token)
+                    .build();
+            log.info(responseDTO);
+            return ResponseEntity.ok().body(responseDTO);
+        }else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

@@ -4,6 +4,8 @@ import com.project.hamsterd.domain.Post;
 import com.project.hamsterd.repo.PostDAO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -20,9 +22,13 @@ public class PostService {
     public List<Post> showAll() {
         return dao.findAll();
     }
-
+    //Pageable pageable
     public Post show(int postNo) {
-        return dao.findById(postNo).orElse(null);
+        log.info("show postNo " + postNo);
+        Post post = dao.findById(postNo).orElse(null);
+        log.info(post);
+
+        return post;
     }
 
     public Post create(Post post) {
@@ -52,23 +58,34 @@ public class PostService {
 
 
         Post create = dao.findById(post.getPostNo()).orElse(null);
-        post.setCreateTime( create.getCreateTime());
-
+        post.setCreateTime(create.getCreateTime());
+        post.setBoardView(create.getBoardView());
+        post.setSecurityCheck(create.getSecurityCheck());
         post.setUpdateTime(formattedDate);
-
-
-
-        return dao.save(post);
+        log.info("create: " + create);
+        if(create!=null){
+            return dao.save(post);
+        }
+        return null;
     }
 
     public Post delete(int postNo){
         Post data = dao.findById(postNo).orElse(null);
-        dao.delete(data);
-        return data;
+
+        if(data !=null) {
+            dao.delete(data);
+        }
+        return null;
     }
 
-    public List<Post> findByMemberId(String id) {
+    public List<Post> findByMemberId(int id) {
         return dao.findByMemberId(id);
     }
 
+    //게시판 조회수 업데이트
+    public Post updateBoardView(int postNo) {
+        log.info("조회수 서비스");
+        log.info("postNo 서비스 " + postNo);
+        return dao.updateBoardView(postNo);
+    }
 }
