@@ -67,7 +67,7 @@ public class Member {
     private String nickname;
 
     @Column
-    private String profile = "D:\\HamsterD-Front-WorkSpace\\hamsterd-front-workspace\\public\\upload\\hamster.png";
+    private String profile;
 
 
 }
