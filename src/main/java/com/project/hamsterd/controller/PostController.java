@@ -184,15 +184,7 @@ public class PostController {
     //C : 대댓글 추가
     @PostMapping("/post/pcomment/incomment")
     public ResponseEntity <InComment> create(@RequestBody InComment incomment) {
-        Member member = new Member();
-        Post post = new Post();
-        PostComment pcomment = new PostComment();
-        member.setMemberNo(1);
-        post.setPostNo(1);
-        pcomment.setCommentNo(3);
-        incomment.setMember(member);
-        incomment.setPost(post);
-        incomment.setPostComment(pcomment);
+
         return ResponseEntity.status(HttpStatus.OK).body(iCommentService.create(incomment));
     }
 
