@@ -23,18 +23,20 @@ public interface ScheduleDAO extends JpaRepository<Schedule, Integer> , Querydsl
     @Query(value="SELECT * FROM TB_SCHEDULE  WHERE group_no = :groupNo ORDER BY schedule_date", nativeQuery = true)
     Page<Schedule> findByGroupId(Pageable pageable, @Param("groupNo") int groupNo);
 
-
-
     // 특정 멤버의 모든 스케줄 조회
-    @Query(value="SELECT * FROM TB_SCHEDULE WHERE member_no = :memberNo", nativeQuery = true)
-    List<Schedule> findByMemberId(@Param("memberNo") int memberNo);
+    @Query(value="SELECT * FROM TB_SCHEDULE WHERE nickname = :nickname", nativeQuery = true)
+    List<Schedule> findByMemberId(@Param("nickname") String nickname);
 
     // 날짜별 일정 조회
-    @Query(value="SELECT * FROM TB_SCHEDULE WHERE group_no = :groupNo AND TO_CHAR(schedule_date, 'YYMMDD') like %:scheduleDate%", nativeQuery = true) // like써서 날짜 포함하는 경우, 날짜비교하는 쿼리문
+    @Query(value="SELECT * FROM TB_SCHEDULE WHERE group_no = :groupNo AND TO_CHAR(schedule_date, 'YYMMDD') like %:scheduleDate%", nativeQuery = true)
     List<Schedule> findByDate(@Param("groupNo") int groupNo, @Param("scheduleDate") String scheduleDate);
 
+    // 제목으로 검색
+    @Query(value="SELECT * FROM TB_SCHEDULE WHERE group_no = :groupNo AND schedule_title like %:scheduleTitle%", nativeQuery = true)
+    List<Schedule> findByTitle(@Param("groupNo") int groupNo, @Param("scheduleTitle") String scheduleTitle);
 
-
-
+    // 내용으로 검색
+    @Query(value="SELECT * FROM TB_SCHEDULE WHERE group_no = :groupNo AND schedule_content like %:scheduleContent%", nativeQuery = true)
+    List<Schedule> findByContent(@Param("groupNo") int groupNo, @Param("scheduleContent") String scheduleContent);
 
 }

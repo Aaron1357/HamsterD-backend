@@ -2,6 +2,7 @@ package com.project.hamsterd.service;
 
 import com.project.hamsterd.domain.GroupComment;
 import com.project.hamsterd.repo.GroupCommentDAO;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Log4j2
 public class GroupCommentService {
 
     @Autowired
@@ -29,7 +31,7 @@ public class GroupCommentService {
     }
 
     public GroupComment update(GroupComment vo){
-
+        log.info(vo);
 
         // 현재 날짜/시간
         Date now = new Date();
@@ -51,20 +53,18 @@ public class GroupCommentService {
             throw new RuntimeException(e);
         }
 
-
         GroupComment create = dao.findById(vo.getGCommentNo()).orElse(null);
-        vo.setCreateDate(create.getCreateDate());
 
+        vo.setCreateDate(create.getCreateDate());
         vo.setUpdateDate(formattedDate);
         vo.setMember(create.getMember());
         vo.setStudyGroup(create.getStudyGroup());
 
+        if(create!=null){
+            return dao.save(vo);
+        }
 
-
-        return dao.save(vo);
-
-
-
+        return null;
 
     }
 

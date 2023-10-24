@@ -57,8 +57,8 @@ public class ScheduleService {
     }
 
     // R : 개인 일정 목록(memberNo로 조회)
-    public List<Schedule> findByMemberId(int id){
-        return scheduleDAO.findByMemberId(id); // scheduleDAO에서 관련 쿼리문 생성함
+    public List<Schedule> findByMemberId(String nickname){
+        return scheduleDAO.findByMemberId(nickname); // scheduleDAO에서 관련 쿼리문 생성함
     }
 
     // R: 날짜별 일정 목록(scheduleDate로 조회)
@@ -66,6 +66,15 @@ public class ScheduleService {
         return scheduleDAO.findByDate(groupNo, scheduleDate);
     }
 
+    // 제목 검색
+    public List<Schedule> findByTitle(int groupNo, String scheduleTitle){
+        return scheduleDAO.findByTitle(groupNo, scheduleTitle);
+    }
+
+    // 내용 검색
+    public List<Schedule> findByContent(int groupNo, String scheduleContent){
+        return scheduleDAO.findByContent(groupNo, scheduleContent);
+    }
 
     
     // U : 일정 수정

@@ -188,8 +188,27 @@ public class StudyGroupController {
 
     //U : 내 댓글 수정하기
     @PutMapping("/studyGroup/gcomment")
-    public ResponseEntity <GroupComment> update(@RequestBody GroupComment groupComment) {
-        return ResponseEntity.status(HttpStatus.OK).body(gCommentService.update(groupComment));
+    public ResponseEntity <GroupComment> update(@RequestParam("newComment") String newComment,
+                                                @RequestParam("groupNo") int groupNo,
+                                                @RequestParam("gcommentNo") int gCommentNo,
+                                                @RequestParam("token") String token) {
+        log.info("groupNo" + groupNo); // 1
+        log.info("gCommentNo" + gCommentNo);
+
+        String id = tokenProvider.validateAndGetUserId(token);
+        Member member = memberService.showById(id);
+        StudyGroup group = service.show(groupNo);
+
+        GroupComment vo = new GroupComment();
+        vo.setGCommentNo(gCommentNo);
+        vo.setCommentContent(newComment);
+        vo.setStudyGroup(group);
+        vo.setMember(member);
+
+        log.info("vo : " + vo);
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(gCommentService.update(vo));
     }
 
 
@@ -275,8 +294,8 @@ public class StudyGroupController {
 
     // R : 개인 일정 목록(memberNo로 조회)
     @GetMapping("/schedule/member/{memberNo}")
-    public ResponseEntity<List<Schedule>> findByMemberId(@PathVariable int memberNo){
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByMemberId(memberNo));
+    public ResponseEntity<List<Schedule>> findByMemberId(@PathVariable String nickname){
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByMemberId(nickname));
     }
 
     // R: 일정 날짜별 조회(scheduleDate로 조회)
@@ -286,6 +305,19 @@ public class StudyGroupController {
 
     }
 
+    // 제목 검색
+    @GetMapping("/study/{groupNo}/{scheduleTitle}")
+    public ResponseEntity<List<Schedule>> findByTitle(@PathVariable int groupNo, @PathVariable String scheduleTitle){
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByTitle(groupNo, scheduleTitle));
+
+    }
+
+    // 내용 검색
+    @GetMapping("/study/{groupNo}/scheduleContent/{scheduleContent}")
+    public ResponseEntity<List<Schedule>> findByContent(@PathVariable int groupNo, @PathVariable String scheduleContent){
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByContent(groupNo, scheduleContent));
+
+    }
 
 
 
@@ -303,13 +335,10 @@ public class StudyGroupController {
 
         Schedule vo = new Schedule();
 
-        StudyGroup sg = new StudyGroup();
-        sg.setGroupNo(scheduleNo);
-
         vo.setScheduleTitle(title);
         vo.setScheduleContent(content);
         vo.setScheduleNo(scheduleNo);
-        vo.setStudyGroup(sg);
+        vo.setStudyGroup(member.getStudyGroup());
         vo.setMember(member);
 
         // 문자열로 받은 날짜를 Date 객체로 변환
