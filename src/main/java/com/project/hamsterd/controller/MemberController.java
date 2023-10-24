@@ -1,6 +1,5 @@
 package com.project.hamsterd.controller;
 
-import com.project.hamsterd.domain.Post;
 import com.project.hamsterd.domain.MemberDTO;
 import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.security.TokenProvider;
@@ -36,7 +35,6 @@ import java.util.UUID;
 @Log4j2
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 public class MemberController {
-
 
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath;
@@ -84,6 +82,12 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(member);
     }
 
+    @GetMapping("/member/{id}")
+    public ResponseEntity<Member> showMember(@PathVariable String id) {
+        Member member = service.showById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(member);
+    }
+
     @PostMapping("/member")
     public ResponseEntity<MemberDTO> create(@RequestBody MemberDTO dto) {
 //        log.info(member);
@@ -101,9 +105,10 @@ public class MemberController {
 
 
 //          member.setStudentNo(++nextVal);
-    
+
         log.info(dto.getAcademy());
         Member member = Member.builder()
+
                                 .id(dto.getId())
                                 .password(passwordEncoder.encode(dto.getPassword()))
                                 .name(dto.getName())
@@ -113,7 +118,7 @@ public class MemberController {
                                 .academyName(dto.getAcademy())
                                 .address(dto.getAddress())
                                 .nickname(dto.getNickname())
-                                    .profile(dto.getProfile())
+                                .profile(dto.getProfile())
                                 .build();
 
         Member registerMember = service.create(member);
