@@ -22,17 +22,19 @@ public class QPost extends EntityPathBase<Post> {
 
     public static final QPost post = new QPost("post");
 
+    public final NumberPath<Integer> boardView = createNumber("boardView", Integer.class);
+
     public final DateTimePath<java.util.Date> createTime = createDateTime("createTime", java.util.Date.class);
 
     public final QMember member;
 
     public final StringPath postContent = createString("postContent");
 
-    public final StringPath postFile = createString("postFile");
-
     public final NumberPath<Integer> postNo = createNumber("postNo", Integer.class);
 
     public final StringPath postTitle = createString("postTitle");
+
+    public final ComparablePath<Character> securityCheck = createComparable("securityCheck", Character.class);
 
     public final DateTimePath<java.util.Date> updateTime = createDateTime("updateTime", java.util.Date.class);
 

@@ -27,6 +27,10 @@ public class Member {
     @SequenceGenerator(name="memberSEQ",sequenceName = "SEQ_MEMBER_NO", allocationSize = 1)
     private int memberNo;
 
+    @ManyToOne
+    @JoinColumn(name="GROUP_NO")
+    private StudyGroup studyGroup;
+
     @Column
     private String id;
 
@@ -63,12 +67,7 @@ public class Member {
     private String nickname;
 
     @Column
-    private String profile;
-
-
-    @ManyToOne
-    @JoinColumn(name="GROUP_NO")
-    private StudyGroup studyGroup;
+    private String profile = "D:\\HamsterD-Front-WorkSpace\\hamsterd-front-workspace\\public\\upload\\hamster.png";
 
 
 }
