@@ -1,7 +1,9 @@
 package com.project.hamsterd.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -13,6 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicInsert
+@Builder
 @Table(name="TB_GROUP_COMMENT")
 public class GroupComment {
 
@@ -26,9 +29,11 @@ public class GroupComment {
     private String commentContent;
 
     @Column(name = "CO_CREATEDATE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createDate;
 
     @Column(name = "CO_UPDATEDATE")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updateDate;
 
     @Column(name = "CO_NICKNAME")
@@ -41,6 +46,7 @@ public class GroupComment {
     @ManyToOne
     @JoinColumn(name = "MEMBER_NO")
     private Member member;
+
 
 
 }

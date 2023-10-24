@@ -154,20 +154,25 @@ public class StudyGroupController {
 
     // C :댓글 추가
     @PostMapping("/studyGroup/gcomment")
-    public ResponseEntity<GroupComment> create(@RequestBody String newComment){
-        log.info(newComment);
-        GroupComment gc = new GroupComment();
-        gc.setCommentContent(newComment);
+    public ResponseEntity<GroupComment> create(@RequestParam("newComment") String newComment,
+                                               @RequestParam("groupNo") int groupNo,
+                                               @RequestParam("token") String token) {
+        log.info(groupNo);
 
-        Member m = new Member();
-        m.setMemberNo(1);
+        String id = tokenProvider.validateAndGetUserId(token);
+        Member member = memberService.showById(id);
 
-        StudyGroup sg = new StudyGroup();
-        sg.setGroupNo(2);
+        StudyGroup group = new StudyGroup();
+        group.setGroupNo(groupNo);
 
-        gc.setMember(m);
-        gc.setStudyGroup(sg);
-        return ResponseEntity.status(HttpStatus.OK).body(gCommentService.create(gc));
+        GroupComment vo = GroupComment.builder()
+                    .commentContent(newComment)
+                    .studyGroup(group)
+                    .member(member)
+                    .build();
+        log.info(vo.toString());
+        return ResponseEntity.status(HttpStatus.OK).body(gCommentService.create(vo));
+
     }
 
 
