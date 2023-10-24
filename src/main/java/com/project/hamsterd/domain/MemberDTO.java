@@ -21,7 +21,7 @@ public class MemberDTO {
     private String gender;
     private String phone;
     private String address;
-    private String academy;
+    private String academyName;
     private String authority;
     private String nickname;
     private String profile;

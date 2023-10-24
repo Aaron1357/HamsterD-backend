@@ -76,39 +76,29 @@ public class MemberController {
 
     @PostMapping("/member")
     public ResponseEntity<MemberDTO> create(@RequestBody MemberDTO dto) {
-//        log.info(member);
 
-
-          if(member.getProfile() == null)
-          {
-              member.setProfile("D:\\Aaron1357\\HamsterD-Front-WorkSpace\\hamsterd-front-workspace\\public\\upload\\man.png");
-          };
-
-//          member.setStudentNo(++nextVal);
-    
-        log.info(dto.getAcademy());
         Member member = Member.builder()
-                                .id(dto.getId())
-                                .password(passwordEncoder.encode(dto.getPassword()))
-                                .name(dto.getName())
-                                .birth(dto.getBirth())
-                                .gender(dto.getGender())
-                                .phone(dto.getPhone())
-                                .academy(dto.getAcademy())
-                                .address(dto.getAddress())
-                                .nickname(dto.getNickname())
-                                .build();
+                .id(dto.getId())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .name(dto.getName())
+                .birth(dto.getBirth())
+                .gender(dto.getGender())
+                .phone(dto.getPhone())
+                .academyName(dto.getAcademyName())
+                .address(dto.getAddress())
+                .nickname(dto.getNickname())
+                .build();
 
         Member registerMember = service.create(member);
         log.info("회원가입들어옴");
         MemberDTO responseDTO = MemberDTO.builder()
                 .id(registerMember.getId())
-//                .password(registerMember.getPassword())
+                .password(registerMember.getPassword())
                 .name(registerMember.getName())
                 .birth(registerMember.getBirth())
                 .gender(registerMember.getGender())
                 .phone(registerMember.getPhone())
-                .academy(registerMember.getAcademy())
+                .academyName(registerMember.getAcademyName())
                 .address(registerMember.getAddress())
                 .nickname(registerMember.getNickname())
                 .build();
@@ -118,7 +108,6 @@ public class MemberController {
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
-
     @PutMapping("/member")
     public ResponseEntity<MemberDTO> update(MultipartFile profile, @RequestParam(name = "id") String id, @RequestParam(name = "password") String password, @RequestParam(name = "nickname") String nickname) {
         Member member = Member.builder()
