@@ -174,9 +174,9 @@ public class PostController {
 
 
     // D : 댓글 삭제
-    @DeleteMapping("/post/pcomment/{id}")
-    public ResponseEntity<PostComment> deletePDelete(@PathVariable int id){
-        return ResponseEntity.status(HttpStatus.OK).body(pCommentService.delete(id));
+    @DeleteMapping("/post/pcomment/{commentNo}")
+    public ResponseEntity<PostComment> deletePDelete(@PathVariable int commentNo){
+        return ResponseEntity.status(HttpStatus.OK).body(pCommentService.delete(commentNo));
     }
 
     //================================대댓글==========================================

@@ -160,12 +160,14 @@ public class MemberController {
         if(member!=null){ // -> 토큰 생성
             String token = tokenProvider.create(member);
             MemberDTO responseDTO = MemberDTO.builder()
+                    .memberNo(member.getMemberNo())
                     .id(member.getId())
                     .name(member.getName())
                     .nickname(member.getNickname())
                     .authority(member.getAuthority())
                     .token(token)
                     .build();
+            log.info(responseDTO);
             return ResponseEntity.ok().body(responseDTO);
         }else {
             return ResponseEntity.badRequest().build();

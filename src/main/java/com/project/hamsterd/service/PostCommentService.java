@@ -67,8 +67,8 @@ public class PostCommentService {
 
     }
 
-    public PostComment delete(int id){
-        PostComment target = dao.findById(id).orElse(null);
+    public PostComment delete(int commentNo){
+        PostComment target = dao.findById(commentNo).orElse(null);
         dao.delete(target);
 
         return target;
