@@ -84,6 +84,8 @@ public class StudyGroupController {
     }
 
 
+
+
     // 스터디 그룹 생성
     @PostMapping("/studygroup")
     public ResponseEntity<StudyGroup> create(

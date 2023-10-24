@@ -113,10 +113,12 @@ public class MemberController {
                                 .academyName(dto.getAcademy())
                                 .address(dto.getAddress())
                                 .nickname(dto.getNickname())
+                                    .profile(dto.getProfile())
                                 .build();
 
         Member registerMember = service.create(member);
         log.info("회원가입들어옴");
+
         MemberDTO responseDTO = MemberDTO.builder()
                 .id(registerMember.getId())
 //                .password(registerMember.getPassword())
