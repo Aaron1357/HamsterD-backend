@@ -205,6 +205,7 @@ public class MemberController {
             String token = tokenProvider.create(member);
             MemberDTO responseDTO = MemberDTO.builder()
                     .memberNo(member.getMemberNo())
+                    .studyGroup(member.getStudyGroup())
                     .id(member.getId())
                     .name(member.getName())
                     .nickname(member.getNickname())
