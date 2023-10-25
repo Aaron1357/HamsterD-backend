@@ -94,4 +94,10 @@ public class PostService {
         log.info("어딧니 컨텐츠야" +postContent);
         return dao.findSearchContent(postContent);
     }
+
+    //검색창에 제목 조회 시 게시판 조회
+    public List<Post> findSearchTitle(String postTitle) {
+        log.info("어딧니 제목" +postTitle);
+        return dao.findSearchTitle(postTitle);
+    }
 }

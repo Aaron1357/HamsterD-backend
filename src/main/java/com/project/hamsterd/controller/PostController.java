@@ -108,12 +108,12 @@ public class PostController {
         response.put("contents", result.getContent());
         response.put("total", result.getTotalElements());
 
-        log.info("Total Pages : " + result.getTotalPages()); // 총 몇 페이지
-        log.info("Total Count : " + result.getTotalElements()); // 전체 개수
-        log.info("Page Number : " + result.getNumber()); // 현재 페이지 번호
-        log.info("Page Size : " + result.getSize()); // 페이지당 데이터 개수
-        log.info("Next Page : " + result.hasNext()); // 다음 페이지가 있는지 존재 여부
-        log.info("First Page : " + result.isFirst()); // 시작 페이지 여부
+//        log.info("Total Pages : " + result.getTotalPages()); // 총 몇 페이지
+//        log.info("Total Count : " + result.getTotalElements()); // 전체 개수
+//        log.info("Page Number : " + result.getNumber()); // 현재 페이지 번호
+//        log.info("Page Size : " + result.getSize()); // 페이지당 데이터 개수
+//        log.info("Next Page : " + result.hasNext()); // 다음 페이지가 있는지 존재 여부
+//        log.info("First Page : " + result.isFirst()); // 시작 페이지 여부
 
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -127,13 +127,21 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(service.show(postNo));
     }
 
-    @GetMapping("/post/search/postContents")
+    @GetMapping("/post/search/postContents/{postContent}")
     //R : 검색창에 작성된 게시물만 보기
-    public ResponseEntity <List<Post>> showAll(@RequestParam(name="postContent", required = false) String postContent) {
+    public ResponseEntity <List<Post>> findSearchContent(@PathVariable String postContent) {
         log.info("검색창에 작성된 게시물 들어옴" + postContent);
 
         return ResponseEntity.status(HttpStatus.OK).body(service.findSearchContent(postContent));
     }
+
+    //R : 검색창에 작성된 게시물만 보기
+    @GetMapping("/post/search/postTitles/{postTitle}")
+    public ResponseEntity <List<Post>> findSearchTitle(@PathVariable String postTitle) {
+        log.info("검색창에 작성된 제목 들어옴" + postTitle);
+        return ResponseEntity.status(HttpStatus.OK).body(service.findSearchTitle(postTitle));
+    }
+
 
     //R :
     // 특정 멤버의 모든 게시판 조회 memberNo 받아와서 작성하기

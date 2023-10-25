@@ -21,9 +21,12 @@ public interface PostDAO extends JpaRepository<Post, Integer> {
      Post updateBoardView(int postNo);
 
 
-     //검색창에 내용 값 작성시 게시판 전체조회
-
+     //검색창에 게시물내용 값 작성시 게시판 전체조회
      @Query(value = "SELECT * FROM tb_post WHERE post_content LIKE %:postContent%", nativeQuery = true)
      List<Post> findSearchContent(@Param("postContent") String postContent);
 
-     }
+
+     //검색창에 게시물 제목 값 작성시 게시판 전체조회
+     @Query(value = "SELECT * FROM tb_post WHERE post_title LIKE %:postTitle%", nativeQuery = true)
+     List<Post> findSearchTitle(@Param("postTitle") String postTitle);
+    }
