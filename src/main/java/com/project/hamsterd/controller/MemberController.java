@@ -133,6 +133,7 @@ public class MemberController {
                 .academyName(registerMember.getAcademyName())
                 .address(registerMember.getAddress())
                 .nickname(registerMember.getNickname())
+                .nickname(registerMember.getProfile())
                 .build();
 
 //        log.info(registerMember.toString());
@@ -206,6 +207,7 @@ public class MemberController {
                     .name(member.getName())
                     .nickname(member.getNickname())
                     .authority(member.getAuthority())
+                    .profile(member.getProfile())
                     .token(token)
                     .build();
             log.info(responseDTO);
