@@ -17,8 +17,9 @@ public class StudyGroupService {
         return dao.findAll();
     }
 
-    public StudyGroup show(int id){
-        return dao.findById(id).orElse(null);
+    public StudyGroup show(int groupNo){
+//        System.out.println(dao.findById(groupNo).orElse(null));
+        return dao.findById(groupNo).orElse(null);
     }
 
     public StudyGroup create(StudyGroup studyGroup){

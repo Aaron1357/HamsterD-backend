@@ -21,7 +21,7 @@ public class GroupEval {
     @Column(name = "GROUP_SCORE")
     private int groupScore; // 그룹 평가 점수( 나중에 평균내서 점수 출력시키기)
 
-    @Column
+    @Column(name = "REVIEW")
     private String review;  // 그룹 평가내용
 
     @ManyToOne

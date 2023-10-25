@@ -31,6 +31,13 @@ public class GroupEvalService {
         return groupEvalDAO.findAll();
     }
 
+    public List<GroupEval> showGroupEval(int groupNo){
+        List<GroupEval> groupEval = groupEvalDAO.findByGroupNo(groupNo);
+
+        return groupEval;
+    }
+
+
     public GroupEval show(int id){
         GroupEval groupEval = groupEvalDAO.findById(id).orElse(null);
         Member member = memberDAO.findById(groupEval.getMember().getMemberNo()).orElse(null);
