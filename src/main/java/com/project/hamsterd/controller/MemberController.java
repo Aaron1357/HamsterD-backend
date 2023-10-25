@@ -105,7 +105,7 @@ public class MemberController {
 
 //          member.setStudentNo(++nextVal);
 
-        log.info(dto.getAcademy());
+        log.info(dto.getAcademyName());
         Member member = Member.builder()
 
                                 .id(dto.getId())
@@ -114,7 +114,7 @@ public class MemberController {
                                 .birth(dto.getBirth())
                                 .gender(dto.getGender())
                                 .phone(dto.getPhone())
-                                .academyName(dto.getAcademy())
+                                .academyName(dto.getAcademyName())
                                 .address(dto.getAddress())
                                 .nickname(dto.getNickname())
                                 .profile(dto.getProfile())
@@ -130,7 +130,7 @@ public class MemberController {
                 .birth(registerMember.getBirth())
                 .gender(registerMember.getGender())
                 .phone(registerMember.getPhone())
-                .academy(registerMember.getAcademyName())
+                .academyName(registerMember.getAcademyName())
                 .address(registerMember.getAddress())
                 .nickname(registerMember.getNickname())
                 .build();
