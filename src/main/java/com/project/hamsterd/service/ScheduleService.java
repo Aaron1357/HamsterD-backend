@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -58,8 +59,11 @@ public class ScheduleService {
 
     // R : 개인 일정 목록(memberNo로 조회)
     public List<Schedule> findByMemberId(String nickname){
-        return scheduleDAO.findByMemberId(nickname); // scheduleDAO에서 관련 쿼리문 생성함
+        return scheduleDAO.findByMemberId(nickname);
     }
+
+
+
 
     // R: 날짜별 일정 목록(scheduleDate로 조회)
     public List<Schedule> findByDate(int groupNo, String scheduleDate){

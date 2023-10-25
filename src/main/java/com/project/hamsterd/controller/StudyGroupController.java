@@ -273,7 +273,7 @@ public class StudyGroupController {
     // R : 특정 스터디그룹의 일정 목록 보기
     @GetMapping("/schedule/study/{groupNo}")
     public ResponseEntity<List<Schedule>> showAllGroupSchedule(@RequestParam(name="page", defaultValue = "1") int page, @PathVariable int groupNo){
-        Sort sort = Sort.by("scheduleNo").descending();
+        Sort sort = Sort.by("scheduleDate").ascending();
         Pageable pageable = PageRequest.of(page-1, 10, sort); // 시작페이지(0부터 시작), 몇개씩 보여줄지
 
         QSchedule qSchedule = QSchedule.schedule;
@@ -292,9 +292,11 @@ public class StudyGroupController {
 //        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    // R : 개인 일정 목록(memberNo로 조회)
-    @GetMapping("/schedule/member/{memberNo}")
+    // R : 개인 일정 목록
+    @GetMapping("/schedule/member/{nickname}")
     public ResponseEntity<List<Schedule>> findByMemberId(@PathVariable String nickname){
+
+
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByMemberId(nickname));
     }
 
@@ -302,7 +304,6 @@ public class StudyGroupController {
     @GetMapping("/schedule/study/{groupNo}/{scheduleDate}")
     public ResponseEntity<List<Schedule>> findByDate(@PathVariable int groupNo, @PathVariable String scheduleDate){
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByDate(groupNo, scheduleDate));
-
     }
 
     // 제목 검색

@@ -20,11 +20,15 @@ public interface ScheduleDAO extends JpaRepository<Schedule, Integer> , Querydsl
     Schedule findByGnSn(@Param("groupNo") int groupNo, @Param("scheduleNo") int scheduleNo);
 
     // 특정 스터디의 모든 스케줄 조회
-    @Query(value="SELECT * FROM TB_SCHEDULE  WHERE group_no = :groupNo ORDER BY schedule_date", nativeQuery = true)
+    @Query(value="SELECT * FROM TB_SCHEDULE  WHERE group_no = :groupNo", nativeQuery = true)
     Page<Schedule> findByGroupId(Pageable pageable, @Param("groupNo") int groupNo);
 
+
+    // 닉네임으로 멤버 조회 => 멤버넘버 끌어와서 특정 멤버의 모든 스케줄 조회
     // 특정 멤버의 모든 스케줄 조회
-    @Query(value="SELECT * FROM TB_SCHEDULE WHERE nickname = :nickname", nativeQuery = true)
+    @Query(value="SELECT S.SCHEDULE_NO, S.SCHEDULE_TITLE, S.SCHEDULE_CONTENT, S.SCHEDULE_DATE, S.GROUP_NO, S.MEMBER_NO" +
+            " FROM TB_SCHEDULE S JOIN TB_MEMBER M ON (S.MEMBER_NO = M.MEMBER_NO)" +
+            "WHERE nickname = :nickname" , nativeQuery = true)
     List<Schedule> findByMemberId(@Param("nickname") String nickname);
 
     // 날짜별 일정 조회
