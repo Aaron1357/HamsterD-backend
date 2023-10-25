@@ -19,8 +19,8 @@ public class PostService {
     @Autowired
     private PostDAO dao;
 
-    public List<Post> showAll() {
-        return dao.findAll();
+    public Page<Post> showAll(Pageable pageable) {
+        return dao.findAll(pageable);
     }
     //Pageable pageable
     public Post show(int postNo) {
@@ -87,5 +87,11 @@ public class PostService {
         log.info("조회수 서비스");
         log.info("postNo 서비스 " + postNo);
         return dao.updateBoardView(postNo);
+    }
+
+    //검색창에 내용 조회 시 게시판 조회
+    public List<Post> findSearchContent(String postContent) {
+        log.info("어딧니 컨텐츠야" +postContent);
+        return dao.findSearchContent(postContent);
     }
 }

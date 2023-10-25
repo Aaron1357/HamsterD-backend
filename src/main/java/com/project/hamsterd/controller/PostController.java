@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,9 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @Log4j2
@@ -99,22 +98,41 @@ public class PostController {
 
     //R : 게시판 전체 조회
     @GetMapping("/posts")
-    public ResponseEntity<List<Post>> showAll() {
-//          @RequestParam(name="page", defaultValue = "1") int page
-//        Sort sort = Sort.by("postNo").descending();
-//        Pageable pageable = PageRequest.of(page-1, 5, sort);
+    public ResponseEntity<Map<String, Object>> showAll(@RequestParam(name="page", defaultValue = "1") int page) {
+
+        Sort sort = Sort.by("postNo").descending();
+        Pageable pageable = PageRequest.of(page-1, 5, sort);
+        Page<Post> result = service.showAll(pageable);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("contents", result.getContent());
+        response.put("total", result.getTotalElements());
+
+        log.info("Total Pages : " + result.getTotalPages()); // 총 몇 페이지
+        log.info("Total Count : " + result.getTotalElements()); // 전체 개수
+        log.info("Page Number : " + result.getNumber()); // 현재 페이지 번호
+        log.info("Page Size : " + result.getSize()); // 페이지당 데이터 개수
+        log.info("Next Page : " + result.hasNext()); // 다음 페이지가 있는지 존재 여부
+        log.info("First Page : " + result.isFirst()); // 시작 페이지 여부
 
 
-
-//        return ResponseEntity.status(HttpStatus.OK).body(result.getContent());
-        return ResponseEntity.status(HttpStatus.OK).body(service.showAll());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+//        return ResponseEntity.status(HttpStatus.OK).body(service.showAll());
     }
 
-    //R : 특정 게시판 보기
+    //R :  게시판 번호별 보기
     @GetMapping("/post/detail/{postNo}")
     public ResponseEntity <Post> show(@PathVariable int postNo) {
         log.info("상세페이지 들어옴");
         return ResponseEntity.status(HttpStatus.OK).body(service.show(postNo));
+    }
+
+    @GetMapping("/post/search/postContents")
+    //R : 검색창에 작성된 게시물만 보기
+    public ResponseEntity <List<Post>> showAll(@RequestParam(name="postContent", required = false) String postContent) {
+        log.info("검색창에 작성된 게시물 들어옴" + postContent);
+
+        return ResponseEntity.status(HttpStatus.OK).body(service.findSearchContent(postContent));
     }
 
     //R :
