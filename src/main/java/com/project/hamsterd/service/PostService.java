@@ -59,8 +59,8 @@ public class PostService {
 
         Post create = dao.findById(post.getPostNo()).orElse(null);
         post.setCreateTime(create.getCreateTime());
-        post.setBoardView(create.getBoardView());
-        post.setSecurityCheck(create.getSecurityCheck());
+//        post.setBoardView(create.getBoardView());
+//        post.setSecurityCheck(create.getSecurityCheck());
         post.setUpdateTime(formattedDate);
         log.info("create: " + create);
         if(create!=null){

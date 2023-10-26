@@ -61,7 +61,7 @@ public class PostController {
     @PostMapping("/post")
     public ResponseEntity<Post> create(@RequestParam("title") String title,
                                        @RequestParam("desc") String desc,
-                                       @RequestParam("securityCheck") char securityCheck,
+                                       @RequestParam("securityCheck") String securityCheck,
                                        @RequestParam("token") String token) {
 
         log.info("게시판 작성 토큰 " + token);
@@ -101,7 +101,7 @@ public class PostController {
     public ResponseEntity<Map<String, Object>> showAll(@RequestParam(name="page", defaultValue = "1") int page) {
 
         Sort sort = Sort.by("postNo").descending();
-        Pageable pageable = PageRequest.of(page-1, 5, sort);
+        Pageable pageable = PageRequest.of(page-1, 10, sort);
         Page<Post> result = service.showAll(pageable);
 
         Map<String, Object> response = new HashMap<>();
@@ -123,7 +123,8 @@ public class PostController {
     //R :  게시판 번호별 보기
     @GetMapping("/post/detail/{postNo}")
     public ResponseEntity <Post> show(@PathVariable int postNo) {
-        log.info("상세페이지 들어옴");
+
+        log.info("상세페이지 들어옴" + postNo);
         return ResponseEntity.status(HttpStatus.OK).body(service.show(postNo));
     }
 
@@ -142,6 +143,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(service.findSearchTitle(postTitle));
     }
 
+    //R : 검색창에
 
     //R :
     // 특정 멤버의 모든 게시판 조회 memberNo 받아와서 작성하기
@@ -155,14 +157,24 @@ public class PostController {
 
     /*내 게시판만 수정할수있음 memberNo에 postNo으로 해야해*/
     @PutMapping("/updatePost")
-    public ResponseEntity <Post> update(@RequestParam("postNo") int postNo, @RequestParam("title") String title, @RequestParam("desc") String desc) {
+    public ResponseEntity <Post> update(@RequestParam("postNo") int postNo,
+                                        @RequestParam("title") String title,
+                                        @RequestParam("desc") String desc,
+                                        @RequestParam("securityCheck") String securityCheck,
+                                         @RequestParam("id") String id
+                                       ) {
 
+        log.info(id);
+        Member member =  memberService.showById(id);
+
+
+        log.info(securityCheck);
         Post post = new Post();
         post.setPostNo(postNo);
         post.setPostTitle(title);
-        log.info(title);
         post.setPostContent(desc);
-        log.info(desc);
+        post.setSecurityCheck(securityCheck);
+        post.setMember(member);
         return ResponseEntity.status(HttpStatus.OK).body(service.update(post));
     }
 
