@@ -23,15 +23,13 @@ public class MemberService {
         return dao.findAll();
     }
 
-    public Member show(String id, String password){
-        Member mem = dao.findByMemberId(id);
+    public Member findById(String id){
+        return dao.findByMemberId(id);
+    }
 
-        if(mem.getId().equals(id) && mem.getPassword().equals(password)){
-            return mem;
-        }
 
-        return null;
-
+    public Member findByNick(String nick){
+        return dao.findByNick(nick);
     }
     public Member create(Member member) {
 

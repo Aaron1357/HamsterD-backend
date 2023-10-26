@@ -45,27 +45,42 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(service.showAll());
     }
 
-    @GetMapping("/member/{id}/{password}")
-    public ResponseEntity<Member> show(@PathVariable String id, @PathVariable String password) {
-        System.out.println("멤버 개별 조회 들어옴?");
+    @GetMapping("/member/id/{id}")
+    public ResponseEntity<Boolean> idDupil(@PathVariable String id) {
+
+
+
+        System.out.println("멤버 개별 조회 들어옴?(아이디)");
         System.out.println("id : " + id);
-        System.out.println("pw : " + password);
 
-//        List<Member> list =  service.showAll();
-//        for(int i = 0; i<list.size(); i++){
-//            if(member.getId().equals(list.get(i).getId()) && member.getPassword().equals(list.get(i).getPassword())){
-//                member = list.get(i);
-//            }
-//        }
 
-        Member member = service.show(id, password);
 
-//        if(member != null){
-//            session.setAttribute("member", member);
-////            return ResponseEntity.status(HttpStatus.OK).body();
-//        }
+        Member member = service.findById(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body(member);
+        if(member != null){
+            return ResponseEntity.status(HttpStatus.OK).body(true);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(false);
+    }
+
+    @GetMapping("/member/nick/{nickName}")
+    public ResponseEntity<Boolean> nickDupil(@PathVariable String nickName) {
+
+
+
+        System.out.println("멤버 개별 조회 들어옴?(닉네임)");
+        System.out.println("nickName : " + nickName);
+
+
+
+        Member member = service.findByNick(nickName);
+
+        if(member != null){
+            return ResponseEntity.status(HttpStatus.OK).body(true);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(false);
     }
 
     @PostMapping("/member")
