@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -75,8 +76,11 @@ public class GroupCommentService {
         return target;
     }
 
-    public List<GroupComment> findByPostNo(int groupNo){
-        return dao.findByGroupNo(groupNo);
+    public List<GroupComment> findByGroupNo(int groupNo){
+        List<GroupComment> gComments = dao.findByGroupNo(groupNo);
+        gComments.sort(Comparator.comparing(GroupComment::getCreateDate).reversed());
+
+        return gComments;
     }
 }
 

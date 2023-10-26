@@ -11,6 +11,7 @@ import com.project.hamsterd.service.ScheduleService;
 import com.project.hamsterd.service.StudyGroupService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.DateTimePath;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,9 +32,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @CrossOrigin(origins={"*"}, maxAge = 6000)
 @RestController
@@ -180,7 +179,7 @@ public class StudyGroupController {
     @GetMapping("/studyGroup/{groupNo}/gcomment")
     public ResponseEntity<List<GroupComment>> postComment(@PathVariable int groupNo){
 
-        return ResponseEntity.status(HttpStatus.OK).body(gCommentService.findByPostNo(groupNo));
+        return ResponseEntity.status(HttpStatus.OK).body(gCommentService.findByGroupNo(groupNo));
     }
 
 
@@ -264,46 +263,33 @@ public class StudyGroupController {
     public ResponseEntity<List<Schedule>> showAllSchedule(){
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.showAll());
     }
+
     // R : 일정 1개 상세 보기(scheduleNo로 조회)
     @GetMapping("/study/{groupNo}/schedule/{scheduleNo}")
     public ResponseEntity<Schedule> showSchdule(@PathVariable int groupNo, @PathVariable int scheduleNo){
+
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.show(groupNo, scheduleNo));
     }
 
-    // R : 특정 스터디그룹의 일정 목록 보기
+    // R : 특정 스터디그룹의 일정 목록 보기(목록용)
     @GetMapping("/schedule/study/{groupNo}")
-    public ResponseEntity<List<Schedule>> showAllGroupSchedule(@RequestParam(name="page", defaultValue = "1") int page, @PathVariable int groupNo){
-        Sort sort = Sort.by("scheduleDate").ascending();
-        Pageable pageable = PageRequest.of(page-1, 10, sort); // 시작페이지(0부터 시작), 몇개씩 보여줄지
-
-        QSchedule qSchedule = QSchedule.schedule;
-
-        BooleanBuilder builder = new BooleanBuilder();
-
-        if(groupNo!=0) {
-            BooleanExpression expression = qSchedule.studyGroup.groupNo.eq(groupNo);
-            builder.and(expression);
-        }
-
-        Page<Schedule> result = scheduleService.showAllGroupSchedule(pageable, builder);
-
-//        Page<Schedule> result = scheduleService.showAllGroupSchedule(pageable, groupNo);
-        return ResponseEntity.status(HttpStatus.OK).body(result.getContent());
-//        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<List<Schedule>> showAllGroupSchedule(@PathVariable int groupNo){
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.showAllGroupSchedule(groupNo));
     }
+
 
     // R : 개인 일정 목록
     @GetMapping("/schedule/member/{nickname}")
     public ResponseEntity<List<Schedule>> findByMemberId(@PathVariable String nickname){
-
-
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByMemberId(nickname));
     }
 
     // R: 일정 날짜별 조회(scheduleDate로 조회)
     @GetMapping("/schedule/study/{groupNo}/{scheduleDate}")
-    public ResponseEntity<List<Schedule>> findByDate(@PathVariable int groupNo, @PathVariable String scheduleDate){
+    public ResponseEntity<List<Schedule>> findByDate( @PathVariable int groupNo, @PathVariable String scheduleDate){
+
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByDate(groupNo, scheduleDate));
+
     }
 
     // 제목 검색
@@ -316,6 +302,7 @@ public class StudyGroupController {
     // 내용 검색
     @GetMapping("/study/{groupNo}/scheduleContent/{scheduleContent}")
     public ResponseEntity<List<Schedule>> findByContent(@PathVariable int groupNo, @PathVariable String scheduleContent){
+
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findByContent(groupNo, scheduleContent));
 
     }

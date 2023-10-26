@@ -1,9 +1,6 @@
 package com.project.hamsterd.repo;
 
 import com.project.hamsterd.domain.Schedule;
-import com.querydsl.core.BooleanBuilder;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -13,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Date;
 import java.util.List;
 
-public interface ScheduleDAO extends JpaRepository<Schedule, Integer> , QuerydslPredicateExecutor<Schedule> {
+public interface ScheduleDAO extends JpaRepository<Schedule, Integer> , QuerydslPredicateExecutor<Schedule>{
 
     // 스터디그룹 내 일정 1개 상세보기
     @Query(value="SELECT * FROM TB_SCHEDULE WHERE group_no = :groupNo AND schedule_no = :scheduleNo", nativeQuery = true)
@@ -21,7 +18,7 @@ public interface ScheduleDAO extends JpaRepository<Schedule, Integer> , Querydsl
 
     // 특정 스터디의 모든 스케줄 조회
     @Query(value="SELECT * FROM TB_SCHEDULE  WHERE group_no = :groupNo", nativeQuery = true)
-    Page<Schedule> findByGroupId(Pageable pageable, @Param("groupNo") int groupNo);
+    List<Schedule> findByGroupId(@Param("groupNo") int groupNo);
 
 
     // 닉네임으로 멤버 조회 => 멤버넘버 끌어와서 특정 멤버의 모든 스케줄 조회
@@ -32,7 +29,7 @@ public interface ScheduleDAO extends JpaRepository<Schedule, Integer> , Querydsl
     List<Schedule> findByMemberId(@Param("nickname") String nickname);
 
     // 날짜별 일정 조회
-    @Query(value="SELECT * FROM TB_SCHEDULE WHERE group_no = :groupNo AND TO_CHAR(schedule_date, 'YYMMDD') like %:scheduleDate%", nativeQuery = true)
+    @Query(value="SELECT * FROM TB_SCHEDULE WHERE group_no = :groupNo AND TO_CHAR(schedule_date, 'YYYYMMDD') like %:scheduleDate%", nativeQuery = true)
     List<Schedule> findByDate(@Param("groupNo") int groupNo, @Param("scheduleDate") String scheduleDate);
 
     // 제목으로 검색
