@@ -4,6 +4,8 @@ import com.project.hamsterd.domain.Post;
 import com.project.hamsterd.repo.PostDAO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -20,7 +22,7 @@ public class PostService {
     public List<Post> showAll() {
         return dao.findAll();
     }
-
+    //Pageable pageable
     public Post show(int postNo) {
         log.info("show postNo " + postNo);
         Post post = dao.findById(postNo).orElse(null);

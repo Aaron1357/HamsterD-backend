@@ -3,6 +3,7 @@ package com.project.hamsterd.service;
 import com.project.hamsterd.domain.Post;
 import com.project.hamsterd.domain.PostComment;
 import com.project.hamsterd.repo.PostCommentDAO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class PostCommentService {
     @Autowired
     private PostCommentDAO dao;
@@ -29,13 +31,6 @@ public class PostCommentService {
     }
 
     public PostComment update(PostComment vo){
-//
-//        PostComment target = dao.findById(vo.getCommentNo()).orElse(null);
-//
-//        if(target != null) return dao.save(vo);
-//
-//        return null;
-
 
         // 현재 날짜/시간
         Date now = new Date();
@@ -59,23 +54,21 @@ public class PostCommentService {
 
 
         PostComment create = dao.findById(vo.getCommentNo()).orElse(null);
-        vo.setCreateDate(create.getCreateDate());
 
+        vo.setCreateDate(create.getCreateDate());
         vo.setUpdateDate(formattedDate);
         vo.setMember(create.getMember());
         vo.setPost(create.getPost());
-
-
-
-        return dao.save(vo);
-
-
-
+        log.info("create: " + create);
+        if(create!=null){
+            return dao.save(vo);
+        }
+        return null;
 
     }
 
-    public PostComment delete(int id){
-        PostComment target = dao.findById(id).orElse(null);
+    public PostComment delete(int commentNo){
+        PostComment target = dao.findById(commentNo).orElse(null);
         dao.delete(target);
 
         return target;

@@ -96,7 +96,6 @@ public class MemberController {
 
     @PostMapping("/member")
     public ResponseEntity<MemberDTO> create(@RequestBody MemberDTO dto) {
-//        log.info(member);
 
 
 //        StudyGroup group  = new StudyGroup();
@@ -132,7 +131,7 @@ public class MemberController {
 
         MemberDTO responseDTO = MemberDTO.builder()
                 .id(registerMember.getId())
-//                .password(registerMember.getPassword())
+                .password(registerMember.getPassword())
                 .name(registerMember.getName())
                 .birth(registerMember.getBirth())
                 .gender(registerMember.getGender())
@@ -148,7 +147,6 @@ public class MemberController {
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
-
     @PutMapping("/member")
     public ResponseEntity<Member> update(MultipartFile profile, @RequestParam(name = "id") String id, @RequestParam(name = "password") String password, @RequestParam(name = "nickname") String nickname) {
 
@@ -219,6 +217,7 @@ public class MemberController {
                     .profile(member.getProfile())
                     .token(token)
                     .build();
+            log.info(responseDTO);
             return ResponseEntity.ok().body(responseDTO);
         }else {
             return ResponseEntity.badRequest().build();

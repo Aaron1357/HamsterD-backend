@@ -6,12 +6,18 @@ import com.project.hamsterd.service.InCommentService;
 import com.project.hamsterd.service.MemberService;
 import com.project.hamsterd.service.PostCommentService;
 import com.project.hamsterd.service.PostService;
+import com.querydsl.core.BooleanBuilder;
 import lombok.extern.log4j.Log4j2;
 import org.apache.el.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,11 +51,11 @@ public class PostController {
     @Autowired
     private MemberService memberService;
 
-    @Value("${file.upload.path}")
-    private String uploadPath;
-
-    @Value("${spring.servlet.multipart.location}")
-    private String uploadPathImage;
+//    @Value("${file.upload.path}")
+//    private String uploadPath;
+//
+//    @Value("${spring.servlet.multipart.location}")
+//    private String uploadPathImage;
 
 
     //C : 게시판 작성하기
@@ -57,21 +63,21 @@ public class PostController {
     public ResponseEntity<Post> create(@RequestParam("title") String title,
                                        @RequestParam("desc") String desc,
                                        @RequestParam("securityCheck") char securityCheck,
-                                       @RequestParam("token") String token ) {
+                                       @RequestParam("token") String token) {
 
-        log.info(token);
+        log.info("게시판 작성 토큰 " + token);
 
         String id = tokenProvider.validateAndGetUserId(token);
         log.info("id", id);
         Member member =  memberService.showById(id);
-        log.info(member.toString());
+        log.info("게시판 작성 멤버 정보 " + member.toString());
         Post vo = Post.builder()
                 .postTitle(title)
                 .postContent(desc)
                 .securityCheck(securityCheck)
                 .member(member)
                 .build();
-
+         log.info(vo);
 
         return ResponseEntity.status(HttpStatus.OK).body(service.create(vo));
     }
@@ -91,9 +97,16 @@ public class PostController {
 
     //C : 게시판 임시 글 작성하기
 
-    //R : 전체 게시판 보기
-    @GetMapping("/post")
+    //R : 게시판 전체 조회
+    @GetMapping("/posts")
     public ResponseEntity<List<Post>> showAll() {
+//          @RequestParam(name="page", defaultValue = "1") int page
+//        Sort sort = Sort.by("postNo").descending();
+//        Pageable pageable = PageRequest.of(page-1, 5, sort);
+
+
+
+//        return ResponseEntity.status(HttpStatus.OK).body(result.getContent());
         return ResponseEntity.status(HttpStatus.OK).body(service.showAll());
     }
 
@@ -138,23 +151,18 @@ public class PostController {
     //=====================================댓글==========================================
     // C :댓글 추가
     @PostMapping("/post/pcomment")
-    public ResponseEntity<PostComment> create(@RequestBody PostComment postComment){
+//    public ResponseEntity<PostComment> create(@RequestParam("comments") String comments){
+    public ResponseEntity<PostComment> create(@RequestBody PostComment pComment){
 
-        Post post = new Post();
-        post.setPostNo(1);
-        postComment.setPost(post);
 
-        Member member = new Member();
-        member.setMemberNo(1);
-        postComment.setMember(member);
-
-       return ResponseEntity.status(HttpStatus.OK).body(pCommentService.create(postComment));
+       return ResponseEntity.status(HttpStatus.OK).body(pCommentService.create(pComment));
     }
 
     // 댓글 전체 보기
     @GetMapping("/post/{postNo}/pcomment")
     public ResponseEntity<List<PostComment>> postComment(@PathVariable int postNo){
-
+        log.info("댓글 전체 보여짐 ? ");
+        log.info(pCommentService.showAll());
         return ResponseEntity.status(HttpStatus.OK).body(pCommentService.findByPostNo(postNo));
 
     }
@@ -166,9 +174,9 @@ public class PostController {
 
 
     // D : 댓글 삭제
-    @DeleteMapping("/post/pcomment/{id}")
-    public ResponseEntity<PostComment> deletePDelete(@PathVariable int id){
-        return ResponseEntity.status(HttpStatus.OK).body(pCommentService.delete(id));
+    @DeleteMapping("/post/pcomment/{commentNo}")
+    public ResponseEntity<PostComment> deletePDelete(@PathVariable int commentNo){
+        return ResponseEntity.status(HttpStatus.OK).body(pCommentService.delete(commentNo));
     }
 
     //================================대댓글==========================================

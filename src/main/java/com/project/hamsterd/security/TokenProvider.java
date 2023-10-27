@@ -19,8 +19,6 @@ public class TokenProvider {
 
     public String create(Member member){
 
-
-
 //        // claim(데이터)를 담는 객체 정의
 //        Claims claims = Jwts.claims();
 //
@@ -38,6 +36,7 @@ public class TokenProvider {
 //        claims.put("profile", member.getProfile());
 //        claims.put("weight", member.getWeight());
 //        claims.put("studygroup", member.getStudyGroup());
+
 
         // 토근 생성 -> 기한 지정 가능
         Date expireDate = Date.from(Instant.now().plus(1, ChronoUnit.DAYS)) ;
@@ -59,9 +58,6 @@ public class TokenProvider {
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody().getSubject();
-
-//
-//
 //        return claims.getSubject(); // id를 반환
     }
 }
