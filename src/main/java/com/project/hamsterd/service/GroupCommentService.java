@@ -2,15 +2,18 @@ package com.project.hamsterd.service;
 
 import com.project.hamsterd.domain.GroupComment;
 import com.project.hamsterd.repo.GroupCommentDAO;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 @Service
+@Log4j2
 public class GroupCommentService {
 
     @Autowired
@@ -29,7 +32,7 @@ public class GroupCommentService {
     }
 
     public GroupComment update(GroupComment vo){
-
+        log.info(vo);
 
         // 현재 날짜/시간
         Date now = new Date();
@@ -51,20 +54,18 @@ public class GroupCommentService {
             throw new RuntimeException(e);
         }
 
-
         GroupComment create = dao.findById(vo.getGCommentNo()).orElse(null);
-        vo.setCreateDate(create.getCreateDate());
 
+        vo.setCreateDate(create.getCreateDate());
         vo.setUpdateDate(formattedDate);
         vo.setMember(create.getMember());
         vo.setStudyGroup(create.getStudyGroup());
 
+        if(create!=null){
+            return dao.save(vo);
+        }
 
-
-        return dao.save(vo);
-
-
-
+        return null;
 
     }
 
@@ -75,8 +76,11 @@ public class GroupCommentService {
         return target;
     }
 
-    public List<GroupComment> findByPostNo(int groupNo){
-        return dao.findByGroupNo(groupNo);
+    public List<GroupComment> findByGroupNo(int groupNo){
+        List<GroupComment> gComments = dao.findByGroupNo(groupNo);
+        gComments.sort(Comparator.comparing(GroupComment::getCreateDate).reversed());
+
+        return gComments;
     }
 }
 
