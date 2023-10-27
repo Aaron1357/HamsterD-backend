@@ -185,6 +185,7 @@ public class MemberController {
 
         //4.저장할 채널 이미지파일 경로 구성
         String saveProfile = uploadPath + File.separator + uuid + "_" + realPhoto;
+        log.info(saveProfile);
 
         Member member = Member.builder()
                 .id(id)
@@ -231,6 +232,7 @@ public class MemberController {
                     .nickname(member.getNickname())
                     .authority(member.getAuthority())
                     .profile(member.getProfile())
+                    .studyGroup(member.getStudyGroup())
                     .token(token)
                     .build();
             log.info(responseDTO);
