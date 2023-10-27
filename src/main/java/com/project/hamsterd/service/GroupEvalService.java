@@ -38,13 +38,14 @@ public class GroupEvalService {
     }
 
 
-    public GroupEval show(int id){
-        GroupEval groupEval = groupEvalDAO.findById(id).orElse(null);
-        Member member = memberDAO.findById(groupEval.getMember().getMemberNo()).orElse(null);
-        StudyGroup group = studyGroupDAO.findById(groupEval.getStudyGroup().getGroupNo()).orElse(null);
+    public GroupEval show(int memberNo){
 
-        groupEval.setMember(member);
-        groupEval.setStudyGroup(group);
+        GroupEval groupEval = groupEvalDAO.findByMemberNo(memberNo);
+//        Member member = memberDAO.findById(groupEval.getMember().getMemberNo()).orElse(null);
+//        StudyGroup group = studyGroupDAO.findById(groupEval.getStudyGroup().getGroupNo()).orElse(null);
+//
+//        groupEval.setMember(member);
+//        groupEval.setStudyGroup(group);
 
         return groupEval;
     }

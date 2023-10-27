@@ -88,6 +88,12 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(member);
     }
 
+    @GetMapping("/member/memberno/{memberNo}")
+    public ResponseEntity<Member> showMemberbyMemberNO(@PathVariable int memberNo) {
+        Member member = service.showMemberbyMemberNO(memberNo);
+        return ResponseEntity.status(HttpStatus.OK).body(member);
+    }
+
     @PostMapping("/member")
     public ResponseEntity<MemberDTO> create(@RequestBody MemberDTO dto) {
 //        log.info(member);
@@ -218,5 +224,7 @@ public class MemberController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+
 
 }

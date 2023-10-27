@@ -42,16 +42,16 @@ public class EvalController {
         return ResponseEntity.status(HttpStatus.OK).body(groupEvalService.showAll());
     }
 
-    //    http://localhost:8080/hamsterd/groupeval/2
-    @GetMapping("/groupeval/{groupNo}")
+    //    http://localhost:8080/hamsterd/groupeval/groupno/1
+    @GetMapping("/groupeval/groupno/{groupNo}")
     public ResponseEntity<List<GroupEval>> showGroupEval(@PathVariable int groupNo){
         return ResponseEntity.status(HttpStatus.OK).body(groupEvalService.showGroupEval(groupNo));
     }
 
-    //    http://localhost:8080/hamsterd/groupeval/1
-    @GetMapping("/groupeval/{id}")
-    public ResponseEntity<GroupEval> showEval(@PathVariable int id){
-        return ResponseEntity.status(HttpStatus.OK).body(groupEvalService.show(id));
+    //    http://localhost:8080/hamsterd/groupeval/id/1
+    @GetMapping("/groupeval/memberNo/{memberNo}")
+    public ResponseEntity<GroupEval> showEval(@PathVariable int memberNo){
+        return ResponseEntity.status(HttpStatus.OK).body(groupEvalService.show(memberNo));
     }
 
 
