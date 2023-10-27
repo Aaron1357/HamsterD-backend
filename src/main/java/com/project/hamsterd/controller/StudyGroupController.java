@@ -145,6 +145,33 @@ public class StudyGroupController {
         return ResponseEntity.status(HttpStatus.OK).body(service.update(studyGroup));
     }
 
+    // 스터디그룹 가입
+    @PutMapping("/studygroup/join")
+    public ResponseEntity<Member> joinGroup(@RequestParam("memberNo") int memberNo,
+                                                @RequestParam("groupNo") int groupNo){
+
+        Member member = memberService.showMemberbyMemberNO(memberNo);
+        StudyGroup vo = service.show(groupNo);
+        member.setStudyGroup(vo);
+        memberService.update(member);
+
+        return ResponseEntity.status(HttpStatus.OK).body(member);
+    }
+
+    // 스터디그룹 탈퇴
+    @PutMapping("/studygroup/fire")
+    public ResponseEntity<Member> fireGroup(@RequestParam("memberNo") int memberNo,
+                                            @RequestParam("groupNo") int groupNo){
+
+        Member member = memberService.showMemberbyMemberNO(memberNo);
+        StudyGroup vo = service.show(groupNo);
+        member.setStudyGroup(null);
+        memberService.update(member);
+
+        return ResponseEntity.status(HttpStatus.OK).body(member);
+    }
+
+
     // 스터디그룹 삭제
     @DeleteMapping("/studygroup/{id}")
     public ResponseEntity<StudyGroup> delete(@PathVariable int id){

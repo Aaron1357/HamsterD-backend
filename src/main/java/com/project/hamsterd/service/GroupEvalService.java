@@ -31,13 +31,21 @@ public class GroupEvalService {
         return groupEvalDAO.findAll();
     }
 
-    public GroupEval show(int id){
-        GroupEval groupEval = groupEvalDAO.findById(id).orElse(null);
-        Member member = memberDAO.findById(groupEval.getMember().getMemberNo()).orElse(null);
-        StudyGroup group = studyGroupDAO.findById(groupEval.getStudyGroup().getGroupNo()).orElse(null);
+    public List<GroupEval> showGroupEval(int groupNo){
+        List<GroupEval> groupEval = groupEvalDAO.findByGroupNo(groupNo);
 
-        groupEval.setMember(member);
-        groupEval.setStudyGroup(group);
+        return groupEval;
+    }
+
+
+    public GroupEval show(int memberNo){
+
+        GroupEval groupEval = groupEvalDAO.findByMemberNo(memberNo);
+//        Member member = memberDAO.findById(groupEval.getMember().getMemberNo()).orElse(null);
+//        StudyGroup group = studyGroupDAO.findById(groupEval.getStudyGroup().getGroupNo()).orElse(null);
+//
+//        groupEval.setMember(member);
+//        groupEval.setStudyGroup(group);
 
         return groupEval;
     }

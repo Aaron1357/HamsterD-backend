@@ -55,10 +55,19 @@ public class MemberService {
 
     }
 
+
+
     public Member showById(String id)
     {
-        log.info("@@@@@@@@@@@@@@ID : "  + id);
+
         return dao.findByMemberId(id);
+
+    }
+
+    public Member showMemberbyMemberNO(int memberNo)
+    {
+
+        return dao.showMemberbyMemberNO(memberNo);
 
     }
 
