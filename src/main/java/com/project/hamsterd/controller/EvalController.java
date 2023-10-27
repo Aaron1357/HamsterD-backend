@@ -48,6 +48,13 @@ public class EvalController {
         return ResponseEntity.status(HttpStatus.OK).body(groupEvalService.showGroupEval(groupNo));
     }
 
+    //    http://localhost:8080/hamsterd/groupeval/avg/1
+//    @GetMapping("/groupeval/avg/{groupNo}")
+//    public ResponseEntity<List<GroupEval>> getGroupAVG(@PathVariable int groupNo){
+//        return ResponseEntity.status(HttpStatus.OK).body(groupEvalService.getGroupAVG(groupNo));
+//    }
+
+
     //    http://localhost:8080/hamsterd/groupeval/id/1
     @GetMapping("/groupeval/memberNo/{memberNo}")
     public ResponseEntity<GroupEval> showEval(@PathVariable int memberNo){
