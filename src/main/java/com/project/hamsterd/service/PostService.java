@@ -19,8 +19,8 @@ public class PostService {
     @Autowired
     private PostDAO dao;
 
-    public List<Post> showAll() {
-        return dao.findAll();
+    public Page<Post> showAll(Pageable pageable) {
+        return dao.findAll(pageable);
     }
     //Pageable pageable
     public Post show(int postNo) {
@@ -59,8 +59,8 @@ public class PostService {
 
         Post create = dao.findById(post.getPostNo()).orElse(null);
         post.setCreateTime(create.getCreateTime());
-        post.setBoardView(create.getBoardView());
-        post.setSecurityCheck(create.getSecurityCheck());
+//        post.setBoardView(create.getBoardView());
+//        post.setSecurityCheck(create.getSecurityCheck());
         post.setUpdateTime(formattedDate);
         log.info("create: " + create);
         if(create!=null){
@@ -87,5 +87,17 @@ public class PostService {
         log.info("조회수 서비스");
         log.info("postNo 서비스 " + postNo);
         return dao.updateBoardView(postNo);
+    }
+
+    //검색창에 내용 조회 시 게시판 조회
+    public List<Post> findSearchContent(String postContent) {
+        log.info("어딧니 컨텐츠야" +postContent);
+        return dao.findSearchContent(postContent);
+    }
+
+    //검색창에 제목 조회 시 게시판 조회
+    public List<Post> findSearchTitle(String postTitle) {
+        log.info("어딧니 제목" +postTitle);
+        return dao.findSearchTitle(postTitle);
     }
 }
