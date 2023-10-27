@@ -49,7 +49,7 @@ tasks.named('test') {
 }
 
 
-// QueryDSL 관련 여기부터 추가
+//// QueryDSL 관련 여기부터 추가
 //def generated = 'src/main/generated'
 //
 //

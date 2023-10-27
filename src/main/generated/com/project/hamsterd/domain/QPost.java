@@ -34,7 +34,7 @@ public class QPost extends EntityPathBase<Post> {
 
     public final StringPath postTitle = createString("postTitle");
 
-    public final ComparablePath<Character> securityCheck = createComparable("securityCheck", Character.class);
+    public final StringPath securityCheck = createString("securityCheck");
 
     public final DateTimePath<java.util.Date> updateTime = createDateTime("updateTime", java.util.Date.class);
 
