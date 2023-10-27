@@ -1,12 +1,9 @@
 package com.project.hamsterd.controller;
 
 import com.project.hamsterd.domain.MemberDTO;
-import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.security.TokenProvider;
 import com.project.hamsterd.service.MemberService;
 import com.project.hamsterd.domain.Member;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,28 +55,47 @@ public class MemberController {
         log.info("매니저 조회!!");
         return ResponseEntity.status(HttpStatus.OK).body(service.getManagerList());
     }
+    @GetMapping("/member/id/{id}")
+    public ResponseEntity<Boolean> idDupil(@PathVariable String id) {
 
-    @GetMapping("/member/{id}/{password}")
-    public ResponseEntity<Member> show(@PathVariable String id, @PathVariable String password) {
-        System.out.println("멤버 개별 조회 들어옴?");
+        
+    // @GetMapping("/member/{id}/{password}")
+    // public ResponseEntity<Member> show(@PathVariable String id, @PathVariable String password) {
+    //     System.out.println("멤버 개별 조회 들어옴?");
+
+
+
+        System.out.println("멤버 개별 조회 들어옴?(아이디)");
         System.out.println("id : " + id);
-        System.out.println("pw : " + password);
 
-//        List<Member> list =  service.showAll();
-//        for(int i = 0; i<list.size(); i++){
-//            if(member.getId().equals(list.get(i).getId()) && member.getPassword().equals(list.get(i).getPassword())){
-//                member = list.get(i);
-//            }
-//        }
 
-        Member member = service.show(id, password);
 
-//        if(member != null){
-//            session.setAttribute("member", member);
-////            return ResponseEntity.status(HttpStatus.OK).body();
-//        }
+        Member member = service.findById(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body(member);
+        if(member != null){
+            return ResponseEntity.status(HttpStatus.OK).body(true);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(false);
+    }
+
+    @GetMapping("/member/nick/{nickName}")
+    public ResponseEntity<Boolean> nickDupil(@PathVariable String nickName) {
+
+
+
+        System.out.println("멤버 개별 조회 들어옴?(닉네임)");
+        System.out.println("nickName : " + nickName);
+
+
+
+        Member member = service.findByNick(nickName);
+
+        if(member != null){
+            return ResponseEntity.status(HttpStatus.OK).body(true);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(false);
     }
 
     @GetMapping("/member/{id}")
