@@ -29,4 +29,9 @@ public interface MemberDAO extends JpaRepository<Member, Integer > {
     Member showMemberbyMemberNO(@Param("memberNo") int memberNo);
 
 
+
+
+    @Query(value="SELECT * FROM TB_MEMBER WHERE NICKNAME = :nick", nativeQuery=true)
+    Member findByNick(@Param("nick") String nick);
+
 }

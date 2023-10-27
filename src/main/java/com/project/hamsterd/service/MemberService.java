@@ -70,6 +70,15 @@ public class MemberService {
         return dao.showMemberbyMemberNO(memberNo);
 
     }
+    public Member findById(String id){
+        return dao.findByMemberId(id);
+    }
+
+
+    public Member findByNick(String nick){
+        return dao.findByNick(nick);
+    }
+
 
     public Member create(Member member) {
 

@@ -40,7 +40,7 @@ public class Post {
     @Column(name="board_view")
     private int boardView;
     @Column
-    private char securityCheck;
+    private String securityCheck;
     //y랑 n으로 하고 n을 default로 db 추가하기
 
 
