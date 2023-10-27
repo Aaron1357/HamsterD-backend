@@ -31,6 +31,8 @@ public class MemberService {
     public Member findByNick(String nick){
         return dao.findByNick(nick);
     }
+
+
     public Member create(Member member) {
 
 

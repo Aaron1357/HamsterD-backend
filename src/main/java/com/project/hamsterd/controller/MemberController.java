@@ -1,16 +1,11 @@
 package com.project.hamsterd.controller;
 
 import com.project.hamsterd.domain.MemberDTO;
-import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.security.TokenProvider;
 import com.project.hamsterd.service.MemberService;
 import com.project.hamsterd.domain.Member;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
