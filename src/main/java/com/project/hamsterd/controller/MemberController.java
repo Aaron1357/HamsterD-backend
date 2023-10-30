@@ -7,20 +7,14 @@ import com.project.hamsterd.domain.Member;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -57,19 +51,7 @@ public class MemberController {
     }
     @GetMapping("/member/id/{id}")
     public ResponseEntity<Boolean> idDupil(@PathVariable String id) {
-
-        
-    // @GetMapping("/member/{id}/{password}")
-    // public ResponseEntity<Member> show(@PathVariable String id, @PathVariable String password) {
-    //     System.out.println("멤버 개별 조회 들어옴?");
-
-
-
-        System.out.println("멤버 개별 조회 들어옴?(아이디)");
-        System.out.println("id : " + id);
-
-
-
+        // 아이디 중복확인
         Member member = service.findById(id);
 
         if(member != null){
@@ -81,14 +63,7 @@ public class MemberController {
 
     @GetMapping("/member/nick/{nickName}")
     public ResponseEntity<Boolean> nickDupil(@PathVariable String nickName) {
-
-
-
-        System.out.println("멤버 개별 조회 들어옴?(닉네임)");
-        System.out.println("nickName : " + nickName);
-
-
-
+        // 닉네임 중복확인
         Member member = service.findByNick(nickName);
 
         if(member != null){
@@ -112,24 +87,10 @@ public class MemberController {
 
     @PostMapping("/member")
     public ResponseEntity<MemberDTO> create(@RequestBody MemberDTO dto) {
-
-
-//        StudyGroup group  = new StudyGroup();
-//        group.setGroupNo(0);
-//        member.setStudyGroup(group);
-//        Member mem = new Member();
-//        mem.setMemberId("user1");
-//        mem.setMemberAge(24);
-//        mem.setMemberName("윤종빈");
-//        mem.setAcademyName("kh");
-//        mem.setStudentNo(1);
-
-
-//          member.setStudentNo(++nextVal);
+        // 회원가입
 
         log.info(dto.getAcademyName());
         Member member = Member.builder()
-
                                 .id(dto.getId())
                                 .password(passwordEncoder.encode(dto.getPassword()))
                                 .name(dto.getName())
@@ -143,22 +104,22 @@ public class MemberController {
                                 .build();
 
         Member registerMember = service.create(member);
-        log.info("회원가입들어옴");
+        
+
+
 
         MemberDTO responseDTO = MemberDTO.builder()
-                .id(registerMember.getId())
-                .password(registerMember.getPassword())
-                .name(registerMember.getName())
-                .birth(registerMember.getBirth())
-                .gender(registerMember.getGender())
-                .phone(registerMember.getPhone())
-                .academyName(registerMember.getAcademyName())
-                .address(registerMember.getAddress())
-                .nickname(registerMember.getNickname())
-                .nickname(registerMember.getProfile())
-                .build();
-
-//        log.info(registerMember.toString());
+                                        .id(registerMember.getId())
+                                        .password(registerMember.getPassword())
+                                        .name(registerMember.getName())
+                                        .birth(registerMember.getBirth())
+                                        .gender(registerMember.getGender())
+                                        .phone(registerMember.getPhone())
+                                        .academyName(registerMember.getAcademyName())
+                                        .address(registerMember.getAddress())
+                                        .nickname(registerMember.getNickname())
+                                        .profile(registerMember.getProfile())
+                                        .build();
 
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);

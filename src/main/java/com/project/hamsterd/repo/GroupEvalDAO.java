@@ -21,8 +21,13 @@ public interface GroupEvalDAO extends JpaRepository<GroupEval, Integer> {
     List<GroupEval> findByGroupNo(@Param("groupNo") int groupNo);
 
     // groupNo의 그룹리뷰 조회
-    @Query(value = "SELECT * FROM TB_GROUP_REV WHERE GROUP_NO = :memberNo", nativeQuery = true)
+    @Query(value = "SELECT * FROM TB_GROUP_REV WHERE MEMBER_NO = :memberNo", nativeQuery = true)
     GroupEval findByMemberNo(@Param("memberNo") int memberNo);
+
+    // groupNo의 평균점수 조회
+    @Query(value = "SELECT AVG(GROUP_SCORE) FROM TB_GROUP_REV WHERE GROUP_NO = :groupNo", nativeQuery = true)
+    int getGroupAVG(@Param("groupNo") int groupNo);
+
 
 
 
