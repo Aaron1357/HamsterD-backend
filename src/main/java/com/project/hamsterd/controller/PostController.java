@@ -11,10 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.el.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +22,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @Log4j2
@@ -49,6 +49,8 @@ public class PostController {
 
     @Autowired
     private MemberService memberService;
+
+
 
 //    @Value("${file.upload.path}")
 //    private String uploadPath;
@@ -128,22 +130,41 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(service.show(postNo));
     }
 
-    @GetMapping("/post/search/postContents/{postContent}")
-    //R : 검색창에 작성된 게시물만 보기
-    public ResponseEntity <List<Post>> findSearchContent(@PathVariable String postContent) {
-        log.info("검색창에 작성된 게시물 들어옴" + postContent);
+    //R : 검색창에 작성된 게시물내용 보기
+    @GetMapping("/post/search/postContents/{postContent}/page/{page}")
+    public ResponseEntity<Map<String, Object>> findSearchContent(@PathVariable(name ="postContent") String postContent,
+                                                           @PathVariable(name="page") int page
+                                                        ) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(service.findSearchContent(postContent));
+        Sort sort = Sort.by("POST_NO").descending();
+        Pageable pageable = PageRequest.of(page - 1, 10, sort);
+        Page<Post> result = service.findSearchContent(postContent, pageable);
+        log.info("result 입니당" + result);
+        Map<String, Object> response = new HashMap<>();
+        response.put("contents", result.getContent());
+        response.put("total", result.getTotalElements());
+        log.info(response);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    //R : 검색창에 작성된 게시물만 보기
-    @GetMapping("/post/search/postTitles/{postTitle}")
-    public ResponseEntity <List<Post>> findSearchTitle(@PathVariable String postTitle) {
+
+    //R : 검색창에 작성된 게시물명 보기
+    @GetMapping("/post/search/postTitles/{postTitle}/page/{page}")
+    public ResponseEntity <Map<String,Object>> findSearchTitle(@PathVariable String postTitle,  @PathVariable(name="page") int page) {
+        Sort sort = Sort.by("POST_NO").descending();
+        Pageable pageable = PageRequest.of(page-1,10,sort);
+        Page<Post> result = service.findSearchTitle(postTitle, pageable);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("title", result.getContent());
+        response.put("total", result.getTotalElements());
+
+
         log.info("검색창에 작성된 제목 들어옴" + postTitle);
-        return ResponseEntity.status(HttpStatus.OK).body(service.findSearchTitle(postTitle));
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    //R : 검색창에
 
     //R :
     // 특정 멤버의 모든 게시판 조회 memberNo 받아와서 작성하기
@@ -155,7 +176,6 @@ public class PostController {
 
     //U : 내 게시판 수정하기
 
-    /*내 게시판만 수정할수있음 memberNo에 postNo으로 해야해*/
     @PutMapping("/updatePost")
     public ResponseEntity <Post> update(@RequestParam("postNo") int postNo,
                                         @RequestParam("title") String title,
@@ -191,9 +211,18 @@ public class PostController {
     @PostMapping("/post/pcomment")
 //    public ResponseEntity<PostComment> create(@RequestParam("comments") String comments){
     public ResponseEntity<PostComment> create(@RequestBody PostComment pComment){
+    log.info("댓글 들어옴?");
+        Member member= memberService.show(pComment.getMember().getMemberNo());
+        Post post = service.show(pComment.getPost().getPostNo());
 
+        PostComment vo = PostComment.builder()
+                .member(member)
+                .commentContent(pComment.getCommentContent())
+                .createDate(new Date())
+                .post(post)
+                .build();
 
-       return ResponseEntity.status(HttpStatus.OK).body(pCommentService.create(pComment));
+       return ResponseEntity.status(HttpStatus.OK).body(pCommentService.create(vo));
     }
 
     // 댓글 전체 보기
@@ -223,7 +252,26 @@ public class PostController {
     @PostMapping("/post/pcomment/incomment")
     public ResponseEntity <InComment> create(@RequestBody InComment incomment) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(iCommentService.create(incomment));
+        try{
+            Member member = memberService.show(incomment.getMember().getMemberNo());
+            Post post = service.show(incomment.getPost().getPostNo());
+            PostComment postComment = pCommentService.show(incomment.getPostComment().getCommentNo());
+
+            InComment vo = InComment.builder().postComment(postComment)
+                    .createDate(new Date())
+                    .post(post)
+                    .member(member)
+                    .inCoCon(incomment.getInCoCon())
+                    .build();
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(iCommentService.create(vo));
+        }
+        catch(Exception e)
+        {
+            log.info(e.getMessage());
+        }
+return null;
     }
 
     //R : 대댓글 전체 보기

@@ -39,6 +39,7 @@ public class PostComment {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "CO_CREATEDATE")
     private Date createDate;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "CO_UPDATEDATE")
     private Date updateDate;
