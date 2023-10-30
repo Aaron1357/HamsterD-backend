@@ -51,6 +51,7 @@ public class EvalController {
     //        http://localhost:8080/hamsterd/groupeval/avg/1
     @GetMapping("/groupeval/avg/{groupNo}")
     public ResponseEntity <Integer> getGroupAVG(@PathVariable int groupNo){
+
         return ResponseEntity.status(HttpStatus.OK).body(groupEvalService.getGroupAVG(groupNo));
     }
 
@@ -58,6 +59,7 @@ public class EvalController {
     //    http://localhost:8080/hamsterd/groupeval/memberno/1
     @GetMapping("/groupeval/memberno/{memberNo}")
     public ResponseEntity<GroupEval> showEval(@PathVariable int memberNo){
+
         return ResponseEntity.status(HttpStatus.OK).body(groupEvalService.show(memberNo));
     }
 

@@ -74,6 +74,8 @@ public class GroupEvalService {
     }
 
     public int getGroupAVG(int groupNo){
+//        System.out.println(groupNo);
+
         return groupEvalDAO.getGroupAVG(groupNo);
     }
 
