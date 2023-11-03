@@ -2,6 +2,7 @@ package com.project.hamsterd.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -13,6 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicInsert
+@Builder
 @Table(name="TB_IN_COMMENT")
 public class InComment {
 
@@ -35,9 +37,6 @@ public class InComment {
     @Column(name = "IN_CO_UPDATEDATE")
     private Date updateDate;
 
-    //대댓글 익명 닉네임
-    @Column(name = "IN_CO_NICKNAME")
-    private String nickName;
 
     @ManyToOne
     @JoinColumn(name = "POST_NO")
