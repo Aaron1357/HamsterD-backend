@@ -30,8 +30,6 @@ public class QInComment extends EntityPathBase<InComment> {
 
     public final QMember member;
 
-    public final StringPath nickName = createString("nickName");
-
     public final QPost post;
 
     public final QPostComment postComment;
