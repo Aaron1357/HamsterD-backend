@@ -37,7 +37,6 @@ public class InComment {
     @Column(name = "IN_CO_UPDATEDATE")
     private Date updateDate;
 
-
     @ManyToOne
     @JoinColumn(name = "POST_NO")
     private Post post;

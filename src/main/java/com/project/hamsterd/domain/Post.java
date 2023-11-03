@@ -31,24 +31,19 @@ public class Post {
     private String postTitle;
     @Column(name="post_content")
     private String postContent;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+9")
     @Column(name="create_time")
     private Date createTime;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+9")
     @Column(name="update_time")
     private Date updateTime;
     @Column(name="board_view")
     private int boardView;
     @Column
     private String securityCheck;
-    //y랑 n으로 하고 n을 default로 db 추가하기
 
-
-    
-    //멤버에서 닉네임 받아와야함
     @ManyToOne
     @JoinColumn(name="member_no")
-     /*멤버 클래스의 멤버 넘버 외래키 */
      private Member member;
 }
 

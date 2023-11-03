@@ -22,8 +22,8 @@ public class PostDTO {
     private int boardView;
     private String securityCheck;
     private int totalCount;
-    @JoinColumn(name="member_no")
-    private Member member;
+
+    private MemberDTO dto;
 }
 
 

@@ -16,6 +16,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,13 +27,15 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
 @Log4j2
 @RequestMapping("/hamsterd/*")
-//CORS 요청을 허용할 원본(도메인)을 지정합니다. {"*"}은 모든 원본을 허용
+
 @CrossOrigin(origins={"*"}, maxAge = 6000)
 public class PostController {
     @Autowired
@@ -51,38 +54,33 @@ public class PostController {
     private MemberService memberService;
 
 
-
-//    @Value("${file.upload.path}")
-//    private String uploadPath;
-//
-//    @Value("${spring.servlet.multipart.location}")
-//    private String uploadPathImage;
-
-
+    //CORS 요청을 허용할 원본(도메인)을 지정합니다. {"*"}은 모든 원본을 허용
     //C : 게시판 작성하기
     @PostMapping("/post")
-    public ResponseEntity<Post> create(@RequestParam("title") String title,
+    public ResponseEntity<PostDTO> create(@RequestParam("title") String title,
                                        @RequestParam("desc") String desc,
                                        @RequestParam("securityCheck") String securityCheck,
                                        @RequestParam("token") String token) {
 
-        log.info("게시판 작성 토큰 " + token);
-
         String id = tokenProvider.validateAndGetUserId(token);
-        log.info("id", id);
         Member member =  memberService.showById(id);
-        log.info("게시판 작성 멤버 정보 " + member.toString());
+
         Post vo = Post.builder()
                 .postTitle(title)
                 .postContent(desc)
                 .securityCheck(securityCheck)
                 .member(member)
                 .build();
-         log.info(vo);
 
-        return ResponseEntity.status(HttpStatus.OK).body(service.create(vo));
+        Post post = service.create(vo);
+        MemberDTO mDTO = new MemberDTO();
+        mDTO.setId(post.getMember().getId());
+        mDTO.setNickname(post.getMember().getNickname());
+
+        PostDTO dto = PostDTO.builder().dto(mDTO).build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
-
 
 
     //게시판 조회수 updateBoardView
@@ -94,16 +92,12 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(service.updateBoardView(postNo));
     }
 
-    //C : 관리자 공지 글 작성하기 -- 관리자만 작성할수있음 관리자만 삭제가능
-
-    //C : 게시판 임시 글 작성하기
-
     //R : 게시판 전체 조회
     @GetMapping("/posts")
     public ResponseEntity<Map<String, Object>> showAll(@RequestParam(name="page", defaultValue = "1") int page) {
 
         Sort sort = Sort.by("postNo").descending();
-        Pageable pageable = PageRequest.of(page-1, 10, sort);
+        Pageable pageable = PageRequest.of(page-1, 5, sort);
         Page<Post> result = service.showAll(pageable);
 
         Map<String, Object> response = new HashMap<>();
@@ -166,13 +160,6 @@ public class PostController {
     }
 
 
-    //R :
-    // 특정 멤버의 모든 게시판 조회 memberNo 받아와서 작성하기
-
-    @GetMapping("/post/{id}")
-    public ResponseEntity <List<Post>> postList(@PathVariable int id) {
-       return ResponseEntity.status(HttpStatus.OK).body(service.findByMemberId(id));
-  }
 
     //U : 내 게시판 수정하기
 
@@ -180,26 +167,29 @@ public class PostController {
     public ResponseEntity <Post> update(@RequestParam("postNo") int postNo,
                                         @RequestParam("title") String title,
                                         @RequestParam("desc") String desc,
-                                        @RequestParam("securityCheck") String securityCheck,
-                                         @RequestParam("id") String id
+                                        @RequestParam("securityCheck") String securityCheck
                                        ) {
-
-        log.info(id);
-        Member member =  memberService.showById(id);
-
-
-        log.info(securityCheck);
-        Post post = new Post();
-        post.setPostNo(postNo);
+        // 현재 날짜/시간
+        Date now = new Date();
+        // 포맷팅 정의
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // 포맷팅 적용
+        String formatedNow = formatter.format(now);
+        Date formattedDate = null;
+        try {
+            formattedDate = formatter.parse(formatedNow);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        Post post = service.show(postNo);
         post.setPostTitle(title);
         post.setPostContent(desc);
         post.setSecurityCheck(securityCheck);
-        post.setMember(member);
+        post.setUpdateTime(formattedDate);
         return ResponseEntity.status(HttpStatus.OK).body(service.update(post));
     }
 
     //D : 특정 내 게시판 삭제하기
-    /*내 게시판만 지울수있음 memberNo에 postNo으로 해야해*/
     @DeleteMapping("/deletePost/{postNo}")
     public ResponseEntity <Post> delete(@PathVariable int postNo) {
         log.info("포스트삭제 넘버 :" + postNo);
@@ -209,9 +199,7 @@ public class PostController {
     //=====================================댓글==========================================
     // C :댓글 추가
     @PostMapping("/post/pcomment")
-//    public ResponseEntity<PostComment> create(@RequestParam("comments") String comments){
     public ResponseEntity<PostComment> create(@RequestBody PostComment pComment){
-    log.info("댓글 들어옴?");
         Member member= memberService.show(pComment.getMember().getMemberNo());
         Post post = service.show(pComment.getPost().getPostNo());
 

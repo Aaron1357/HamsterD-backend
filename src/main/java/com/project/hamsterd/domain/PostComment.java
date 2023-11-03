@@ -27,13 +27,6 @@ public class PostComment {
     @SequenceGenerator(name = "commentSequence", sequenceName = "SEQ_COMMENT_NO", allocationSize = 1)
     private int commentNo;
 
-
-//    @Column(name = "IN_COMMENT_NO")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "inCommentSequence")
-//    @SequenceGenerator(name = "inCommentSequence", sequenceName = "SEQ_IN_COMMENT_NO", allocationSize = 1)
-//    private int inCoNo;
-
-
     @Column(name = "COMMENT_CONTENT")
     private String commentContent;
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -43,9 +36,6 @@ public class PostComment {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "CO_UPDATEDATE")
     private Date updateDate;
-
-    @Column(name = "CO_NICKNAME")
-    private String nickName;
 
     @ManyToOne
     @JoinColumn(name = "POST_NO")
