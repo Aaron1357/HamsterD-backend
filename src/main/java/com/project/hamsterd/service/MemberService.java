@@ -1,11 +1,14 @@
 package com.project.hamsterd.service;
 
 //import com.project.hamsterd.SecurityConfig;
+import com.project.hamsterd.domain.MemberDTO;
 import com.project.hamsterd.domain.StudyGroup;
 import com.project.hamsterd.repo.MemberDAO;
 import com.project.hamsterd.domain.Member;
+import com.project.hamsterd.security.TokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,8 @@ import java.util.List;
 @Service
 @Slf4j
 public class MemberService {
+
+
 
     @Autowired
     private MemberDAO dao;
@@ -81,13 +86,6 @@ public class MemberService {
 
 
     public Member create(Member member) {
-
-
-//        String encodedPw = security.passwordEncoder().encode(member.getPassword());
-
-//        System.out.println("암호화 된 비번 : " + encodedPw);
-//        member.setPassword(encodedPw);
-
         return dao.save(member);
     }
 
@@ -132,6 +130,33 @@ public class MemberService {
         }
 
         return null;
+    }
+
+    public MemberDTO makeToken(Member member, TokenProvider tokenProvider){
+
+        String token = tokenProvider.create(member);
+        MemberDTO responseDTO = MemberDTO.builder()
+                                        .memberNo(member.getMemberNo())
+                                        .studyGroup(member.getStudyGroup())
+                                        .id(member.getId())
+                                        .name(member.getName())
+                                        .nickname(member.getNickname())
+                                        .authority(member.getAuthority())
+                                        .profile(member.getProfile())
+                                        .email(member.getEmail())
+                                        .phone(member.getPhone())
+                                        .birth(member.getBirth())
+                                        .gender(member.getGender())
+                                        .address(member.getAddress())
+                                        .studyGroup(member.getStudyGroup())
+                                        .token(token)
+                                        .build();
+
+
+        System.out.println("생성된 DTO : " + responseDTO);
+
+        return responseDTO;
+
     }
 
 }

@@ -36,6 +36,7 @@ public class MemberController {
     @Autowired
     private MemberService service;
 
+
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @GetMapping("/member")
@@ -88,8 +89,6 @@ public class MemberController {
     @PostMapping("/member")
     public ResponseEntity<MemberDTO> create(@RequestBody MemberDTO dto) {
         // 회원가입
-
-        log.info(dto.getAcademyName());
         Member member = Member.builder()
                                 .id(dto.getId())
                                 .password(passwordEncoder.encode(dto.getPassword()))
@@ -100,6 +99,7 @@ public class MemberController {
                                 .academyName(dto.getAcademyName())
                                 .address(dto.getAddress())
                                 .nickname(dto.getNickname())
+                                .email(dto.getEmail())
                                 .profile(dto.getProfile())
                                 .build();
 
@@ -108,24 +108,13 @@ public class MemberController {
 
 
 
-        MemberDTO responseDTO = MemberDTO.builder()
-                                        .id(registerMember.getId())
-                                        .password(registerMember.getPassword())
-                                        .name(registerMember.getName())
-                                        .birth(registerMember.getBirth())
-                                        .gender(registerMember.getGender())
-                                        .phone(registerMember.getPhone())
-                                        .academyName(registerMember.getAcademyName())
-                                        .address(registerMember.getAddress())
-                                        .nickname(registerMember.getNickname())
-                                        .profile(registerMember.getProfile())
-                                        .build();
+        MemberDTO responseDTO = service.makeToken(registerMember, tokenProvider);
 
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
     @PutMapping("/member")
-    public ResponseEntity<Member> update(MultipartFile profile, @RequestParam(name = "id") String id, @RequestParam(name = "password") String password, @RequestParam(name = "nickname") String nickname) {
+    public ResponseEntity<MemberDTO> update(MultipartFile profile, @RequestParam(name = "id") String id, @RequestParam(name = "password") String password, @RequestParam(name = "nickname") String nickname) {
 
         log.info("멤버 id : " + id);
         log.info("멤버 password : " + password);
@@ -155,13 +144,6 @@ public class MemberController {
                 .profile(saveProfile)
                 .build();
 
-//        Member vo = new Member();
-//        vo.setId(id);
-//        vo.setPassword(password);
-////        vo.getMember().setNickname(nickname);
-//        vo.setNickname(nickname);
-//        vo.setProfile(saveProfile);
-
 
         Path pathPhoto = Paths.get(saveProfile);
         try {
@@ -169,8 +151,15 @@ public class MemberController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        Member resultMem = service.update(member);
 
-        return ResponseEntity.status(HttpStatus.OK).body(service.update(member));
+        if(resultMem != null){
+            MemberDTO responseDTO = service.makeToken(resultMem, tokenProvider);
+            log.info(responseDTO);
+            return ResponseEntity.ok().body(responseDTO);
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/member/{id}")
@@ -179,23 +168,13 @@ public class MemberController {
     }
 
     @PostMapping("/member/signin")
-
     public ResponseEntity<MemberDTO> authenticate(@RequestBody MemberDTO dto){
 
         Member member = service.getByCredentials(dto.getId(), dto.getPassword(), passwordEncoder);
+
+        log.info(member);
         if(member!=null){ // -> 토큰 생성
-            String token = tokenProvider.create(member);
-            MemberDTO responseDTO = MemberDTO.builder()
-                    .memberNo(member.getMemberNo())
-                    .studyGroup(member.getStudyGroup())
-                    .id(member.getId())
-                    .name(member.getName())
-                    .nickname(member.getNickname())
-                    .authority(member.getAuthority())
-                    .profile(member.getProfile())
-                    .studyGroup(member.getStudyGroup())
-                    .token(token)
-                    .build();
+            MemberDTO responseDTO = service.makeToken(member, tokenProvider);
             log.info(responseDTO);
             return ResponseEntity.ok().body(responseDTO);
         }else {

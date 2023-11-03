@@ -73,7 +73,7 @@ public class GroupEvalService {
         return groupEvalDAO.findByMemberNoAndGroupNo(mNo, gNo);
     }
 
-    public int getGroupAVG(int groupNo){
+    public Integer getGroupAVG(int groupNo){
         return groupEvalDAO.getGroupAVG(groupNo);
     }
 

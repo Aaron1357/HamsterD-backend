@@ -26,6 +26,7 @@ public class MemberDTO {
     private String academyName;
     private String authority;
     private String nickname;
+    private String email;
     private String profile;
     private StudyGroup studyGroup;
 

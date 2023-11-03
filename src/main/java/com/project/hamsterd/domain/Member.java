@@ -67,6 +67,9 @@ public class Member {
     private String nickname;
 
     @Column
+    private String email;
+
+    @Column
     private String profile;
 
 
